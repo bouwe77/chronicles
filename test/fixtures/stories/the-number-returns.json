@@ -1,0 +1,249 @@
+{
+  "story_id": "the-number-returns",
+  "story_title": "The Number Returns",
+  "description": "The same bare rooms, mirrored. Bring the 7 you made back down to exactly 0, with the moves you saved last time.",
+  "tags": [
+    "puzzle",
+    "test"
+  ],
+  "starting_location": "seven",
+  "locations": {
+    "seven": {
+      "name": "Seven",
+      "description": "An empty room. A 7 is painted on the floor.",
+      "exits": {
+        "subtract 3": {
+          "to": "minus_three",
+          "order": 0
+        },
+        "subtract 2": {
+          "to": "minus_two",
+          "order": 1
+        },
+        "add 1": {
+          "to": "plus_one",
+          "order": 2
+        }
+      }
+    },
+    "minus_three": {
+      "name": "−3",
+      "description": "A bare room. Its only content is the sign −3 on the wall.",
+      "exits": {
+        "subtract 2": {
+          "to": "minus_two",
+          "order": 1
+        },
+        "add 1": {
+          "to": "plus_one",
+          "order": 2
+        }
+      }
+    },
+    "minus_two": {
+      "name": "−2",
+      "description": "A bare room. Its only content is the sign −2 on the wall.",
+      "exits": {
+        "subtract 3": {
+          "to": "minus_three",
+          "order": 0
+        },
+        "add 1": {
+          "to": "plus_one",
+          "order": 2
+        }
+      }
+    },
+    "plus_one": {
+      "name": "+1",
+      "description": "A bare room. Its only content is the sign +1 on the wall.",
+      "exits": {
+        "subtract 3": {
+          "to": "minus_three",
+          "order": 0
+        },
+        "subtract 2": {
+          "to": "minus_two",
+          "order": 1
+        }
+      }
+    }
+  },
+  "context": {
+    "initial": {
+      "value": 7,
+      "moves": 0
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer"
+        },
+        "moves": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value",
+        "moves"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": {
+        "at": "minus_three"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": -3
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    },
+    {
+      "when": {
+        "at": "minus_two"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": -2
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    },
+    {
+      "when": {
+        "at": "plus_one"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": 1
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    }
+  ],
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "spare": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "spare"
+      ]
+    }
+  },
+  "openingLog": [
+    "The number is 7 again. Make it exactly 0.",
+    "You have three moves, plus the {/input/spare} you saved last time. You cannot use the same operation twice in a row."
+  ],
+  "endings": [
+    {
+      "when": {
+        "path": "/value",
+        "equals": 0
+      },
+      "outcome": "win",
+      "message": "Zero. The number is back where it started, and so are you."
+    },
+    {
+      "when": {
+        "anyOf": [
+          {
+            "allOf": [
+              {
+                "path": "/input/spare",
+                "equals": 0
+              },
+              {
+                "path": "/moves",
+                "atLeast": 3
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "path": "/input/spare",
+                "equals": 1
+              },
+              {
+                "path": "/moves",
+                "atLeast": 4
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "path": "/input/spare",
+                "equals": 2
+              },
+              {
+                "path": "/moves",
+                "atLeast": 5
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "path": "/input/spare",
+                "equals": 3
+              },
+              {
+                "path": "/moves",
+                "atLeast": 6
+              }
+            ]
+          }
+        ]
+      },
+      "outcome": "loss",
+      "message": "No moves left, and the number is {/value}. The rooms go dark."
+    }
+  ]
+}

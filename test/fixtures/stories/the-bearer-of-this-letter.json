@@ -1,0 +1,2435 @@
+{
+  "story_id": "the-bearer-of-this-letter",
+  "story_title": "The Bearer of This Letter",
+  "description": "Ravensholt Castle, one summer morning in 1342, while the whole household is at Mass. You are a messenger who has done nothing wrong, and when Mass ends the guards will put you in chains: get out of the castle before then, and if you can, find out who betrayed you.",
+  "tags": [
+    "escape",
+    "puzzle",
+    "detective",
+    "race against time"
+  ],
+  "notesEnabled": true,
+  "openingLog": [
+    "Last night you rode into Ravensholt Castle with a sealed letter from your lord, Aldric of Brenmoor. You gave it to the steward, Master Osric. He said Sir Geoffrey would read it after morning Mass.",
+    "Before dawn, Maud the kitchen maid shook you awake. \"The steward told the sergeant to have chains ready,\" she whispered. \"For you. After Mass.\" Then she was gone.",
+    "Now the chapel bell is ringing. The whole household is at Mass. You do not know this castle, and you do not have long. Get out before Mass ends, and if you can, find out who betrayed you. (Tip: open your notes and draw the map as you go.)"
+  ],
+  "starting_location": "guest_chamber",
+  "starting_inventory": [
+    {
+      "id": "belt_knife",
+      "name": "your belt knife",
+      "description": "A thin knife lies here.",
+      "descriptionWhenCarried": "A thin, sharp knife. Every messenger carries one."
+    }
+  ],
+  "items": {
+    "fire_pot": {
+      "name": "a pot of embers",
+      "descriptionWhenCarried": "A small clay pot with a lid. Hot embers glow inside."
+    },
+    "rope": {
+      "name": "a coil of rope",
+      "descriptionWhenCarried": "Long and strong. Tom's."
+    },
+    "lords_letter": {
+      "name": "your lord's letter",
+      "descriptionWhenCarried": "Sealed with the red wax of Brenmoor. It orders your arrest, in your lord's own words."
+    },
+    "letter_contents": {
+      "name": "what the letter says",
+      "descriptionWhenCarried": "You are accused of selling the road of the Cold Ash silver to Hugh de Varn, the road Sir Geoffrey's men were to guard. \"Only you, I and the bearer knew it.\""
+    },
+    "old_seal_marks": {
+      "name": "the old seal marks",
+      "descriptionWhenCarried": "Someone lifted the seal of the letter before you did, after you handed it over last night."
+    },
+    "ede_hint": {
+      "name": "Ede's story about Osric",
+      "descriptionWhenCarried": "Osric's sleeves come back spotted with candle wax and ink. He writes at night, alone."
+    },
+    "waxed_knife": {
+      "name": "Osric's thin knife",
+      "descriptionWhenCarried": "A thin knife with a blackened tip and an O cut into the handle. On the blade, a crust of Brenmoor-red wax with a piece of the Brenmoor stag pressed into it."
+    },
+    "varn_letter": {
+      "name": "de Varn's letter to Osric",
+      "descriptionWhenCarried": "Sealed with a black boar. It thanks Osric for the silver of Cold Ash and promises the rest of his fee."
+    }
+  },
+  "locations": {
+    "gatehouse": {
+      "name": "Gatehouse Passage",
+      "description": "You are in the passage under the gatehouse.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The great gate is shut and barred. Two guards lean on their spears beside it, half asleep, but awake enough. Nobody leaves today without the steward's word."
+        }
+      ],
+      "exits": {
+        "north": {
+          "to": "south_yard",
+          "order": 1
+        },
+        "east": {
+          "to": "porters_lodge",
+          "order": 2
+        },
+        "south": {
+          "to": "road_outside",
+          "order": 3,
+          "enabledWhen": {
+            "not": {
+              "turnAtLeast": 0
+            }
+          },
+          "interruptedText": "You set your shoulder to the bar across the gate. It is as thick as your arm, and it does not move."
+        }
+      }
+    },
+    "porters_lodge": {
+      "name": "Porter's Lodge",
+      "description": "You are in the porter's lodge beside the gate.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Old Hob the porter sits by a small fire, mending a strap. He looks up and nods at you."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "gatehouse",
+          "order": 4
+        }
+      },
+      "actions": [
+        "ask_hob_leave",
+        "ask_hob_postern"
+      ]
+    },
+    "south_yard": {
+      "name": "Outer Ward, South",
+      "description": "You are in the south part of the outer ward.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Chickens scratch in the mud. The gatehouse is south. You smell horses to the west and hear a hammer to the east."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "gatehouse",
+          "order": 3
+        },
+        "west": {
+          "to": "stables",
+          "order": 4
+        },
+        "east": {
+          "to": "smithy",
+          "order": 2
+        },
+        "north": {
+          "to": "north_yard",
+          "order": 1
+        }
+      }
+    },
+    "stables": {
+      "name": "Stables",
+      "description": "You are in the stables.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Your own horse turns its head as you come in. Tom, the stable boy, is forking straw. A ladder leads up to the hayloft."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "south_yard",
+          "order": 2
+        },
+        "up": {
+          "to": "hayloft",
+          "order": 5
+        },
+        "north": {
+          "to": "laundry",
+          "order": 1
+        }
+      },
+      "actions": [
+        "ask_tom_rope"
+      ]
+    },
+    "hayloft": {
+      "name": "Hayloft",
+      "description": "You are in the hayloft above the stables.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Warm, dusty hay. Through a gap in the boards you see the whole outer ward: the laundry to the north, the gatehouse to the south."
+        }
+      ],
+      "exits": {
+        "down": {
+          "to": "stables",
+          "order": 6
+        }
+      }
+    },
+    "smithy": {
+      "name": "Smithy",
+      "description": "You are in the smithy.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The forge fire is banked low; the smith is at Mass like everyone else. Horseshoes hang in rows on the wall."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "south_yard",
+          "order": 4
+        },
+        "east": {
+          "to": "kennels",
+          "order": 2
+        },
+        "north": {
+          "to": "mews",
+          "order": 1
+        }
+      }
+    },
+    "kennels": {
+      "name": "Kennels",
+      "description": "You are by the kennels.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The hounds throw themselves against the fence and bark at you until you back away. North, past the fence, you see apple trees."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "smithy",
+          "order": 4
+        },
+        "north": {
+          "to": "orchard",
+          "order": 1
+        }
+      }
+    },
+    "north_yard": {
+      "name": "Outer Ward, North",
+      "description": "You are in the north part of the outer ward.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A wide muddy yard. The inner gate stands open to the north. Steam drifts from a building to the west."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "south_yard",
+          "order": 3
+        },
+        "west": {
+          "to": "laundry",
+          "order": 4
+        },
+        "east": {
+          "to": "mews",
+          "order": 2
+        },
+        "north": {
+          "to": "inner_gate",
+          "order": 1
+        }
+      },
+      "actions": [
+        "hint_ways_out"
+      ]
+    },
+    "laundry": {
+      "name": "Laundry",
+      "description": "You are in the castle laundry.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Big wooden tubs, wet linen, the smell of lye. Ede the laundress is wringing out a sheet with strong red arms. A loaded hand cart stands by the door, piled with baskets of washing."
+        },
+        {
+          "type": "log",
+          "text": "Ede jerks her head at the cart: \"Sanctus bell, I go. Be in the big basket or be left behind.\"",
+          "when": {
+            "path": "/ede/agreed",
+            "equals": true
+          }
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "stables",
+          "order": 3
+        },
+        "east": {
+          "to": "north_yard",
+          "order": 2
+        },
+        "west": {
+          "to": "drying_green",
+          "order": 4
+        },
+        "hide in the laundry basket": {
+          "to": "road_outside",
+          "order": 9,
+          "visibleWhen": {
+            "path": "/ede/agreed",
+            "equals": true
+          },
+          "enabledWhen": {
+            "allOf": [
+              {
+                "turnAtLeast": 30
+              },
+              {
+                "turnAtMost": 34
+              },
+              {
+                "path": "/alarm/raised",
+                "equals": false
+              }
+            ]
+          },
+          "interruptedText": "You run for the big basket a moment too late. It is already on the cart, and the cart is gone. Be in the big one, Ede said, or be left behind."
+        }
+      },
+      "actions": [
+        "ask_ede_osric",
+        "ask_ede_help"
+      ]
+    },
+    "drying_green": {
+      "name": "Drying Green",
+      "description": "You are on the drying green.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Sheets hang on lines between posts, flapping in the wind. To the north a narrow passage runs along the west wall."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "laundry",
+          "order": 2
+        },
+        "north": {
+          "to": "postern_passage",
+          "order": 1
+        }
+      }
+    },
+    "postern_passage": {
+      "name": "Postern Passage",
+      "description": "You are in a narrow passage inside the west wall.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "At the end of the passage is a low, iron-bound door: the postern gate. You hear the river on the other side. The lock is big and old."
+        },
+        {
+          "type": "log",
+          "text": "A guard now stands in front of the postern, sword drawn.",
+          "when": {
+            "path": "/alarm/raised",
+            "equals": true
+          }
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "drying_green",
+          "order": 3
+        },
+        "east": {
+          "to": "guardroom",
+          "order": 2
+        },
+        "west": {
+          "to": "riverbank",
+          "order": 4,
+          "enabledWhen": {
+            "allOf": [
+              {
+                "isCarrying": "postern_key"
+              },
+              {
+                "path": "/alarm/raised",
+                "equals": false
+              }
+            ]
+          },
+          "interruptedText": "Boots ring on the stones outside the postern. You press back into the passage and leave the door shut."
+        }
+      }
+    },
+    "guardroom": {
+      "name": "Guardroom",
+      "description": "You are in the guardroom.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Sergeant Bran lies asleep on a bench after the night watch, snoring. His belt hangs on a peg above him.",
+          "when": {
+            "turnAtMost": 24
+          }
+        },
+        {
+          "type": "log",
+          "text": "Sergeant Bran sits on his bench, awake, pulling on his boots. He frowns at you. You back out quickly.",
+          "when": {
+            "turnAtLeast": 25
+          }
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "postern_passage",
+          "order": 4
+        },
+        "east": {
+          "to": "inner_gate",
+          "order": 2
+        }
+      },
+      "items": [
+        {
+          "id": "postern_key",
+          "name": "the postern key",
+          "description": "A big iron key hangs from the sergeant's belt on the peg.",
+          "descriptionWhenCarried": "Heavy and old. It opens the postern gate in the west wall.",
+          "takeLabel": "Lift the key off the belt",
+          "availableWhen": {
+            "turnAtMost": 24
+          }
+        }
+      ]
+    },
+    "mews": {
+      "name": "Mews",
+      "description": "You are in the mews, where the hawks are kept.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Hooded hawks sit on their perches in the half-dark. They shift and ruffle as you pass."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "smithy",
+          "order": 3
+        },
+        "west": {
+          "to": "north_yard",
+          "order": 4
+        },
+        "east": {
+          "to": "orchard",
+          "order": 2
+        }
+      }
+    },
+    "orchard": {
+      "name": "Orchard",
+      "description": "You are in the orchard.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Rows of apple trees inside the curtain wall. It is quiet here, far from the yards."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "kennels",
+          "order": 3
+        },
+        "west": {
+          "to": "mews",
+          "order": 4
+        }
+      }
+    },
+    "inner_gate": {
+      "name": "Inner Gate",
+      "description": "You are in the inner gate between the two wards.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The gate stands open; the gatekeeper is at Mass. A door on the west side leads into the guardroom."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "guardroom",
+          "order": 4
+        },
+        "south": {
+          "to": "north_yard",
+          "order": 3
+        },
+        "north": {
+          "to": "inner_yard",
+          "order": 1
+        }
+      }
+    },
+    "inner_yard": {
+      "name": "Inner Ward",
+      "description": "You are in the inner ward.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A paved yard. The great hall fills the north side. To the east is the chapel; you hear singing from it. To the west is the well."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "inner_gate",
+          "order": 3
+        },
+        "west": {
+          "to": "well",
+          "order": 4
+        },
+        "east": {
+          "to": "chapel_porch",
+          "order": 2
+        },
+        "north": {
+          "to": "great_hall",
+          "order": 1
+        }
+      }
+    },
+    "well": {
+      "name": "Well",
+      "description": "You are at the well.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A stone well with a bucket and chain. Doors lead west and north."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "inner_yard",
+          "order": 2
+        },
+        "west": {
+          "to": "brewhouse",
+          "order": 4
+        },
+        "north": {
+          "to": "screens_passage",
+          "order": 1
+        }
+      }
+    },
+    "brewhouse": {
+      "name": "Brewhouse",
+      "description": "You are in the brewhouse.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Sour, warm air and big vats of ale. A door north leads to the kitchen."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "well",
+          "order": 2
+        },
+        "north": {
+          "to": "kitchen",
+          "order": 1
+        }
+      }
+    },
+    "chapel_porch": {
+      "name": "Chapel Porch",
+      "description": "You are in the porch of the chapel.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The chapel door is shut. Behind it the whole household is at Mass: Sir Geoffrey, his lady, the steward, the guards who are not on duty. You hear the priest's voice through the wood."
+        },
+        {
+          "type": "log",
+          "text": "The Mass has only just begun.",
+          "when": {
+            "turnAtMost": 14
+          }
+        },
+        {
+          "type": "log",
+          "text": "The Mass is in its middle part. You still have some time.",
+          "when": {
+            "allOf": [
+              {
+                "turnAtLeast": 15
+              },
+              {
+                "turnAtMost": 29
+              }
+            ]
+          }
+        },
+        {
+          "type": "log",
+          "text": "They are past the Sanctus. Mass will not last much longer.",
+          "when": {
+            "allOf": [
+              {
+                "turnAtLeast": 30
+              },
+              {
+                "turnAtMost": 41
+              }
+            ]
+          }
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "inner_yard",
+          "order": 4
+        },
+        "north": {
+          "to": "keep_yard",
+          "order": 1
+        },
+        "east": {
+          "to": "chaplain_house",
+          "order": 2
+        }
+      },
+      "actions": [
+        "listen_at_door",
+        "slip_into_chapel"
+      ]
+    },
+    "great_hall": {
+      "name": "Great Hall",
+      "description": "You are in the great hall.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Long tables, benches, the remains of last night's fire. A stair at the side leads up. Doors lead west to the screens passage, east to the yard by the keep, and south to the inner ward."
+        },
+        {
+          "type": "log",
+          "text": "Agnes the chambermaid sweeps last night's rushes off the floor. A ring of keys hangs at her belt. \"The steward's room next,\" she mutters.",
+          "when": {
+            "turnAtMost": 13
+          }
+        },
+        {
+          "type": "log",
+          "text": "Agnes is back, scrubbing the high table.",
+          "when": {
+            "turnAtLeast": 25
+          }
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "inner_yard",
+          "order": 3
+        },
+        "west": {
+          "to": "screens_passage",
+          "order": 4
+        },
+        "east": {
+          "to": "keep_yard",
+          "order": 2
+        },
+        "up": {
+          "to": "upper_passage",
+          "order": 5
+        }
+      }
+    },
+    "screens_passage": {
+      "name": "Screens Passage",
+      "description": "You are in the screens passage at the end of the hall.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A narrow passage behind a wooden screen. Servants carry food through here from the kitchen to the hall."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "well",
+          "order": 3
+        },
+        "west": {
+          "to": "kitchen",
+          "order": 4
+        },
+        "east": {
+          "to": "great_hall",
+          "order": 2
+        },
+        "north": {
+          "to": "buttery",
+          "order": 1
+        }
+      }
+    },
+    "kitchen": {
+      "name": "Kitchen",
+      "description": "You are in the kitchen.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A huge fire burns in the hearth; a pot of pottage bubbles over it. Maud, the kitchen maid, looks up from her bread dough. Her face goes pale when she sees you."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "brewhouse",
+          "order": 3
+        },
+        "east": {
+          "to": "screens_passage",
+          "order": 2
+        },
+        "north": {
+          "to": "pantry",
+          "order": 1
+        },
+        "west": {
+          "to": "herb_garden",
+          "order": 4
+        }
+      },
+      "actions": [
+        "ask_maud_embers",
+        "ask_maud_letters"
+      ]
+    },
+    "pantry": {
+      "name": "Pantry",
+      "description": "You are in the pantry.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Bread, cheese and salt on shelves. It is cool and quiet here."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "kitchen",
+          "order": 3
+        },
+        "east": {
+          "to": "buttery",
+          "order": 2
+        }
+      }
+    },
+    "buttery": {
+      "name": "Buttery",
+      "description": "You are in the buttery.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Jugs of ale and wine. A trapdoor and steps lead down to the cellar."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "screens_passage",
+          "order": 3
+        },
+        "west": {
+          "to": "pantry",
+          "order": 4
+        },
+        "down": {
+          "to": "cellar",
+          "order": 6
+        }
+      }
+    },
+    "cellar": {
+      "name": "Cellar",
+      "description": "You are in the cellar.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Barrels in the dark. Nothing here but wine and spiders."
+        }
+      ],
+      "exits": {
+        "up": {
+          "to": "buttery",
+          "order": 5
+        }
+      }
+    },
+    "upper_passage": {
+      "name": "Upper Passage",
+      "description": "You are in the passage above the hall.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A wooden gallery with doors along it. The stair leads down to the hall."
+        },
+        {
+          "type": "log",
+          "text": "The steward's door, to the west, is locked.",
+          "when": {
+            "turnAtMost": 13
+          }
+        },
+        {
+          "type": "log",
+          "text": "The steward's door stands open, propped with a stool. Nobody is inside. Agnes has left her broom by the door.",
+          "when": {
+            "allOf": [
+              {
+                "turnAtLeast": 15
+              },
+              {
+                "turnAtMost": 24
+              },
+              {
+                "not": {
+                  "allOf": [
+                    {
+                      "turnAtLeast": 19
+                    },
+                    {
+                      "turnAtMost": 20
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "log",
+          "text": "The steward's door stands open. Inside, Agnes is on her knees, scrubbing the floor.",
+          "when": {
+            "allOf": [
+              {
+                "turnEquals": 20
+              },
+              {
+                "path": "/alarm/raised",
+                "equals": false
+              }
+            ]
+          }
+        },
+        {
+          "type": "log",
+          "text": "The steward's door is locked again.",
+          "when": {
+            "turnAtLeast": 26
+          }
+        }
+      ],
+      "exits": {
+        "down": {
+          "to": "great_hall",
+          "order": 6
+        },
+        "west": {
+          "to": "steward_chamber",
+          "order": 4,
+          "enabledWhen": {
+            "anyOf": [
+              {
+                "allOf": [
+                  {
+                    "turnAtLeast": 14
+                  },
+                  {
+                    "turnAtMost": 18
+                  }
+                ]
+              },
+              {
+                "allOf": [
+                  {
+                    "turnAtLeast": 21
+                  },
+                  {
+                    "turnAtMost": 24
+                  }
+                ]
+              }
+            ]
+          },
+          "interruptedText": "You stop on the threshold of the steward's room and step back into the passage before Agnes can see you."
+        },
+        "north": {
+          "to": "guest_chamber",
+          "order": 1
+        }
+      },
+      "actions": [
+        "hint_door"
+      ]
+    },
+    "guest_chamber": {
+      "name": "Guest Chamber",
+      "description": "You are in the guest chamber.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A narrow bed, a wash basin, your riding cloak on a peg. Your satchel is empty: the letter you carried is no longer yours."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "upper_passage",
+          "order": 3
+        }
+      },
+      "actions": [
+        "hint_start"
+      ]
+    },
+    "steward_chamber": {
+      "name": "Steward's Chamber",
+      "description": "You are in the steward's chamber.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Master Osric's room: neat, clean, a writing desk, a chest of accounts. Everything in its place."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "upper_passage",
+          "order": 2
+        },
+        "north": {
+          "to": "counting_house",
+          "order": 1
+        }
+      },
+      "actions": [
+        "search_desk",
+        "hint_osric"
+      ]
+    },
+    "counting_house": {
+      "name": "Counting House",
+      "description": "You are in the counting house.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Tally sticks and account rolls. An open roll on the table lists who came and went this month. Your own name is there: \"messenger of Brenmoor, received by O.\" Three weeks ago, and again last night."
+        },
+        {
+          "type": "log",
+          "text": "A half-burnt candle stands on the table among the rolls."
+        },
+        {
+          "type": "log",
+          "text": "Wax and ink, Ede said. Someone works in here after dark, alone.",
+          "when": {
+            "isCarrying": "ede_hint"
+          }
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "steward_chamber",
+          "order": 3
+        }
+      },
+      "actions": [
+        "search_rolls",
+        "hint_proof"
+      ]
+    },
+    "keep_yard": {
+      "name": "Yard by the Keep",
+      "description": "You are in the yard at the foot of the keep.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The keep rises to the east: the oldest and strongest tower, where Sir Geoffrey lives. Its door stands open."
+        },
+        {
+          "type": "log",
+          "text": "A guard stands at the keep door. \"Nobody goes up while Sir Geoffrey is at Mass,\" he says. \"Only servants on an errand.\"",
+          "when": {
+            "not": {
+              "path": "/alarm/raised",
+              "equals": true
+            }
+          }
+        },
+        {
+          "type": "log",
+          "text": "The guard holds his spear across the keep door. He has heard the alarm. Nobody passes now, errand or not.",
+          "when": {
+            "path": "/alarm/raised",
+            "equals": true
+          }
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "great_hall",
+          "order": 4
+        },
+        "south": {
+          "to": "chapel_porch",
+          "order": 3
+        },
+        "east": {
+          "to": "keep_ground",
+          "order": 2,
+          "enabledWhen": {
+            "allOf": [
+              {
+                "isCarrying": "fire_pot"
+              },
+              {
+                "path": "/alarm/raised",
+                "equals": false
+              }
+            ]
+          },
+          "interruptedText": "The guard lowers his spear across the keep door. Nobody goes in now, errand or no errand."
+        }
+      },
+      "actions": [
+        "hint_keep"
+      ]
+    },
+    "keep_ground": {
+      "name": "Keep, Ground Floor",
+      "description": "You are on the ground floor of the keep.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The guard looks at your pot of embers. \"For the brazier? Go on, then.\""
+        },
+        {
+          "type": "log",
+          "text": "A dark, vaulted room. A spiral stair goes up. A doorway leads north."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "keep_yard",
+          "order": 4
+        },
+        "north": {
+          "to": "storeroom",
+          "order": 1
+        },
+        "up": {
+          "to": "antechamber",
+          "order": 5
+        }
+      }
+    },
+    "storeroom": {
+      "name": "Keep Storeroom",
+      "description": "You are in the keep storeroom.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Sacks of grain, salted meat, arrows in bundles. Supplies for a siege."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "keep_ground",
+          "order": 3
+        }
+      }
+    },
+    "antechamber": {
+      "name": "Antechamber",
+      "description": "You are in the antechamber on the first floor of the keep.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A waiting room with a bench for visitors. The stair goes on up to Sir Geoffrey's solar. A door to the north opens onto the wall walk."
+        }
+      ],
+      "exits": {
+        "down": {
+          "to": "keep_ground",
+          "order": 6
+        },
+        "up": {
+          "to": "solar",
+          "order": 5
+        },
+        "north": {
+          "to": "wall_walk",
+          "order": 1
+        }
+      }
+    },
+    "solar": {
+      "name": "Solar",
+      "description": "You are in Sir Geoffrey's solar.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A fine room with glass in the window and a cold brazier. Sir Geoffrey's chair stands by a table. A small door in the north wall leads to the privy."
+        },
+        {
+          "type": "log",
+          "text": "On the table lies your lord's letter, the red wax seal of Brenmoor unbroken, waiting for Sir Geoffrey to come back from Mass.",
+          "when": {
+            "path": "/letter/taken",
+            "equals": false
+          }
+        },
+        {
+          "type": "log",
+          "text": "The table is empty where the letter lay.",
+          "when": {
+            "path": "/letter/taken",
+            "equals": true
+          }
+        }
+      ],
+      "exits": {
+        "down": {
+          "to": "antechamber",
+          "order": 6
+        },
+        "north": {
+          "to": "garderobe",
+          "order": 1
+        }
+      },
+      "actions": [
+        "lift_seal",
+        "take_letter",
+        "return_letter",
+        "hint_proof"
+      ]
+    },
+    "garderobe": {
+      "name": "Garderobe",
+      "description": "You are in the garderobe, the privy of the keep.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "A stone seat over a dark shaft in the thickness of the wall. Cold air and a bad smell come up from far below. You hear water."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "solar",
+          "order": 3
+        },
+        "climb down the shaft": {
+          "to": "moat",
+          "order": 9,
+          "enabledWhen": {
+            "isCarrying": "rope"
+          },
+          "interruptedText": "The knot slips when you test it. You pull the rope back up and stay where you are."
+        }
+      }
+    },
+    "wall_walk": {
+      "name": "Wall Walk",
+      "description": "You are on the north wall walk.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Wind and sky. Below, outside the wall, is the moat. To the west the wall walk ends at a tower."
+        }
+      ],
+      "exits": {
+        "south": {
+          "to": "antechamber",
+          "order": 3
+        },
+        "west": {
+          "to": "north_tower",
+          "order": 4
+        }
+      }
+    },
+    "north_tower": {
+      "name": "North Tower",
+      "description": "You are in the north tower.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "From the arrow slit you look along the outside of the keep. A dark stain runs down the wall from the privy shaft into the moat. The water there looks deep, and the far bank is close."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "wall_walk",
+          "order": 2
+        }
+      }
+    },
+    "riverbank": {
+      "name": "Riverbank",
+      "description": "You are on the riverbank outside the castle walls.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You lock the postern behind you and drop the key in the river. Free."
+        }
+      ],
+      "exits": {}
+    },
+    "road_outside": {
+      "name": "Road Below the Castle",
+      "description": "You are on the road below the castle.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Ede's cart rolls past the gate guards, who do not look twice at a basket of wet sheets. At the river meadow you climb out, stiff and damp."
+        }
+      ],
+      "exits": {}
+    },
+    "moat": {
+      "name": "Moat",
+      "description": "You are in the moat.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You slide down the shaft and drop into cold, filthy water. You come up gasping."
+        }
+      ],
+      "exits": {
+        "swim north": {
+          "to": "moat_far_bank",
+          "order": 9
+        }
+      }
+    },
+    "moat_far_bank": {
+      "name": "Far Bank of the Moat",
+      "description": "You are on the far bank of the moat.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You pull yourself out of the water, shaking, and run for the trees."
+        }
+      ],
+      "exits": {}
+    },
+    "herb_garden": {
+      "name": "Herb Garden",
+      "description": "You are in the herb garden.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Low beds of sage, thyme, parsley and fennel behind a wattle fence. Bees hum in the lavender. The kitchen door is east."
+        }
+      ],
+      "exits": {
+        "east": {
+          "to": "kitchen",
+          "order": 2
+        }
+      }
+    },
+    "chaplain_house": {
+      "name": "Chaplain's House",
+      "description": "You are in the chaplain's house.",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Father Anselm's house leans against the chapel wall. Robes hang on pegs, and a locked chest holds the chapel silver. Under the window stands a desk with books, pens and a crucifix. On the desk lies a letter with a foreign seal."
+        }
+      ],
+      "exits": {
+        "west": {
+          "to": "chapel_porch",
+          "order": 4
+        }
+      },
+      "actions": [
+        "read_chaplain_letter"
+      ]
+    }
+  },
+  "actions": {
+    "ask_maud_embers": {
+      "description": "Ask Maud for some hot embers",
+      "visibleWhen": {
+        "not": {
+          "isCarrying": "fire_pot"
+        }
+      },
+      "effects": [
+        {
+          "give": "fire_pot"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Maud does not ask why. She scoops glowing embers into a small clay pot with a lid and pushes it into your hands. \"Mind your fingers. And Sir Geoffrey's brazier is cold. Somebody has to light it before he is back from Mass. Tell the guard at the keep that Maud sent you.\""
+        }
+      ],
+      "interruptedText": "Maud turns away to shout at a kitchen boy, and the moment to ask is gone."
+    },
+    "ask_maud_letters": {
+      "description": "Ask Maud who takes the letters to Sir Geoffrey",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "\"Master Osric. Always Master Osric,\" Maud says. \"Every letter that comes to this castle goes through his hands first. He likes it that way.\""
+        }
+      ]
+    },
+    "ask_hob_leave": {
+      "description": "Ask Hob if you can leave",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Hob shakes his head. \"Not today, lad. Master Osric came by last night, not an hour after you rode in, and said the Brenmoor messenger was not to leave.\""
+        }
+      ]
+    },
+    "ask_hob_postern": {
+      "description": "Ask Hob about other ways out",
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Hob lowers his voice. \"There's the postern in the west wall, down to the river. Sergeant Bran keeps the key on his belt. He sleeps in the guardroom after the night watch, till the Terce bell rings from the village. Then he's up and about.\""
+        }
+      ]
+    },
+    "ask_tom_rope": {
+      "description": "Ask Tom for a rope",
+      "visibleWhen": {
+        "not": {
+          "isCarrying": "rope"
+        }
+      },
+      "effects": [
+        {
+          "give": "rope"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Tom hands you a coil of rope. \"What do you want it for? Not the privy shaft, I hope. We fished a dropped cup out of the moat under the keep last week. Straight down, deep water, stinks to heaven.\""
+        }
+      ],
+      "interruptedText": "A horse kicks at its stall and Tom runs to it before you can ask."
+    },
+    "ask_ede_osric": {
+      "description": "Ask Ede about Master Osric",
+      "visibleWhen": {
+        "not": {
+          "isCarrying": "ede_hint"
+        }
+      },
+      "effects": [
+        {
+          "give": "ede_hint"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Ede snorts. \"That one. Pays me short and calls it fair. And his good blue sleeves come to me every week spotted with candle wax and ink. An honest steward does his accounts by daylight. What is he writing at night, alone?\""
+        }
+      ],
+      "interruptedText": "Ede is wringing out a sheet and does not hear your question."
+    },
+    "ask_ede_help": {
+      "description": "Ask Ede to help you get out",
+      "visibleWhen": {
+        "path": "/ede/agreed",
+        "equals": false
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/ede/agreed",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You tell her about the chains. Ede looks at you for a long time. \"Anyone Osric wants in chains is a friend of mine.\" She points at the cart. \"I take the washing to the river meadow when the Sanctus bell rings. The guards never look in the baskets. Be in the big one, or be left behind.\""
+        }
+      ],
+      "interruptedText": "Ede turns back to her copper before you find the words. You will have to ask her again."
+    },
+    "search_desk": {
+      "description": "Search the desk",
+      "visibleWhen": {
+        "path": "/steward/searched",
+        "equals": false
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/steward/searched",
+          "value": true
+        },
+        {
+          "give": "waxed_knife"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Pens, ink, sand, a stick of sealing wax. In the drawer: a thin knife with a blackened tip and an O cut into the handle. On the blade is a crust of red wax, Brenmoor red, and pressed into it the tip of an antler: a piece of the Brenmoor stag, your lord's own seal. You take it."
+        },
+        {
+          "type": "log",
+          "text": "There are no letters from anyone but tenants and merchants. If Osric keeps a secret, he does not keep it where a servant cleans."
+        }
+      ],
+      "interruptedText": "A board creaks out on the stair. You freeze with your hand on the drawer and leave it shut."
+    },
+    "read_chaplain_letter": {
+      "description": "Look at the letter with the foreign seal",
+      "timeCost": 0,
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The seal is foreign, but the letter is open and harmless: Father Anselm's brother, a monk in Bruges, writes about the price of wax candles and the bad winter."
+        }
+      ]
+    },
+    "lift_seal": {
+      "description": "Lift the seal with a hot knife",
+      "visibleWhen": {
+        "path": "/letter/read",
+        "equals": false
+      },
+      "enabledWhen": {
+        "allOf": [
+          {
+            "isCarrying": "belt_knife"
+          },
+          {
+            "isCarrying": "fire_pot"
+          }
+        ]
+      },
+      "timeCost": 2,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/letter/read",
+          "value": true
+        },
+        {
+          "give": "letter_contents"
+        },
+        {
+          "give": "old_seal_marks"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You heat the thin end of your knife in the embers and slide it under the wax. The seal comes up in one piece."
+        },
+        {
+          "type": "log",
+          "text": "It came up too easily. Under the wax is a second, older smear of red, and a hair-thin crack has been pressed shut. Someone lifted this seal before you. Since you handed the letter over last night, only one person has held it."
+        },
+        {
+          "type": "log",
+          "text": "\"To my friend Geoffrey of Ravensholt. The bearer of this letter sold my secret to Hugh de Varn: the road of my silver by the ford at Cold Ash, which I asked your men to guard. Only you, I and the bearer knew it. It grieves me to write this. He has carried my letters for many years, and I trusted him as I trust you. Hold him in chains until my men come for him. Aldric of Brenmoor.\""
+        },
+        {
+          "type": "log",
+          "text": "You warm the wax again and press the seal back down. It looks untouched."
+        }
+      ],
+      "interruptedText": "The embers have gone grey on top and the wax will not soften. You stop before you crack the seal."
+    },
+    "take_letter": {
+      "description": "Take the letter",
+      "visibleWhen": {
+        "path": "/letter/taken",
+        "equals": false
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/letter/taken",
+          "value": true
+        },
+        {
+          "give": "lords_letter"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You slip the letter into your satchel. Sooner or later someone will see the empty table."
+        }
+      ],
+      "interruptedText": "Steps pass below the window. You pull your hand back from the table."
+    },
+    "return_letter": {
+      "description": "Put the letter back on the table",
+      "visibleWhen": {
+        "isCarrying": "lords_letter"
+      },
+      "effects": [
+        {
+          "consume": "lords_letter"
+        },
+        {
+          "op": "replace",
+          "path": "/letter/taken",
+          "value": false
+        },
+        {
+          "op": "replace",
+          "path": "/letter/missing",
+          "value": 0
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You lay the letter back on the table, exactly where it was."
+        }
+      ],
+      "interruptedText": "You stop over the table with the letter in your hand, then slip it back into your satchel."
+    },
+    "listen_at_door": {
+      "description": "Listen at the chapel door",
+      "timeCost": 0,
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Latin, a cough, the shuffle of feet. You hear Master Osric's dry voice among the responses."
+        }
+      ]
+    },
+    "hint_start": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "path": "/hints/start",
+        "equals": false
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/start",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You sit on the bed and think about Maud's words. The steward gave the order, not Sir Geoffrey. Sir Geoffrey has not even read the letter yet. He will read it after Mass, in his own rooms, and right now nobody is there."
+        },
+        {
+          "type": "log",
+          "text": "And a stranger who wants to know who gave which orders, or how else to leave, could do worse than talk to the man who keeps the gate."
+        }
+      ],
+      "interruptedText": "Your thoughts will not settle. You get up from the bed no wiser than you sat down."
+    },
+    "hint_ways_out": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "path": "/hints/ways_out",
+            "equals": false
+          },
+          {
+            "path": "/ede/agreed",
+            "equals": false
+          },
+          {
+            "not": {
+              "isCarrying": "postern_key"
+            }
+          },
+          {
+            "not": {
+              "isCarrying": "rope"
+            }
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/ways_out",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You stand in the mud and think. The guards will not help you, but the people who do the work here might. The man by the gate, the boy with the horses, the woman with the washing. Servants know the ways in and out that their masters forget."
+        }
+      ],
+      "interruptedText": "A cart horse stamps behind you and your thoughts scatter. You are still standing in the mud."
+    },
+    "hint_osric": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "path": "/hints/osric",
+            "equals": false
+          },
+          {
+            "path": "/steward/searched",
+            "equals": true
+          },
+          {
+            "not": {
+              "isCarrying": "ede_hint"
+            }
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/osric",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You look around the neat room. A careful man keeps his secrets away from his own desk. But somebody cleans up after him, and the people who handle a man's things notice where he has been."
+        }
+      ],
+      "interruptedText": "Every sound on the stair makes you look at the door. You cannot think in this room."
+    },
+    "hint_proof": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "path": "/hints/proof",
+            "equals": false
+          },
+          {
+            "isCarrying": "varn_letter"
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/proof",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You turn the black-sealed letter over in your hands. Sir Geoffrey is not the one who thinks you are a traitor. Your own lord does, and he is far from here."
+        },
+        {
+          "type": "log",
+          "text": "Proof left behind in this castle speaks for nobody. It has to reach the man who wrote your letter, and only you can carry it there."
+        }
+      ],
+      "interruptedText": "You turn the black-sealed letter over and over, but no clear thought comes."
+    },
+    "search_rolls": {
+      "description": "Search the old rolls",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "isCarrying": "ede_hint"
+          },
+          {
+            "path": "/counting/searched",
+            "equals": false
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/counting/searched",
+          "value": true
+        },
+        {
+          "give": "varn_letter"
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You pull down the old rolls, the ones nobody needs any more, and unroll them one by one. In the middle of last year's rents, rolled up inside the parchment, is a folded letter."
+        },
+        {
+          "type": "log",
+          "text": "The seal is a black boar: Hugh de Varn. \"To Osric, steward of Ravensholt. The silver of Cold Ash came to my hands as you promised. The rest of your fee comes with the next news of Brenmoor. Burn this.\""
+        },
+        {
+          "type": "log",
+          "text": "He did not burn it."
+        },
+        {
+          "type": "log",
+          "text": "All this time it lay a few steps from your bed."
+        }
+      ],
+      "interruptedText": "You have unrolled only a few of the old rolls when your nerve fails. You roll them up again and put them back."
+    },
+    "hint_keep": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "path": "/hints/keep",
+            "equals": false
+          },
+          {
+            "not": {
+              "isCarrying": "fire_pot"
+            }
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/keep",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Servants on an errand may pass, the guard said. Sir Geoffrey will want a warm room when he comes back from Mass. And every fire in a castle starts in the kitchen."
+        }
+      ],
+      "interruptedText": "The guard keeps his eyes on you. You stop staring at the keep door and try to look busy."
+    },
+    "hint_door": {
+      "description": "Stop and think",
+      "visibleWhen": {
+        "allOf": [
+          {
+            "path": "/hints/door",
+            "equals": false
+          },
+          {
+            "turnAtMost": 13
+          }
+        ]
+      },
+      "timeCost": 3,
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/hints/door",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You look at the locked door. Masters go to Mass, and servants clean their rooms while they are gone. Whoever carries the keys up here will come sooner or later."
+        }
+      ],
+      "interruptedText": "Steps on the stair break off your thinking. You no longer need to guess who carries the keys."
+    },
+    "slip_into_chapel": {
+      "description": "Slip in at the back of the chapel",
+      "visibleWhen": {
+        "path": "/alarm/raised",
+        "equals": false
+      },
+      "timeCost": 3,
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "You slip through the door and stand at the back, behind the servants. Nobody turns, except Master Osric. He looks at you, then back at the altar, calm."
+        },
+        {
+          "type": "log",
+          "text": "The priest has only just begun. This will take a long time.",
+          "when": {
+            "turnAtMost": 14
+          }
+        },
+        {
+          "type": "log",
+          "text": "The priest drones on through the readings. A servant yawns.",
+          "when": {
+            "allOf": [
+              {
+                "turnAtLeast": 15
+              },
+              {
+                "turnAtMost": 29
+              }
+            ]
+          }
+        },
+        {
+          "type": "log",
+          "text": "They are past the Sanctus. The whole household kneels, and you kneel with them.",
+          "when": {
+            "turnAtLeast": 30
+          }
+        },
+        {
+          "type": "log",
+          "text": "There is nothing for you here: no help, no way out, only the man who wants you in chains. You slip out again."
+        }
+      ],
+      "interruptedText": "You never get through the door. You back away from the chapel before anyone looks your way."
+    }
+  },
+  "timeline": [
+    {
+      "atTurn": 10,
+      "message": "From the chapel, the household sings the Gloria.",
+      "effects": []
+    },
+    {
+      "atTurn": 25,
+      "message": "Across the river, the village church rings the Terce bell.",
+      "effects": []
+    },
+    {
+      "atTurn": 30,
+      "message": "The Sanctus bell rings in the chapel. In the outer ward, a cart creaks.",
+      "effects": []
+    },
+    {
+      "atTurn": 35,
+      "message": "Out by the gate, a cart rattles over the bridge and away.",
+      "effects": []
+    },
+    {
+      "atTurn": 38,
+      "message": "The choir begins the last hymn. Mass is almost over.",
+      "effects": []
+    }
+  ],
+  "rules": [
+    {
+      "when": {
+        "path": "/alarm/raised",
+        "equals": true
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/alarm/countdown",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/letter/taken",
+            "equals": true
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/letter/missing",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/letter/missing",
+            "atLeast": 15
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/alarm/raised",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "shake"
+        },
+        {
+          "type": "log",
+          "text": "A shout from the keep: a servant has found Sir Geoffrey's table empty. Doors bang. Guards run. They are looking for you."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "turnAtLeast": 42
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/alarm/raised",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "shake"
+        },
+        {
+          "type": "log",
+          "text": "The chapel doors open. Mass is over. Sir Geoffrey climbs to his solar and breaks the seal of your lord's letter.",
+          "when": {
+            "path": "/letter/taken",
+            "equals": false
+          }
+        },
+        {
+          "type": "log",
+          "text": "The chapel doors open. Mass is over. Sir Geoffrey climbs to his solar and finds the letter gone. Osric does not need to read it to know what it said.",
+          "when": {
+            "path": "/letter/taken",
+            "equals": true
+          }
+        },
+        {
+          "type": "log",
+          "text": "A horn sounds. Guards run to every gate. They are looking for you."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "upper_passage"
+          },
+          {
+            "turnEquals": 14
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Agnes comes up the stair with her broom and her ring of keys. She unlocks the steward's door, props it open with a stool and leans the broom by the door. \"Water first,\" she mutters, and goes back down."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "upper_passage"
+          },
+          {
+            "turnEquals": 25
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Agnes hurries up the stair. She kicks the stool away, takes her broom and locks the steward's door. Then she goes back down to the hall."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "at": "steward_chamber"
+              },
+              {
+                "at": "counting_house"
+              }
+            ]
+          },
+          {
+            "turnEquals": 18
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Below, a bucket clanks on the stair. Someone is humming. Agnes is coming back."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "upper_passage"
+          },
+          {
+            "turnEquals": 19
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Agnes comes up the stair with a bucket of water. She goes into the steward's room and starts to scrub the floor."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "counting_house"
+          },
+          {
+            "turnEquals": 19
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Next door, Agnes sets down her bucket and starts to scrub. She does not come in here. Nobody cleans Master Osric's counting house."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "steward_chamber"
+          },
+          {
+            "turnAtLeast": 19
+          },
+          {
+            "turnAtMost": 20
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [
+        {
+          "op": "replace",
+          "path": "/alarm/raised",
+          "value": true
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "shake"
+        },
+        {
+          "type": "log",
+          "text": "Agnes comes in with her bucket and stops dead. The water slops over her feet. Then she screams, drops the bucket and runs for the stair. \"Guards! The messenger is in the steward's room!\" Down in the hall, a door bangs and men shout. Soon the whole castle will be looking for you. If you mean to run, run now."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "counting_house"
+          },
+          {
+            "turnEquals": 20
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Next door, the scrubbing stops. Agnes picks up her bucket and goes back down the stair. The steward's room is quiet again."
+        }
+      ]
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "at": "upper_passage"
+          },
+          {
+            "turnEquals": 21
+          },
+          {
+            "path": "/alarm/raised",
+            "equals": false
+          }
+        ]
+      },
+      "effects": [],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "Agnes picks up her bucket and goes back down the stair. The steward's room is quiet again."
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "when": {
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "at": "riverbank"
+              },
+              {
+                "at": "road_outside"
+              },
+              {
+                "at": "moat_far_bank"
+              }
+            ]
+          },
+          {
+            "isCarrying": "varn_letter"
+          },
+          {
+            "isCarrying": "waxed_knife"
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "You keep off the roads and hide from Geoffrey's riders. When you reach Brenmoor at last, the gate guards seize you. A rider from Ravensholt was here before you. They drag you before Lord Aldric. \"A traitor would have run to Hugh de Varn,\" he says. \"You came back to me. Why?\" You lay Hugh de Varn's letter and Osric's knife on the table. Aldric reads the letter twice, then turns the knife over and sees his own red wax on the blade. He puts a hand on your shoulder. \"I should have known better,\" he says. The next morning he rides for Ravensholt himself, with ten of his men, and you at his side. As you ride in through the gate, you see a face at a window of the hall. Master Osric. He is not smiling now. Your name is clean."
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "at": "riverbank"
+              },
+              {
+                "at": "road_outside"
+              },
+              {
+                "at": "moat_far_bank"
+              }
+            ]
+          },
+          {
+            "isCarrying": "varn_letter"
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "You keep off the roads and hide from Geoffrey's riders. When you reach Brenmoor at last, the gate guards seize you. A rider from Ravensholt was here before you. They drag you before Lord Aldric. \"A traitor would have run to Hugh de Varn,\" he says. \"You came back to me. Why?\" You lay Hugh de Varn's letter on the table. Aldric reads it twice. The black boar is real, and the name is plain. \"But how could Geoffrey's steward know my road?\" You tell him: every letter to Ravensholt passes through Osric's hands, and he opens them. That is how he learned the road. That is how he knew to have chains ready for you before Sir Geoffrey had even read the letter. Aldric is quiet for a long time. \"That is your word against his,\" he says. \"Geoffrey will hear it from both of you.\" He rides for Ravensholt himself, and you ride beside him, free. As you pass through the gate, you see a face at a window of the hall. Master Osric. Your name is not clean yet. But it is no longer only your word."
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "at": "riverbank"
+              },
+              {
+                "at": "road_outside"
+              },
+              {
+                "at": "moat_far_bank"
+              }
+            ]
+          },
+          {
+            "isCarrying": "waxed_knife"
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "You keep off the roads and hide from Geoffrey's riders. When you reach Brenmoor at last, the gate guards seize you. A rider from Ravensholt was here before you. They drag you before Lord Aldric. \"A traitor would have run to Hugh de Varn,\" he says. \"You came back to me. Why?\" You lay Osric's knife on the table. Aldric turns it over in his hands. Brenmoor wax, an O cut into the handle. \"You carry my letters every week,\" he says. \"Any messenger could make a knife like this.\" He wants to believe you. You see it in his face. But he does not, not yet. \"We ride to Ravensholt,\" he says. \"You and I. If you lied to me, you stay in Geoffrey's cellar.\" You ride behind him, between two of his guards. As you pass through the gate, you see a face at a window of the hall. Master Osric, watching. Now it is his word against what Ravensholt can show."
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "at": "riverbank"
+              },
+              {
+                "at": "road_outside"
+              },
+              {
+                "at": "moat_far_bank"
+              }
+            ]
+          },
+          {
+            "isCarrying": "lords_letter"
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "You are out, and alive, with your lord's letter in your satchel. It tells you what you are accused of, but it proves nothing. Behind you, Osric tells Sir Geoffrey what the missing letter said, and Sir Geoffrey sends riders after you. Your lord thinks you are a traitor, the real one is still inside, and you can never go home."
+    },
+    {
+      "when": {
+        "anyOf": [
+          {
+            "at": "riverbank"
+          },
+          {
+            "at": "road_outside"
+          },
+          {
+            "at": "moat_far_bank"
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "You are out, and alive. Behind you, Sir Geoffrey reads the letter and sends riders after you. Your lord thinks you are a traitor, the real one is still inside, and you can never go home."
+    },
+    {
+      "when": {
+        "path": "/alarm/countdown",
+        "atLeast": 8
+      },
+      "outcome": "loss",
+      "message": "Rough hands grab you from behind. The guards drag you to the cellar under the keep and lock the chains on your wrists. Master Osric watches from the doorway, and smiles."
+    }
+  ],
+  "context": {
+    "initial": {
+      "alarm": {
+        "raised": false,
+        "countdown": 0
+      },
+      "letter": {
+        "read": false,
+        "taken": false,
+        "missing": 0
+      },
+      "ede": {
+        "agreed": false
+      },
+      "steward": {
+        "searched": false
+      },
+      "hints": {
+        "start": false,
+        "ways_out": false,
+        "osric": false,
+        "proof": false,
+        "keep": false,
+        "door": false
+      },
+      "counting": {
+        "searched": false
+      }
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "alarm": {
+          "type": "object",
+          "properties": {
+            "raised": {
+              "type": "boolean"
+            },
+            "countdown": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "raised",
+            "countdown"
+          ],
+          "additionalProperties": false
+        },
+        "letter": {
+          "type": "object",
+          "properties": {
+            "read": {
+              "type": "boolean"
+            },
+            "taken": {
+              "type": "boolean"
+            },
+            "missing": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "read",
+            "taken",
+            "missing"
+          ],
+          "additionalProperties": false
+        },
+        "ede": {
+          "type": "object",
+          "properties": {
+            "agreed": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "agreed"
+          ],
+          "additionalProperties": false
+        },
+        "steward": {
+          "type": "object",
+          "properties": {
+            "searched": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "searched"
+          ],
+          "additionalProperties": false
+        },
+        "hints": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "boolean"
+            },
+            "ways_out": {
+              "type": "boolean"
+            },
+            "osric": {
+              "type": "boolean"
+            },
+            "proof": {
+              "type": "boolean"
+            },
+            "keep": {
+              "type": "boolean"
+            },
+            "door": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "start",
+            "ways_out",
+            "osric",
+            "proof",
+            "keep",
+            "door"
+          ],
+          "additionalProperties": false
+        },
+        "counting": {
+          "type": "object",
+          "properties": {
+            "searched": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "searched"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "alarm",
+        "letter",
+        "ede",
+        "steward",
+        "hints",
+        "counting"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "waitEnabled": true
+}

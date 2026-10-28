@@ -1,0 +1,254 @@
+{
+  "story_id": "the-number",
+  "story_title": "The Number",
+  "description": "Bare rooms where each door changes a number. Turn 0 into exactly 7 in six moves or fewer.",
+  "tags": [
+    "puzzle",
+    "test"
+  ],
+  "starting_location": "zero",
+  "locations": {
+    "zero": {
+      "name": "Zero",
+      "description": "An empty room. A 0 is painted on the floor.",
+      "exits": {
+        "add 3": {
+          "to": "plus_three",
+          "order": 0
+        },
+        "add 2": {
+          "to": "plus_two",
+          "order": 1
+        },
+        "subtract 1": {
+          "to": "minus_one",
+          "order": 2
+        }
+      }
+    },
+    "plus_three": {
+      "name": "+3",
+      "description": "A bare room. Its only content is the sign +3 on the wall.",
+      "exits": {
+        "add 2": {
+          "to": "plus_two",
+          "order": 1
+        },
+        "subtract 1": {
+          "to": "minus_one",
+          "order": 2
+        }
+      }
+    },
+    "plus_two": {
+      "name": "+2",
+      "description": "A bare room. Its only content is the sign +2 on the wall.",
+      "exits": {
+        "add 3": {
+          "to": "plus_three",
+          "order": 0
+        },
+        "subtract 1": {
+          "to": "minus_one",
+          "order": 2
+        }
+      }
+    },
+    "minus_one": {
+      "name": "−1",
+      "description": "A bare room. Its only content is the sign −1 on the wall.",
+      "exits": {
+        "add 3": {
+          "to": "plus_three",
+          "order": 0
+        },
+        "add 2": {
+          "to": "plus_two",
+          "order": 1
+        }
+      }
+    }
+  },
+  "context": {
+    "initial": {
+      "value": 0,
+      "moves": 0
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer"
+        },
+        "moves": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value",
+        "moves"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": {
+        "at": "plus_three"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": 3
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    },
+    {
+      "when": {
+        "at": "plus_two"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": 2
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    },
+    {
+      "when": {
+        "at": "minus_one"
+      },
+      "effects": [
+        {
+          "op": "inc",
+          "path": "/value",
+          "value": -1
+        },
+        {
+          "op": "inc",
+          "path": "/moves",
+          "value": 1
+        }
+      ],
+      "sideEffects": [
+        {
+          "type": "log",
+          "text": "The number is {/value}. Moves used: {/moves}."
+        }
+      ]
+    }
+  ],
+  "openingLog": [
+    "The number is 0. Make it exactly 7. You have six moves, and every door you go through changes the number.",
+    "You cannot use the same operation twice in a row. Every move you save stays with you."
+  ],
+  "endings": [
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/value",
+            "equals": 7
+          },
+          {
+            "path": "/moves",
+            "atMost": 3
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "Seven, in 3 moves. You saved 3 moves.",
+      "output": {
+        "spare": 3
+      }
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/value",
+            "equals": 7
+          },
+          {
+            "path": "/moves",
+            "atMost": 4
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "Seven, in 4 moves. You saved 2 moves.",
+      "output": {
+        "spare": 2
+      }
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/value",
+            "equals": 7
+          },
+          {
+            "path": "/moves",
+            "atMost": 5
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "Seven, in 5 moves. You saved 1 move.",
+      "output": {
+        "spare": 1
+      }
+    },
+    {
+      "when": {
+        "allOf": [
+          {
+            "path": "/value",
+            "equals": 7
+          },
+          {
+            "path": "/moves",
+            "atMost": 6
+          }
+        ]
+      },
+      "outcome": "win",
+      "message": "Seven, with your last move. You saved nothing, but you made it.",
+      "output": {
+        "spare": 0
+      }
+    },
+    {
+      "when": {
+        "path": "/moves",
+        "atLeast": 6
+      },
+      "outcome": "loss",
+      "message": "Six moves used, and the number is {/value}. The rooms go dark."
+    }
+  ]
+}
