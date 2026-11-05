@@ -9,7 +9,7 @@ defmodule ChroniclesWeb.UserLive.Confirmation do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <div class="mx-auto max-w-sm">
         <div class="text-center">
-          <.header>Welcome {@user.email}</.header>
+          <.header>{gettext("Welcome %{email}", email: @user.email)}</.header>
         </div>
 
         <.form
@@ -25,13 +25,14 @@ defmodule ChroniclesWeb.UserLive.Confirmation do
           <.button
             name={@form[:remember_me].name}
             value="true"
-            phx-disable-with="Confirming..."
-            class="btn btn-primary w-full"
+            phx-disable-with={gettext("Confirming...")}
+            variant="primary"
+            class="w-full"
           >
-            Confirm and stay logged in
+            {gettext("Confirm and stay logged in")}
           </.button>
-          <.button phx-disable-with="Confirming..." class="btn btn-primary btn-soft w-full mt-2">
-            Confirm and log in only this time
+          <.button phx-disable-with={gettext("Confirming...")} class="mt-2 w-full">
+            {gettext("Confirm and log in only this time")}
           </.button>
         </.form>
 
@@ -46,26 +47,27 @@ defmodule ChroniclesWeb.UserLive.Confirmation do
         >
           <input type="hidden" name={@form[:token].name} value={@form[:token].value} />
           <%= if @current_scope do %>
-            <.button phx-disable-with="Logging in..." class="btn btn-primary w-full">
-              Log in
+            <.button phx-disable-with={gettext("Logging in...")} variant="primary" class="w-full">
+              {gettext("Log in")}
             </.button>
           <% else %>
             <.button
               name={@form[:remember_me].name}
               value="true"
-              phx-disable-with="Logging in..."
-              class="btn btn-primary w-full"
+              phx-disable-with={gettext("Logging in...")}
+              variant="primary"
+              class="w-full"
             >
-              Keep me logged in on this device
+              {gettext("Keep me logged in on this device")}
             </.button>
-            <.button phx-disable-with="Logging in..." class="btn btn-primary btn-soft w-full mt-2">
-              Log me in only this time
+            <.button phx-disable-with={gettext("Logging in...")} class="mt-2 w-full">
+              {gettext("Log me in only this time")}
             </.button>
           <% end %>
         </.form>
 
         <p :if={!@user.confirmed_at} class="alert alert-outline mt-8">
-          Tip: If you prefer passwords, you can enable them in the user settings.
+          {gettext("Tip: if you prefer a password, you can set one in your settings.")}
         </p>
       </div>
     </Layouts.app>
@@ -82,7 +84,7 @@ defmodule ChroniclesWeb.UserLive.Confirmation do
     else
       {:ok,
        socket
-       |> put_flash(:error, "Magic link is invalid or it has expired.")
+       |> put_flash(:error, gettext("This login link is not valid or has expired."))
        |> push_navigate(to: ~p"/users/log-in")}
     end
   end

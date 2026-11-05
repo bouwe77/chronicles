@@ -8,7 +8,7 @@ defmodule ChroniclesWeb.UserLive.RegistrationTest do
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
-      assert html =~ "Register"
+      assert html =~ "Sign up"
       assert html =~ "Log in"
     end
 
@@ -30,7 +30,7 @@ defmodule ChroniclesWeb.UserLive.RegistrationTest do
         |> element("#registration_form")
         |> render_change(user: %{"email" => "with spaces"})
 
-      assert result =~ "Register"
+      assert result =~ "Sign up"
       assert result =~ "must have the @ sign and no spaces"
     end
   end
@@ -47,7 +47,7 @@ defmodule ChroniclesWeb.UserLive.RegistrationTest do
         |> follow_redirect(conn, ~p"/users/log-in")
 
       assert html =~
-               ~r/An email was sent to .*, please access it to confirm your account/
+               ~r/We sent an email to .*\. Open it to confirm your account/
     end
 
     test "renders errors for duplicated email", %{conn: conn} do

@@ -1,14 +1,14 @@
 defmodule Chronicles.Play do
   @moduledoc """
-  Drives `Chronicles.Engine` by button label, the way a player clicks. A port of
-  adventure-game's `app/sim/play.mjs`. Every step returns a new `%{version, state}`.
+  Drives `Chronicles.Engine` by button label, the way a player clicks. Every step returns
+  a new `%{version, state}`.
   """
 
   alias Chronicles.Engine
 
   @fixtures Path.expand("../fixtures/stories", __DIR__)
 
-  # A story's head version, exported from adventure-game into test/fixtures/stories.
+  # A story's content, from test/fixtures/stories.
   def story(id), do: @fixtures |> Path.join("#{id}.json") |> File.read!() |> Jason.decode!()
 
   # `setup` may change the fresh game state before the first move.
@@ -24,8 +24,10 @@ defmodule Chronicles.Play do
 
   def act(game, label), do: click(game, :actions, label, &{:act, &1.id})
 
+  def wait(game), do: click(game, :actions, "", fn _ -> {:act, :wait} end)
+
   def wait_until(game, turn) do
-    if game.state["turns"] < turn, do: game |> act("Wait") |> wait_until(turn), else: game
+    if game.state.turns < turn, do: game |> wait() |> wait_until(turn), else: game
   end
 
   def take(game, name) do
@@ -34,14 +36,13 @@ defmodule Chronicles.Play do
   end
 
   # How many log lines match `regex`.
-  def count(game, regex), do: Enum.count(game.state["log"], &(&1["text"] =~ regex))
+  def count(game, regex), do: Enum.count(game.state.log, &(&1.text =~ regex))
 
   # The game after `fun`, and the log lines `fun` added.
   def during(game, fun) do
     after_fun = fun.(game)
 
-    {after_fun,
-     after_fun.state["log"] |> Enum.drop(length(game.state["log"])) |> Enum.map(& &1["text"])}
+    {after_fun, after_fun.state.log |> Enum.drop(length(game.state.log)) |> Enum.map(& &1.text)}
   end
 
   defp click(game, kind, label, command) do
@@ -53,7 +54,7 @@ defmodule Chronicles.Play do
 
       _ ->
         available = Enum.map_join(buttons, ", ", &"#{&1.label}#{if &1.disabled?, do: " (off)"}")
-        raise "#{kind} #{inspect(label)} not available at t#{game.state["turns"]}: #{available}"
+        raise "#{kind} #{inspect(label)} not available at t#{game.state.turns}: #{available}"
     end
   end
 

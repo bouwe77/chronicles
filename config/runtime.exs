@@ -41,6 +41,12 @@ if config_env() == :dev do
 end
 
 if config_env() == :prod do
+  # Signing up needs this code. Without it, nobody can sign up.
+  config :chronicles, invite_code: System.get_env("INVITE_CODE")
+
+  # Requests to /api per client IP per minute.
+  config :chronicles, api_rate_limit: String.to_integer(System.get_env("RATE_LIMIT") || "100")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

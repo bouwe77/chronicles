@@ -1,5 +1,6 @@
 defmodule ChroniclesWeb.UserAuth do
   use ChroniclesWeb, :verified_routes
+  use Gettext, backend: ChroniclesWeb.Gettext
 
   import Plug.Conn
   import Phoenix.Controller
@@ -194,6 +195,9 @@ defmodule ChroniclesWeb.UserAuth do
       on user_token.
       Redirects to login page if there's no logged user.
 
+    * `:require_admin` - Lets only admins through. Use it after
+      `:require_authenticated`.
+
   ## Examples
 
   Use the `on_mount` lifecycle macro in LiveViews to mount or authenticate
@@ -224,7 +228,7 @@ defmodule ChroniclesWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, gettext("You must log in to access this page."))
         |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
@@ -239,8 +243,22 @@ defmodule ChroniclesWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must re-authenticate to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, gettext("Log in again to open this page."))
         |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+
+      {:halt, socket}
+    end
+  end
+
+  # Use after `:require_authenticated`.
+  def on_mount(:require_admin, _params, _session, socket) do
+    if socket.assigns.current_scope.user.role == :admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, gettext("Only an admin can open this page."))
+        |> Phoenix.LiveView.redirect(to: ~p"/stories")
 
       {:halt, socket}
     end
@@ -258,9 +276,9 @@ defmodule ChroniclesWeb.UserAuth do
   end
 
   @doc "Returns the path to redirect to after log in."
-  # the user was already logged in, redirect to settings
+  # the user was already logged in, redirect to their account
   def signed_in_path(%Plug.Conn{assigns: %{current_scope: %Scope{user: %Accounts.User{}}}}) do
-    ~p"/users/settings"
+    ~p"/account"
   end
 
   def signed_in_path(_), do: ~p"/"
@@ -273,7 +291,7 @@ defmodule ChroniclesWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, gettext("You must log in to access this page."))
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log-in")
       |> halt()

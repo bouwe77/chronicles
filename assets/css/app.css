@@ -103,3 +103,27 @@
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
 /* This file is for your main application CSS */
+
+/* Game cues (assets/js/cues.js): full-screen overlays whose opacity the script animates. */
+.defeat-flash,
+.explosion-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.defeat-flash {
+  box-shadow: inset 0 0 120px 40px rgba(200, 0, 0, 0.55);
+}
+
+.explosion-flash {
+  background: radial-gradient(
+    circle at 50% 55%,
+    rgba(255, 245, 180, 0.95) 0%,
+    rgba(255, 170, 40, 0.8) 30%,
+    rgba(220, 60, 0, 0.65) 60%,
+    rgba(120, 0, 0, 0.7) 100%
+  );
+}

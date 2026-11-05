@@ -55,6 +55,9 @@ config :chronicles, ChroniclesWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :chronicles, dev_routes: true
 
+# The code to sign up with, locally. Production reads INVITE_CODE (config/runtime.exs).
+config :chronicles, invite_code: "dev"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 
@@ -75,3 +78,6 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# The API rate limit per IP per minute. Scripts and the story skills call the API a lot.
+config :chronicles, api_rate_limit: 10_000

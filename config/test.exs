@@ -26,6 +26,8 @@ config :chronicles, ChroniclesWeb.Endpoint,
 # In test we don't send emails
 config :chronicles, Chronicles.Mailer, adapter: Swoosh.Adapters.Test
 
+config :chronicles, invite_code: "test-invite"
+
 # Disable swoosh api client as it is only required for production adapters
 config :swoosh, :api_client, false
 
@@ -42,3 +44,6 @@ config :phoenix_live_view,
 # Sort query params output of verified routes for robust url comparisons
 config :phoenix,
   sort_verified_routes_query_params: true
+
+# Every test request comes from 127.0.0.1; RateLimitTest passes its own limit.
+config :chronicles, api_rate_limit: 1_000_000

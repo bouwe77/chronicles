@@ -62,6 +62,8 @@ defmodule ChroniclesWeb.CoreComponents do
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
+      phx-hook=".AutoHideFlash"
+      data-auto-hide={@kind == :info}
       role="alert"
       class="toast toast-top toast-end z-50"
       {@rest}
@@ -83,6 +85,22 @@ defmodule ChroniclesWeb.CoreComponents do
         </button>
       </div>
     </div>
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".AutoHideFlash">
+      // Info toasts close themselves after 3 seconds, the same way a click closes them.
+      // Error toasts stay until clicked away.
+      export default {
+        mounted() { this.schedule() },
+        updated() { this.schedule() },
+        destroyed() { clearTimeout(this.timer) },
+        schedule() {
+          clearTimeout(this.timer)
+          if (!this.el.hasAttribute("data-auto-hide")) return
+          this.timer = setTimeout(() => {
+            this.liveSocket.execJS(this.el, this.el.getAttribute("phx-click"))
+          }, 3000)
+        }
+      }
+    </script>
     """
   end
 
@@ -93,20 +111,28 @@ defmodule ChroniclesWeb.CoreComponents do
 
       <.button>Send!</.button>
       <.button phx-click="go" variant="primary">Send!</.button>
-      <.button navigate={~p"/"}>Home</.button>
+      <.button navigate={~p"/"} variant="ghost" size="sm">Home</.button>
+      <.button variant="primary" class="w-full">Log in</.button>
   """
   attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
-  attr :class, :any
-  attr :variant, :string, values: ~w(primary)
+  attr :class, :any, default: nil, doc: "extra classes, added to the button's own"
+  attr :variant, :string, values: [nil, "primary", "ghost"], default: nil
+  attr :size, :string, values: ~w(sm md), default: "md"
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
-    variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
-
     assigns =
-      assign_new(assigns, :class, fn ->
-        ["btn", Map.fetch!(variants, assigns[:variant])]
-      end)
+      assign(assigns, :class, [
+        "inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg font-medium",
+        "transition active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40",
+        case assigns.variant do
+          nil -> "border border-base-300 bg-base-100 hover:border-primary hover:text-primary"
+          "primary" -> "bg-primary text-primary-content hover:brightness-110"
+          "ghost" -> "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+        end,
+        if(assigns.size == "sm", do: "px-3 py-1.5 text-sm", else: "px-4 py-2"),
+        assigns.class
+      ])
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
       ~H"""
@@ -421,6 +447,19 @@ defmodule ChroniclesWeb.CoreComponents do
           <div>{render_slot(item)}</div>
         </div>
       </li>
+    </ul>
+    """
+  end
+
+  @doc """
+  Renders a story's tags as small labels. Renders nothing without tags.
+  """
+  attr :tags, :list, default: nil
+
+  def tags(assigns) do
+    ~H"""
+    <ul :if={@tags not in [nil, []]} class="flex flex-wrap gap-1.5">
+      <li :for={tag <- @tags} class="rounded-full bg-base-200 px-2.5 py-0.5 text-xs">{tag}</li>
     </ul>
     """
   end

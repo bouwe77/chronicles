@@ -59,6 +59,9 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
 11. **Tests.** The engine tests are ported to ExUnit. adventure-game's Playwright suite
     (`e2e/`) finds things by role and text only, so it is the acceptance test for the
     rebuild.
+    Its journeys now live in Chronicles' own `e2e/`, changed for email login, autosave and
+    the new pages. The journeys for dropped features (saving, back to last save, asking
+    to save when leaving, password login) are gone.
 
 ## Steps
 

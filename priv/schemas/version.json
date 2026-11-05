@@ -1,0 +1,789 @@
+{
+  "type": "object",
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "equals": {}
+          },
+          "required": [
+            "path",
+            "equals"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "atLeast": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "path",
+            "atLeast"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "atMost": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "path",
+            "atMost"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "greaterThan": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "path",
+            "greaterThan"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "lessThan": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "path",
+            "lessThan"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "supply": {
+              "type": "string"
+            },
+            "equals": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "supply",
+            "equals"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "supply": {
+              "type": "string"
+            },
+            "atLeast": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "supply",
+            "atLeast"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "supply": {
+              "type": "string"
+            },
+            "atMost": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "supply",
+            "atMost"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "supply": {
+              "type": "string"
+            },
+            "greaterThan": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "supply",
+            "greaterThan"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "supply": {
+              "type": "string"
+            },
+            "lessThan": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "supply",
+            "lessThan"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "anyOf": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "anyOf"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "allOf": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "allOf"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "not"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "isCarrying": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "isCarrying"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "at": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "at"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "turnAtLeast": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "turnAtLeast"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "turnAtMost": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "turnAtMost"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "turnEquals": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "turnEquals"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "sideEffect": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "confetti",
+            "defeat",
+            "explosion",
+            "shake",
+            "log"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "when": {
+          "$ref": "#/$defs/condition"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "patchOp": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "add",
+            "remove",
+            "replace",
+            "inc"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "value": {}
+      },
+      "required": [
+        "op",
+        "path"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "inc"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        }
+      ]
+    },
+    "supplyDelta": {
+      "type": "object",
+      "properties": {
+        "supply": {
+          "type": "string"
+        },
+        "by": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "supply",
+        "by"
+      ],
+      "additionalProperties": false
+    },
+    "effect": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/patchOp"
+        },
+        {
+          "$ref": "#/$defs/supplyDelta"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "give": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "give"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "consume": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "consume"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "carriedItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "descriptionByLocation": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "descriptionWhenCarried": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "story_title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notesEnabled": {
+      "type": "boolean"
+    },
+    "waitEnabled": {
+      "type": "boolean"
+    },
+    "openingLog": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "starting_location": {
+      "type": "string"
+    },
+    "starting_inventory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/carriedItem"
+      }
+    },
+    "items": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "descriptionByLocation": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "descriptionWhenCarried": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "supplies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namePlural": {
+            "type": "string"
+          },
+          "initial": {
+            "type": "integer"
+          },
+          "min": {
+            "type": "integer"
+          },
+          "max": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "atTurn": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "every": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "message": {
+            "type": "string"
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/effect"
+            }
+          }
+        },
+        "required": [
+          "atTurn",
+          "effects"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "when": {
+            "$ref": "#/$defs/condition"
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/effect"
+            }
+          },
+          "sideEffects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sideEffect"
+            }
+          }
+        },
+        "required": [
+          "when",
+          "effects"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "endings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "when": {
+            "$ref": "#/$defs/condition"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "win",
+              "loss"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "output": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "when",
+          "outcome",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "timeCost": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000,
+            "default": 1
+          },
+          "visibleWhen": {
+            "$ref": "#/$defs/condition"
+          },
+          "enabledWhen": {
+            "$ref": "#/$defs/condition"
+          },
+          "interruptedText": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sideEffects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sideEffect"
+            }
+          },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/effect"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "schema"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "default": {},
+      "properties": {
+        "initial": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "schema": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "randomize": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 2
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "locations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "arrivalText": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            ]
+          },
+          "sideEffects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sideEffect"
+            }
+          },
+          "exits": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "to": {
+                  "type": "string"
+                },
+                "order": {
+                  "type": "number"
+                },
+                "timeCost": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1000,
+                  "default": 1
+                },
+                "visibleWhen": {
+                  "$ref": "#/$defs/condition"
+                },
+                "enabledWhen": {
+                  "$ref": "#/$defs/condition"
+                },
+                "interruptedText": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sideEffects": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/sideEffect"
+                  }
+                }
+              },
+              "required": [
+                "to"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "descriptionByLocation": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "descriptionWhenCarried": {
+                  "type": "string"
+                },
+                "takeLabel": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "availableWhen": {
+                  "$ref": "#/$defs/condition"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "exits"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "story_title",
+    "starting_location",
+    "locations",
+    "context"
+  ],
+  "additionalProperties": false
+}

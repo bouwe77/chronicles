@@ -1,8 +1,15 @@
 defmodule ChroniclesWeb.PageControllerTest do
   use ChroniclesWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  import Chronicles.AccountsFixtures
+
+  test "GET / opens the stories", %{conn: conn} do
+    conn = conn |> log_in_user(user_fixture()) |> get(~p"/")
+    assert redirected_to(conn) == ~p"/stories"
+  end
+
+  test "GET / sends a visitor to log in", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    assert redirected_to(conn) == ~p"/users/log-in"
   end
 end

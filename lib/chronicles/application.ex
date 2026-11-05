@@ -12,6 +12,7 @@ defmodule Chronicles.Application do
       Chronicles.Repo,
       {DNSCluster, query: Application.get_env(:chronicles, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Chronicles.PubSub},
+      ChroniclesWeb.RateLimit,
       # Start a worker by calling: Chronicles.Worker.start_link(arg)
       # {Chronicles.Worker, arg},
       # Start to serve requests, typically the last entry

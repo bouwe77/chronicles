@@ -6,7 +6,7 @@ defmodule Chronicles.Accounts do
   import Ecto.Query, warn: false
   alias Chronicles.Repo
 
-  alias Chronicles.Accounts.{User, UserToken, UserNotifier}
+  alias Chronicles.Accounts.{Scope, User, UserToken, UserNotifier}
 
   ## Database getters
 
@@ -60,6 +60,9 @@ defmodule Chronicles.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc "Gets a single user, or nil."
+  def get_user(id), do: Repo.get(User, id)
+
   ## User registration
 
   @doc """
@@ -76,8 +79,82 @@ defmodule Chronicles.Accounts do
   """
   def register_user(attrs) do
     %User{}
-    |> User.email_changeset(attrs)
+    |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc "A changeset for the signup form."
+  def change_user_registration(user, attrs \\ %{}, opts \\ []) do
+    User.registration_changeset(user, attrs, opts)
+  end
+
+  ## Username
+
+  def change_user_username(user, attrs \\ %{}), do: User.username_changeset(user, attrs)
+
+  def update_user_username(user, attrs) do
+    user |> User.username_changeset(attrs) |> Repo.update()
+  end
+
+  ## Language
+
+  def change_user_locale(user, attrs \\ %{}), do: User.locale_changeset(user, attrs)
+
+  def update_user_locale(user, attrs) do
+    user |> User.locale_changeset(attrs) |> Repo.update()
+  end
+
+  ## Roles
+
+  @doc "All users, by email. For admins."
+  def list_users(%Scope{user: %User{role: :admin}}) do
+    User |> order_by(:email) |> Repo.all()
+  end
+
+  @doc """
+  Creates a user with a role, without an invite code. Only an admin may. The caller sends
+  the login link.
+  """
+  def create_user(%Scope{user: %User{role: :admin}}, attrs) do
+    %User{} |> User.admin_changeset(attrs) |> Repo.insert()
+  end
+
+  def create_user(_scope, _attrs), do: {:error, :unauthorized}
+
+  @doc "A changeset for the admin's new-user form."
+  def change_new_user(attrs \\ %{}),
+    do: User.admin_changeset(%User{}, attrs, validate_unique: false)
+
+  @doc """
+  Changes a user's role. Only an admin may, and not their own role, so the last admin
+  can't lock themselves out.
+  """
+  def update_user_role(%Scope{user: %User{role: :admin} = admin}, %User{} = user, role)
+      when admin.id != user.id do
+    user |> User.role_changeset(%{role: role}) |> Repo.update()
+  end
+
+  def update_user_role(_scope, _user, _role), do: {:error, :unauthorized}
+
+  @doc """
+  Deletes a user with everything they own: their series, their stories (with every game of
+  those) and their games. The foreign keys do the cascade. While a story of theirs is in
+  another user's series, nothing is deleted.
+  """
+  def delete_user(%User{} = user) do
+    Repo.transact(fn ->
+      # Their own series first: the database checks a series' stories as each cascade
+      # runs, so a series of their own stories would otherwise stop the delete.
+      Repo.delete_all(from s in Chronicles.Stories.Series, where: s.author_id == ^user.id)
+
+      user
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.foreign_key_constraint(:id,
+        name: :series_stories_story_id_fkey,
+        message: "has a story in another user's series; that series must change first"
+      )
+      |> Repo.delete()
+    end)
   end
 
   ## Settings
@@ -251,7 +328,7 @@ defmodule Chronicles.Accounts do
 
   ## Examples
 
-      iex> deliver_user_update_email_instructions(user, current_email, &url(~p"/users/settings/confirm-email/#{&1}"))
+      iex> deliver_user_update_email_instructions(user, current_email, &url(~p"/account/confirm-email/#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
   """

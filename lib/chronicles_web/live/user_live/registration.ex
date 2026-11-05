@@ -11,13 +11,12 @@ defmodule ChroniclesWeb.UserLive.Registration do
       <div class="mx-auto max-w-sm">
         <div class="text-center">
           <.header>
-            Register for an account
+            {gettext("Sign up")}
             <:subtitle>
-              Already registered?
+              {gettext("Already have an account?")}
               <.link navigate={~p"/users/log-in"} class="font-semibold text-brand hover:underline">
-                Log in
+                {gettext("Log in")}
               </.link>
-              to your account now.
             </:subtitle>
           </.header>
         </div>
@@ -26,15 +25,24 @@ defmodule ChroniclesWeb.UserLive.Registration do
           <.input
             field={@form[:email]}
             type="email"
-            label="Email"
+            label={gettext("Email")}
             autocomplete="username"
             spellcheck="false"
             required
             phx-mounted={JS.focus()}
           />
+          <.input
+            field={@form[:username]}
+            type="text"
+            label={gettext("Username (shown to other players)")}
+            autocomplete="nickname"
+            spellcheck="false"
+            required
+          />
+          <.input field={@form[:invite_code]} type="text" label={gettext("Invite code")} required />
 
-          <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
-            Create an account
+          <.button phx-disable-with={gettext("Creating account...")} variant="primary" class="w-full">
+            {gettext("Create an account")}
           </.button>
         </.form>
       </div>
@@ -49,7 +57,7 @@ defmodule ChroniclesWeb.UserLive.Registration do
   end
 
   def mount(_params, _session, socket) do
-    changeset = Accounts.change_user_email(%User{}, %{}, validate_unique: false)
+    changeset = Accounts.change_user_registration(%User{}, %{}, validate_unique: false)
 
     {:ok, assign_form(socket, changeset), temporary_assigns: [form: nil]}
   end
@@ -68,7 +76,9 @@ defmodule ChroniclesWeb.UserLive.Registration do
          socket
          |> put_flash(
            :info,
-           "An email was sent to #{user.email}, please access it to confirm your account."
+           gettext("We sent an email to %{email}. Open it to confirm your account.",
+             email: user.email
+           )
          )
          |> push_navigate(to: ~p"/users/log-in")}
 
@@ -78,7 +88,7 @@ defmodule ChroniclesWeb.UserLive.Registration do
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do
-    changeset = Accounts.change_user_email(%User{}, user_params, validate_unique: false)
+    changeset = Accounts.change_user_registration(%User{}, user_params, validate_unique: false)
     {:noreply, assign_form(socket, Map.put(changeset, :action, :validate))}
   end
 

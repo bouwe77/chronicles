@@ -1,4 +1,4 @@
-defmodule ChroniclesWeb.UserLive.Settings do
+defmodule ChroniclesWeb.UserLive.Account do
   use ChroniclesWeb, :live_view
 
   on_mount {ChroniclesWeb.UserAuth, :require_sudo_mode}
@@ -9,23 +9,32 @@ defmodule ChroniclesWeb.UserLive.Settings do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="text-center">
-        <.header>
-          Account Settings
-          <:subtitle>Manage your account email address and password settings</:subtitle>
-        </.header>
-      </div>
+      <h1 class="text-2xl font-semibold tracking-tight">{gettext("Account")}</h1>
+
+      <.form for={@username_form} id="username_form" phx-submit="update_username">
+        <.input
+          field={@username_form[:username]}
+          type="text"
+          label={gettext("Username (shown to other players)")}
+          autocomplete="nickname"
+          spellcheck="false"
+          required
+        />
+        <.button variant="primary" phx-disable-with={gettext("Saving...")}>{gettext("Change username")}</.button>
+      </.form>
+
+      <div class="divider" />
 
       <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
         <.input
           field={@email_form[:email]}
           type="email"
-          label="Email"
+          label={gettext("Email")}
           autocomplete="username"
           spellcheck="false"
           required
         />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        <.button variant="primary" phx-disable-with={gettext("Changing...")}>{gettext("Change email")}</.button>
       </.form>
 
       <div class="divider" />
@@ -49,7 +58,7 @@ defmodule ChroniclesWeb.UserLive.Settings do
         <.input
           field={@password_form[:password]}
           type="password"
-          label="New password"
+          label={gettext("New password")}
           autocomplete="new-password"
           spellcheck="false"
           required
@@ -57,14 +66,33 @@ defmodule ChroniclesWeb.UserLive.Settings do
         <.input
           field={@password_form[:password_confirmation]}
           type="password"
-          label="Confirm new password"
+          label={gettext("Confirm new password")}
           autocomplete="new-password"
           spellcheck="false"
         />
-        <.button variant="primary" phx-disable-with="Saving...">
-          Save Password
+        <.button variant="primary" phx-disable-with={gettext("Saving...")}>
+          {gettext("Save password")}
         </.button>
       </.form>
+
+      <div class="divider" />
+
+      <section id="delete-account" class="space-y-3">
+        <h2 class="font-semibold">{gettext("Delete account")}</h2>
+        <p class="text-sm text-base-content/70">
+          {gettext(
+            "This deletes your account, your stories with every game of them, and your games. It can't be undone."
+          )}
+        </p>
+        <.button
+          id="delete-account-button"
+          phx-click="delete_account"
+          data-confirm={gettext("Delete your account and everything you own?")}
+          class="border-error text-error hover:border-error hover:text-error"
+        >
+          {gettext("Delete my account")}
+        </.button>
+      </section>
     </Layouts.app>
     """
   end
@@ -74,13 +102,13 @@ defmodule ChroniclesWeb.UserLive.Settings do
     socket =
       case Accounts.update_user_email(socket.assigns.current_scope.user, token) do
         {:ok, _user} ->
-          put_flash(socket, :info, "Email changed successfully.")
+          put_flash(socket, :info, gettext("Your email address is changed."))
 
         {:error, _} ->
-          put_flash(socket, :error, "Email change link is invalid or it has expired.")
+          put_flash(socket, :error, gettext("This link is not valid or has expired."))
       end
 
-    {:ok, push_navigate(socket, to: ~p"/users/settings")}
+    {:ok, push_navigate(socket, to: ~p"/account")}
   end
 
   def mount(_params, _session, socket) do
@@ -92,6 +120,7 @@ defmodule ChroniclesWeb.UserLive.Settings do
       socket
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
+      |> assign(:username_form, to_form(Accounts.change_user_username(user)))
       |> assign(:password_form, to_form(password_changeset))
       |> assign(:trigger_submit, false)
 
@@ -121,10 +150,10 @@ defmodule ChroniclesWeb.UserLive.Settings do
         Accounts.deliver_user_update_email_instructions(
           Ecto.Changeset.apply_action!(changeset, :insert),
           user.email,
-          &url(~p"/users/settings/confirm-email/#{&1}")
+          &url(~p"/account/confirm-email/#{&1}")
         )
 
-        info = "A link to confirm your email change has been sent to the new address."
+        info = gettext("We sent a link to the new address. Open it to confirm the change.")
         {:noreply, socket |> put_flash(:info, info)}
 
       changeset ->
@@ -155,6 +184,43 @@ defmodule ChroniclesWeb.UserLive.Settings do
 
       changeset ->
         {:noreply, assign(socket, password_form: to_form(changeset, action: :insert))}
+    end
+  end
+
+  def handle_event("update_username", %{"user" => user_params}, socket) do
+    case Accounts.update_user_username(socket.assigns.current_scope.user, user_params) do
+      {:ok, user} ->
+        {:noreply,
+         socket
+         |> assign(:username_form, to_form(Accounts.change_user_username(user)))
+         |> put_flash(
+           :info,
+           gettext("Your username is now %{username}.", username: user.username)
+         )}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :username_form, to_form(changeset, action: :update))}
+    end
+  end
+
+  def handle_event("delete_account", _params, socket) do
+    user = socket.assigns.current_scope.user
+    true = Accounts.sudo_mode?(user)
+
+    case Accounts.delete_user(user) do
+      {:ok, _user} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("Your account is deleted."))
+         |> redirect(to: ~p"/")}
+
+      {:error, _changeset} ->
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           gettext("A story of yours is in another user's series. Ask them to remove it first.")
+         )}
     end
   end
 end

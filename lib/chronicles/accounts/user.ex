@@ -4,10 +4,17 @@ defmodule Chronicles.Accounts.User do
 
   schema "users" do
     field :email, :string
+    # Shown to other users, for example as a story's author. The email never is.
+    field :username, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    # A player plays; an author also writes stories; an admin also manages users.
+    field :role, Ecto.Enum, values: [:player, :author, :admin], default: :player
+    field :invite_code, :string, virtual: true, redact: true
+    # The language of the app for this user; nil means the browser's language.
+    field :locale, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -27,6 +34,63 @@ defmodule Chronicles.Accounts.User do
     user
     |> cast(attrs, [:email])
     |> validate_email(opts)
+  end
+
+  @doc """
+  A changeset for signing up: the email, plus the invite code from the `:invite_code`
+  config. A new user is an author. Without a configured code, nobody can sign up.
+  """
+  def registration_changeset(user, attrs, opts \\ []) do
+    user
+    |> email_changeset(attrs, opts)
+    |> username_changeset(attrs)
+    |> cast(attrs, [:invite_code])
+    |> validate_required([:invite_code])
+    |> validate_change(:invite_code, fn :invite_code, code ->
+      expected = Application.get_env(:chronicles, :invite_code)
+
+      if is_binary(expected) and Plug.Crypto.secure_compare(code, expected),
+        do: [],
+        else: [invite_code: "is not valid"]
+    end)
+    |> put_change(:role, :author)
+  end
+
+  @doc "A changeset for an admin who creates a user: email, username and role, no invite code."
+  def admin_changeset(user, attrs, opts \\ []) do
+    user
+    |> email_changeset(attrs, opts)
+    |> username_changeset(attrs)
+    |> role_changeset(attrs)
+  end
+
+  @doc "A changeset for the username: letters, digits, `-` and `_`, unique regardless of case."
+  def username_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_required([:username])
+    |> validate_length(:username, min: 3, max: 30)
+    |> validate_format(:username, ~r/^[a-zA-Z0-9_-]+$/,
+      message: "can only have letters, digits, - and _"
+    )
+    |> unique_constraint(:username, name: :users_username_index)
+  end
+
+  @doc "The languages of the app."
+  def locales, do: ~w(en nl)
+
+  @doc "A changeset for the language: one of `locales/0`, or nil for the browser's language."
+  def locale_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:locale], empty_values: [""])
+    |> validate_inclusion(:locale, locales())
+  end
+
+  @doc "A changeset for an admin changing a user's role."
+  def role_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
   end
 
   defp validate_email(changeset, opts) do

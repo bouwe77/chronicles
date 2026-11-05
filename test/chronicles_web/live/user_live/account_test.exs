@@ -1,23 +1,23 @@
-defmodule ChroniclesWeb.UserLive.SettingsTest do
+defmodule ChroniclesWeb.UserLive.AccountTest do
   use ChroniclesWeb.ConnCase, async: true
 
   alias Chronicles.Accounts
   import Phoenix.LiveViewTest
   import Chronicles.AccountsFixtures
 
-  describe "Settings page" do
-    test "renders settings page", %{conn: conn} do
+  describe "Account page" do
+    test "renders account page", %{conn: conn} do
       {:ok, _lv, html} =
         conn
         |> log_in_user(user_fixture())
-        |> live(~p"/users/settings")
+        |> live(~p"/account")
 
-      assert html =~ "Change Email"
-      assert html =~ "Save Password"
+      assert html =~ "Change email"
+      assert html =~ "Save password"
     end
 
     test "redirects if user is not logged in", %{conn: conn} do
-      assert {:error, redirect} = live(conn, ~p"/users/settings")
+      assert {:error, redirect} = live(conn, ~p"/account")
 
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log-in"
@@ -30,10 +30,10 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
         |> log_in_user(user_fixture(),
           token_authenticated_at: DateTime.add(DateTime.utc_now(:second), -11, :minute)
         )
-        |> live(~p"/users/settings")
+        |> live(~p"/account")
         |> follow_redirect(conn, ~p"/users/log-in")
 
-      assert conn.resp_body =~ "You must re-authenticate to access this page."
+      assert conn.resp_body =~ "Log in again to open this page."
     end
   end
 
@@ -46,7 +46,7 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
     test "updates the user email", %{conn: conn, user: user} do
       new_email = unique_user_email()
 
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       result =
         lv
@@ -55,12 +55,12 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
         })
         |> render_submit()
 
-      assert result =~ "A link to confirm your email"
+      assert result =~ "We sent a link to the new address"
       assert Accounts.get_user_by_email(user.email)
     end
 
     test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       result =
         lv
@@ -70,12 +70,12 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
           "user" => %{"email" => "with spaces"}
         })
 
-      assert result =~ "Change Email"
+      assert result =~ "Change email"
       assert result =~ "must have the @ sign and no spaces"
     end
 
     test "renders errors with invalid data (phx-submit)", %{conn: conn, user: user} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       result =
         lv
@@ -84,8 +84,20 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
         })
         |> render_submit()
 
-      assert result =~ "Change Email"
+      assert result =~ "Change email"
       assert result =~ "did not change"
+    end
+  end
+
+  describe "delete account" do
+    test "deletes the user and leaves the page", %{conn: conn} do
+      user = user_fixture()
+      {:ok, view, _html} = conn |> log_in_user(user) |> live(~p"/account")
+
+      assert {:error, {:redirect, %{to: "/"}}} =
+               view |> element("#delete-account-button") |> render_click()
+
+      refute Chronicles.Accounts.get_user_by_email(user.email)
     end
   end
 
@@ -98,7 +110,7 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
     test "updates the user password", %{conn: conn, user: user} do
       new_password = valid_user_password()
 
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       form =
         form(lv, "#password_form", %{
@@ -113,7 +125,7 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
 
       new_password_conn = follow_trigger_action(form, conn)
 
-      assert redirected_to(new_password_conn) == ~p"/users/settings"
+      assert redirected_to(new_password_conn) == ~p"/account"
 
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
 
@@ -124,7 +136,7 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
     end
 
     test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       result =
         lv
@@ -136,13 +148,13 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
           }
         })
 
-      assert result =~ "Save Password"
+      assert result =~ "Save password"
       assert result =~ "should be at least 12 character(s)"
       assert result =~ "does not match password"
     end
 
     test "renders errors with invalid data (phx-submit)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+      {:ok, lv, _html} = live(conn, ~p"/account")
 
       result =
         lv
@@ -154,7 +166,7 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
         })
         |> render_submit()
 
-      assert result =~ "Save Password"
+      assert result =~ "Save password"
       assert result =~ "should be at least 12 character(s)"
       assert result =~ "does not match password"
     end
@@ -174,35 +186,35 @@ defmodule ChroniclesWeb.UserLive.SettingsTest do
     end
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
-      {:error, redirect} = live(conn, ~p"/users/settings/confirm-email/#{token}")
+      {:error, redirect} = live(conn, ~p"/account/confirm-email/#{token}")
 
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/users/settings"
+      assert path == ~p"/account"
       assert %{"info" => message} = flash
-      assert message == "Email changed successfully."
+      assert message == "Your email address is changed."
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
       # use confirm token again
-      {:error, redirect} = live(conn, ~p"/users/settings/confirm-email/#{token}")
+      {:error, redirect} = live(conn, ~p"/account/confirm-email/#{token}")
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/users/settings"
+      assert path == ~p"/account"
       assert %{"error" => message} = flash
-      assert message == "Email change link is invalid or it has expired."
+      assert message == "This link is not valid or has expired."
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
-      {:error, redirect} = live(conn, ~p"/users/settings/confirm-email/oops")
+      {:error, redirect} = live(conn, ~p"/account/confirm-email/oops")
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/users/settings"
+      assert path == ~p"/account"
       assert %{"error" => message} = flash
-      assert message == "Email change link is invalid or it has expired."
+      assert message == "This link is not valid or has expired."
       assert Accounts.get_user_by_email(user.email)
     end
 
     test "redirects if user is not logged in", %{token: token} do
       conn = build_conn()
-      {:error, redirect} = live(conn, ~p"/users/settings/confirm-email/#{token}")
+      {:error, redirect} = live(conn, ~p"/account/confirm-email/#{token}")
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log-in"
       assert %{"error" => message} = flash

@@ -31,44 +31,108 @@ defmodule ChroniclesWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :wide, :boolean, default: false, doc: "use the full width, for the game"
+
   slot :inner_block, required: true
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://phoenix.hexdocs.pm/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
-
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+    <main class={["px-4 sm:px-6 lg:px-8", if(@wide, do: "py-6", else: "py-20")]}>
+      <div class={["mx-auto space-y-4", if(@wide, do: "max-w-7xl", else: "max-w-2xl")]}>
         {render_slot(@inner_block)}
       </div>
     </main>
 
     <.flash_group flash={@flash} />
+    """
+  end
+
+  @doc """
+  The site header: navigation and the account menu.
+
+  Rendered from the root layout, so it shows on every page.
+  """
+  attr :current_scope, :map, default: nil
+
+  def site_header(assigns) do
+    ~H"""
+    <header class="navbar relative z-10 gap-4 px-4 sm:px-6 lg:px-8">
+      <div class="flex-1">
+        <.link navigate={~p"/stories"} class="text-lg font-semibold tracking-tight">
+          Chronicles
+        </.link>
+      </div>
+      <ul class="flex flex-none items-center gap-4">
+        <li>
+          <.button navigate={~p"/stories"} variant="ghost">{gettext("Stories")}</.button>
+        </li>
+        <li :if={@current_scope && @current_scope.user.role == :admin}>
+          <.button navigate={~p"/admin/users"} variant="ghost">{gettext("Users")}</.button>
+        </li>
+        <%= if @current_scope do %>
+          <li class="group">
+            <button
+              popovertarget="user-menu"
+              class="flex cursor-pointer items-center gap-1 rounded-field px-2 py-1 text-sm transition [anchor-name:--user-menu] hover:bg-base-200"
+            >
+              {@current_scope.user.email}
+              <.icon
+                name="hero-chevron-down-micro"
+                class="size-4 transition-transform group-has-[:popover-open]:rotate-180"
+              />
+            </button>
+            <ul
+              id="user-menu"
+              popover
+              class="inset-auto m-0 mt-2 min-w-40 rounded-box border border-base-300 bg-base-100 p-1 text-sm text-base-content shadow-lg [position-anchor:--user-menu] [position-area:bottom_span-left]"
+            >
+              <li>
+                <.link
+                  href={~p"/settings"}
+                  class="block rounded-field px-3 py-2 hover:bg-base-200"
+                >
+                  {gettext("Settings")}
+                </.link>
+              </li>
+              <li>
+                <.link
+                  href={~p"/account"}
+                  class="block rounded-field px-3 py-2 hover:bg-base-200"
+                >
+                  {gettext("Account")}
+                </.link>
+              </li>
+              <li>
+                <.link
+                  href={~p"/users/log-out"}
+                  method="delete"
+                  class="block rounded-field px-3 py-2 hover:bg-base-200"
+                >
+                  {gettext("Log out")}
+                </.link>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li>
+            <.link href={~p"/users/register"}>{gettext("Sign up")}</.link>
+          </li>
+          <li>
+            <.link href={~p"/users/log-in"}>{gettext("Log in")}</.link>
+          </li>
+          <li>
+            <.link
+              navigate={~p"/settings"}
+              aria-label={gettext("Settings")}
+              title={gettext("Settings")}
+              class="flex opacity-70 transition hover:opacity-100"
+            >
+              <.icon name="hero-cog-6-tooth" class="size-5" />
+            </.link>
+          </li>
+        <% end %>
+      </ul>
+    </header>
     """
   end
 

@@ -52,6 +52,9 @@ defmodule ChroniclesWeb do
     quote do
       use Phoenix.LiveView
 
+      # The language of the user or their browser, in every LiveView.
+      on_mount ChroniclesWeb.Locale
+
       unquote(html_helpers())
     end
   end

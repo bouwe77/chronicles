@@ -85,7 +85,7 @@ defmodule ChroniclesWeb.UserLive.LoginTest do
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 
-      assert login_html =~ "Register"
+      assert login_html =~ "Sign up"
     end
   end
 
@@ -98,8 +98,8 @@ defmodule ChroniclesWeb.UserLive.LoginTest do
     test "shows login page with email filled in", %{conn: conn, user: user} do
       {:ok, _lv, html} = live(conn, ~p"/users/log-in")
 
-      assert html =~ "You need to reauthenticate"
-      refute html =~ "Register"
+      assert html =~ "Log in again before you change your account"
+      refute html =~ "Sign up"
       assert html =~ "Log in with email"
 
       assert html =~
