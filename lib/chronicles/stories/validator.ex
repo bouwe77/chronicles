@@ -25,6 +25,7 @@ defmodule Chronicles.Stories.Validator do
   }
 
   @placeholder ~r/\{(\/[^{}\s]*|supply:[^{}\s]+)\}/
+  @whole_placeholder ~r/^\{(\/[^{}\s]*|supply:[^{}\s]+)\}$/
 
   @doc "The errors in a story's content. An empty list means it's valid."
   def errors(content) do
@@ -58,7 +59,7 @@ defmodule Chronicles.Stories.Validator do
       ),
       for {{prev, prev_content}, {next, next_content}} <- Enum.zip(stories, tl(stories)) do
         endings = Enum.with_index(prev_content["endings"] || [], 1)
-        unlocks? = fn {ending, _} -> accepts_input?(next_content, ending["output"]) end
+        unlocks? = fn {ending, _} -> may_accept_input?(next_content, ending["output"]) end
 
         cond do
           is_nil(next_content["input"]) ->
@@ -78,6 +79,37 @@ defmodule Chronicles.Stories.Validator do
       end
     ])
   end
+
+  # Before any game is played, an output value that is one placeholder (`"{/points}"`) is
+  # unknown, so a schema error on it doesn't count. `accepts_input?/2` checks the real value
+  # when the game ends.
+  defp may_accept_input?(content, output) do
+    root = content["input"] && build(content["input"]["schema"])
+
+    not is_nil(output) and not is_nil(root) and
+      case JSV.validate(output, root) do
+        {:ok, _} ->
+          true
+
+        {:error, error} ->
+          for %{instanceLocation: at, errors: errors} <- JSV.normalize_error(error).details,
+              Enum.any?(errors, &(&1.kind not in [:properties, :boolean_schema])) do
+            at |> String.trim_leading("#") |> pointer() |> Enum.reduce(output, &value_at/2)
+          end
+          |> Enum.all?(&(is_binary(&1) and &1 =~ @whole_placeholder))
+      end
+  end
+
+  defp value_at(key, map) when is_map(map), do: Map.get(map, key)
+
+  defp value_at(key, list) when is_list(list) do
+    case Integer.parse(key) do
+      {i, ""} -> Enum.at(list, i)
+      _ -> nil
+    end
+  end
+
+  defp value_at(_key, _value), do: nil
 
   defp shape_errors(error) do
     for %{instanceLocation: at, errors: errors} <- JSV.normalize_error(error).details,
@@ -546,6 +578,13 @@ defmodule Chronicles.Stories.Validator do
     do: list |> Enum.frequencies() |> Enum.filter(&(elem(&1, 1) > 1)) |> Enum.map(&elem(&1, 0))
 
   # The first segment of a JSON Pointer, unescaped.
+  defp pointer(path) do
+    path
+    |> String.split("/")
+    |> Enum.drop(1)
+    |> Enum.map(&(&1 |> String.replace("~1", "/") |> String.replace("~0", "~")))
+  end
+
   defp pointer_root(path) do
     path
     |> String.split("/")

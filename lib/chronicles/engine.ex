@@ -329,7 +329,7 @@ defmodule Chronicles.Engine do
           outcome: if(e["outcome"] == "win", do: :win, else: :loss),
           message: fill(e["message"], state),
           turn: state.turns,
-          output: e["output"]
+          output: resolve(e["output"], state)
         }
       end
     end)
@@ -561,6 +561,23 @@ defmodule Chronicles.Engine do
       _, path -> text_of(get_path(state.context, path))
     end)
   end
+
+  # An ending's output, with its placeholders filled. A string that is one placeholder
+  # becomes that value as it is, so `"{/points}"` hands on the number 12, not "12".
+  defp resolve(map, state) when is_map(map),
+    do: Map.new(map, fn {k, v} -> {k, resolve(v, state)} end)
+
+  defp resolve(list, state) when is_list(list), do: Enum.map(list, &resolve(&1, state))
+
+  defp resolve(text, state) when is_binary(text) do
+    case Regex.run(~r/^\{(\/[^{}\s]*|supply:[^{}\s]+)\}$/, text) do
+      [_, "supply:" <> id] -> Map.get(state.supplies, id, 0)
+      [_, path] -> get_path(state.context, path)
+      nil -> fill(text, state)
+    end
+  end
+
+  defp resolve(value, _state), do: value
 
   defp text_of(nil), do: ""
   defp text_of(v) when is_binary(v) or is_number(v) or is_boolean(v), do: to_string(v)

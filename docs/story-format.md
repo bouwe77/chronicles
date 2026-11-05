@@ -662,7 +662,7 @@ behaviour.
 | `when`    | condition | **Required**; any [condition](#conditions) (`path`/`supply`/`isCarrying`/`at`/`turn*`/`anyOf`/`allOf`/`not`); `{ "at": "<location_id>" }` makes reaching a room a win or loss. For an always-true fallback ending, use `{ "turnAtLeast": 0 }`.                   |
 | `outcome` | string    | **Required**; `"win"` or `"loss"`. Selects the cue (a confetti burst for a win, the screen-shake + red flash for a loss) and the modal styling.                                                                                                                  |
 | `message` | string    | **Required, non-empty**; the ending's narrative line — shown in the modal and appended to the log as an `outcome` line stamped with the turn it fired.                                                                                                           |
-| `output`  | object    | Optional; what this ending hands on to the next story of a series, as a fixed object. The next story accepts it when it passes that story's `input.schema`. An ending without `output` unlocks nothing. See [Series: input and output](#series-input-and-output) |
+| `output`  | object    | Optional; what this ending hands on to the next story of a series. A string that is one placeholder (`"{/points}"`) becomes that value when the game ends. The next story accepts it when it passes that story's `input.schema`. An ending without `output` unlocks nothing. See [Series: input and output](#series-input-and-output) |
 
 ```json
 "endings": [
@@ -697,9 +697,12 @@ story, and the way it ended is the next game's **input**. Each story stays a nor
 story. It knows nothing about the stories before or after it; the series is the only link.
 The link is two small parts that the author designs together:
 
-- **Output**: an ending's `output`, a fixed object. It has its own shape. It does not
-  mirror the story's context, items or rooms, so the story can change those freely. For
-  different outputs, write more endings, one per output.
+- **Output**: an ending's `output`, an object. It has its own shape. It does not
+  mirror the story's context, items or rooms, so the story can change those freely. Its
+  strings may hold placeholders, filled when the game ends. A string that is exactly one
+  placeholder becomes that value as it is: `"points": "{/points}"` hands on the number
+  `12`, not the text `"12"`. So the next story can gate on a range
+  (`"minimum": 10`) and still read the real score.
 - **Input**: the next story's `input.schema`, a JSON Schema. A finished game's output
   is correct input when it passes this schema. The keys match exactly: the output holds
   the keys and values the schema expects.
@@ -742,6 +745,10 @@ The save checks the head content of each story, in order:
 - every next story has `input`, and at least one **win** ending of the story before it
   has an `output` that this `input.schema` accepts;
 - no **loss** ending of the story before it has an accepted `output`.
+
+An output value that is one placeholder is unknown until the game ends, so these checks
+treat it as a value the schema may accept. When the game ends, the real value must pass
+`input.schema`, or the game has no sequel.
 
 A story is in at most one series, and a story a series names can't be deleted until the
 series changes.

@@ -80,6 +80,23 @@ defmodule Chronicles.EngineTest do
              %{"out" => true}
   end
 
+  test "an output value that is one placeholder hands on the value itself" do
+    v =
+      version(%{
+        "endings" => [
+          %{
+            "when" => %{"at" => "b"},
+            "outcome" => "win",
+            "message" => "Out.",
+            "output" => %{"turns" => "{/visits/b}", "note" => "seen b {/visits/b} time(s)"}
+          }
+        ]
+      })
+
+    assert (v |> start() |> exit("east")).state.ending.output ==
+             %{"turns" => 1, "note" => "seen b 1 time(s)"}
+  end
+
   test "an exit the world closes mid-way logs its interruptedText and stays put" do
     v =
       version(%{

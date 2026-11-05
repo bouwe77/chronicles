@@ -49,6 +49,38 @@ defmodule Chronicles.SeriesTest do
                ])
     end
 
+    test "an output placeholder counts as unknown until the game ends" do
+      one = content("the-number")
+      two = content("the-number-returns")
+
+      with_output = fn outcome, output ->
+        endings =
+          for e <- one["endings"],
+              do: if(e["outcome"] == outcome, do: Map.put(e, "output", output), else: e)
+
+        Map.put(one, "endings", endings)
+      end
+
+      assert Validator.series_errors([
+               {"one", with_output.("win", %{"spare" => "{/moves}"})},
+               {"two", two}
+             ]) == []
+
+      assert [~s(loss ending #) <> _] =
+               Validator.series_errors([
+                 {"one", with_output.("loss", %{"spare" => "{/moves}"})},
+                 {"two", two}
+               ])
+
+      assert [~s(no win ending) <> _] =
+               Validator.series_errors([
+                 {"one", with_output.("win", %{"other" => "{/moves}"})},
+                 {"two", two}
+               ])
+
+      refute Validator.accepts_input?(two, %{"spare" => 5})
+    end
+
     test "input is accepted when the output passes input.schema" do
       two = content("the-number-returns")
       assert Validator.accepts_input?(two, %{"spare" => 2})
