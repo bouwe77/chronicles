@@ -1,0 +1,17 @@
+---
+name: Chronicles
+windows:
+  - tabs:
+      - title: 'Chronicles: Dev'
+        layout:
+          split_direction: horizontal
+          panes:
+            - cwd: /Users/bouwe/dev-bouwe/chronicles
+              commands:
+                - exec: claude
+            - split_direction: vertical
+              panes:
+                - cwd: /Users/bouwe/dev-bouwe/chronicles
+                  commands:
+                    - exec: mix phx.server
+                - cwd: /Users/bouwe/dev-bouwe/chronicles
