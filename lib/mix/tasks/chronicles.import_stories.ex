@@ -5,8 +5,7 @@ defmodule Mix.Tasks.Chronicles.ImportStories do
   Imports stories from JSON files, each as its first version, for the user with the given
   email. The file name is the story's slug (`the-number.json` becomes `the-number`). Each
   file is a story's content, with an optional `visibility` key (`"private"` or `"public"`,
-  default private). A `story_id` key, from older exports, is dropped. A story whose slug
-  exists is skipped.
+  default private). A `story_id` key is dropped. A story whose slug exists is skipped.
 
       mix chronicles.import_stories you@example.com ~/stories/*.json
   """

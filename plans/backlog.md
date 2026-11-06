@@ -12,15 +12,15 @@ item says why it waits. Remove an item when it is done or dropped.
   and other secrets, and a production database.
 - **An email provider for login links.** Production login uses magic links, which need
   a real mail service. Development uses the local mailbox.
-- **The production import.** Stories and the series `the-number`, from MongoDB. The
-  import task does stories; the series can go through `PUT /api/series/:slug`.
+- **The production import.** The stories and the series `the-number`. The import task
+  does stories; the series can go through `PUT /api/series/:slug`.
 - **The API rate limit counts per machine.** `ChroniclesWeb.RateLimit` keeps its counts
   in memory. With more than one Fly machine, each has its own count; then it needs a
   shared store (Postgres, or Hammer with Redis). Set `RATE_LIMIT` on Fly (default 100).
 
 ## Playing
 
-- **Back to last save.** Dropped for now (decision 4). Can come back as a `checkpoint`
+- **Save points.** Not there for now (decision 4). Can come as a `checkpoint`
   field on the game.
 - **Undo or replay.** Needs a move history, which we don't store (decision 5).
 - **Multiplayer or chat.** Needs a process per game (decision 6).
@@ -34,7 +34,7 @@ item says why it waits. Remove an item when it is done or dropped.
   the order an author wrote them in. Harmless, but less readable for big parts.
 - **The editor's toolbar alignment.** The rename and connect forms don't line up neatly
   with the buttons. Part of the restyle.
-- **Series in the app.** Series are managed through the API only, as in adventure-game.
+- **Series in the app.** Series are managed through the API only.
 - **Series checks on a story save.** Saving a story doesn't re-check its series, so an
   edited ending can quietly break the link to the next story. `PUT` the series again to
   check it. A warning on save would help.
@@ -46,7 +46,7 @@ item says why it waits. Remove an item when it is done or dropped.
   ("28 Oct 2026"), because `Calendar.strftime` only knows English names. A few
   validation messages that the core writes itself ("is not valid" for the invite code,
   the username rules). Errors from the story validator and the sketch stay English on
-  purpose: they are for authors and AI tools, as in adventure-game.
+  purpose: they are for authors and AI tools.
 - **No "view as player".** Admins can list every story ("All stories"), but there is no
   switch to see the app as a player sees it. Log in as a player account for that.
 - **Creating users is in the app only.** There is no API for it.
