@@ -55,9 +55,6 @@ config :chronicles, ChroniclesWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :chronicles, dev_routes: true
 
-# The code to sign up with, locally. Production reads INVITE_CODE (config/runtime.exs).
-config :chronicles, invite_code: "dev"
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 

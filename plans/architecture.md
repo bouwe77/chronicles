@@ -42,13 +42,14 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
    the engine and writes to the database. No GenServer per game until multiplayer or
    chat; the engine is pure, so that change only moves who calls it.
 7. **A small JSON API, only for tools.** The story skills use HTTP. The API has only
-   what they need: login, read a story and a version, save a story, series. Token with `Phoenix.Token`. Each route
+   what they need: read a story and a version, save a story, series. A revocable API token from the
+   account page, only for users an admin gave API access. Each route
    calls the same context function as the LiveView.
 8. **IDs.** Ecto's default integer ids. Stories get a unique `slug` for URLs such as
    `/stories/the-front-door`.
-9. **Login.** `phx.gen.auth` as generated (email, magic link, optional password), plus an
-   invite code on signup. Production needs an email provider; development uses the
-   local mailbox.
+9. **Login.** `phx.gen.auth` with magic links only (no passwords) and no sign-up: an
+   admin invites users, whose invite link works for 2 days. Production needs an email
+   provider; development uses the local mailbox.
 10. **Import.** `mix chronicles.import_stories` loads story JSON files for a user.
 11. **Tests.** ExUnit for the engine and the app. The Playwright suite in `e2e/` finds
     things by role and text only, so it is the acceptance test.

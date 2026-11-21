@@ -13,8 +13,9 @@ with user `postgres` and password `postgres` (see `config/dev.exs`).
     mix setup
     mix phx.server
 
-Then open [`localhost:9278`](http://localhost:9278). To sign up locally, use the invite
-code `dev`. Login links arrive in the dev mailbox at
+Then open [`localhost:9278`](http://localhost:9278). There is no sign-up: an admin
+invites users on `/admin/users`. `mix setup` seeds an admin, `admin@example.com`; log in
+with that email. Login links arrive in the dev mailbox at
 [`localhost:9278/dev/mailbox`](http://localhost:9278/dev/mailbox).
 
 ## Writing stories
@@ -30,7 +31,7 @@ code `dev`. Login links arrive in the dev mailbox at
 
 ## Acceptance tests
 
-`e2e/` holds Playwright journeys that use the app only in the browser: sign up, write a
+`e2e/` holds Playwright journeys that use the app only in the browser: get invited, write a
 story, play it, share it. Start the server first, then:
 
     cd e2e
@@ -38,9 +39,9 @@ story, play it, share it. Start the server first, then:
     npx playwright install chromium
     npx playwright test
 
-They run against `localhost:9278` with the dev invite code, and read login links from
-the dev mailbox. Each test makes its own user and deletes it afterwards. Set `E2E_URL`
-and `E2E_INVITE_CODE` to test another server.
+They run against `localhost:9278` and read login links from the dev mailbox. The seeded
+admin invites a user for each test, which deletes it afterwards. Set `E2E_URL` and
+`E2E_ADMIN_EMAIL` to test another server.
 
 ## License
 

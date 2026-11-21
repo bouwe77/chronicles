@@ -7,9 +7,11 @@ item says why it waits. Remove an item when it is done or dropped.
 
 - **The acceptance tests read the dev mailbox.** `e2e/` logs in through
   `/dev/mailbox/json`, which only exists in development. Against Fly they need another
-  way to get a login link (a password, or a test-only route).
-- **Deployment on Fly with Postgres.** Step 5 of the plan. Includes the `INVITE_CODE`
-  and other secrets, and a production database.
+  way to get a login link (a test-only route).
+- **Deployment on Fly with Postgres.** Step 5 of the plan. Includes the secrets and a
+  production database.
+- **The first admin in production.** There is no sign-up, and only an admin invites
+  users. Production needs a way to create the first admin, such as a release task.
 - **An email provider for login links.** Production login uses magic links, which need
   a real mail service. Development uses the local mailbox.
 - **The production import.** The stories and the series `the-number`. The import task
@@ -41,18 +43,18 @@ item says why it waits. Remove an item when it is done or dropped.
 
 ## Accounts and admin
 
-- **Some text stays English in Dutch.** The emails (login link, confirmation), because
+- **Some text stays English in Dutch.** The emails (login link, invite), because
   they are built in the core and Gettext lives in the web layer. The months in dates
   ("28 Oct 2026"), because `Calendar.strftime` only knows English names. A few
-  validation messages that the core writes itself ("is not valid" for the invite code,
-  the username rules). Errors from the story validator and the sketch stay English on
+  validation messages that the core writes itself (the username rules). Errors from the story validator and the sketch stay English on
   purpose: they are for authors and AI tools.
 - **No "view as player".** Admins can list every story ("All stories"), but there is no
   switch to see the app as a player sees it. Log in as a player account for that.
 - **Creating users is in the app only.** There is no API for it.
-- **The API needs a password.** Accounts that log in with email links must set a
-  password before they use the API or the story skills.
 - **The header shows your email.** Other places show the username; the header could too.
+- **Invite codes.** Admins invite users one by one. Invite codes an admin manages could
+  let more people in at once: a code, an optional email it is bound to, an expiry date
+  and a maximum number of uses. Waits until inviting one by one is too much work.
 
 ## Look and feel
 

@@ -13,23 +13,19 @@ defmodule Chronicles.AccountsRolesTest do
   defp set_role(user, role),
     do: user |> Accounts.User.role_changeset(%{role: role}) |> Repo.update!()
 
-  test "signing up needs the invite code, and makes an author" do
-    assert {:error, changeset} =
-             Accounts.register_user(valid_user_attributes(invite_code: "wrong"))
-
-    assert "is not valid" in errors_on(changeset).invite_code
-    assert {:ok, user} = Accounts.register_user(valid_user_attributes())
-    assert user.role == :author
-  end
-
   test "a username is unique regardless of case" do
     user_fixture(username: "Agnes")
-    assert {:error, changeset} = Accounts.register_user(valid_user_attributes(username: "agnes"))
+
+    assert {:error, changeset} =
+             Accounts.create_user(admin_scope(), valid_user_attributes(username: "agnes"))
+
     assert "has already been taken" in errors_on(changeset).username
   end
 
   test "a username has only letters, digits, - and _" do
-    assert {:error, changeset} = Accounts.register_user(valid_user_attributes(username: "a b"))
+    assert {:error, changeset} =
+             Accounts.create_user(admin_scope(), valid_user_attributes(username: "a b"))
+
     assert errors_on(changeset).username != []
   end
 

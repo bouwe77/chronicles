@@ -43,7 +43,7 @@ defmodule Chronicles.Accounts.UserNotifier do
   """
   def deliver_login_instructions(user, url) do
     case user do
-      %User{confirmed_at: nil} -> deliver_confirmation_instructions(user, url)
+      %User{confirmed_at: nil} -> deliver_invite_instructions(user, url)
       _ -> deliver_magic_link_instructions(user, url)
     end
   end
@@ -65,18 +65,21 @@ defmodule Chronicles.Accounts.UserNotifier do
     """)
   end
 
-  defp deliver_confirmation_instructions(user, url) do
-    deliver(user.email, "Confirmation instructions", """
+  defp deliver_invite_instructions(user, url) do
+    deliver(user.email, "You're invited to Chronicles", """
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{user.username},
 
-    You can confirm your account by visiting the URL below:
+    You're invited to Chronicles. Open the link below to log in for the first time:
 
     #{url}
 
-    If you didn't create an account with us, please ignore this.
+    The link works for 2 days. After that, ask for a new one on the login page with
+    your email address.
+
+    If you don't want an account, you can ignore this email.
 
     ==============================
     """)

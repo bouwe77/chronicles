@@ -1,7 +1,9 @@
-import { expect, test as base, type Page } from '@playwright/test'
+import { expect, test as base, type Browser, type Page } from '@playwright/test'
 
-// The invite code of the server under test (config/dev.exs has "dev").
-const INVITE_CODE = process.env.E2E_INVITE_CODE ?? 'dev'
+// The admin who invites the test users (priv/repo/seeds.exs makes one in development),
+// and where admin.setup.ts keeps their session.
+export const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? 'admin@example.com'
+export const ADMIN_STATE = '.auth/admin.json'
 
 // Waits until the page's LiveView is connected, so clicks and forms reach the server.
 export const connected = (page: Page) => page.locator('[data-phx-main].phx-connected').waitFor()
@@ -44,23 +46,26 @@ const loginLink = async (page: Page, email: string) => {
   return new URL(link!).pathname
 }
 
-// Fills in and sends the signup form, by default with the right invite code.
-export const submitSignup = async (
-  page: Page,
-  email: string,
-  username: string,
-  inviteCode = INVITE_CODE,
-) => {
-  await visit(page, '/users/register')
-  await page.getByLabel('Email').fill(email)
-  await page.getByLabel('Username (shown to other players)').fill(username)
-  await page.getByLabel('Invite code').fill(inviteCode)
-  await page.getByRole('button', { name: 'Create an account' }).click()
+// Fills in and sends the admin's new-user form, in a browser of the admin's own. Returns
+// once the page answered, with the admin's page still open for checks.
+export const submitInvite = async (browser: Browser, email: string, username: string) => {
+  const context = await browser.newContext({ storageState: ADMIN_STATE })
+  const page = await context.newPage()
+  await visit(page, '/admin/users')
+  const form = page.locator('#new-user-form')
+  await form.getByLabel('Email').fill(email)
+  await form.getByLabel('Username').fill(username)
+  await form.getByLabel('Role').selectOption('author')
+  await form.getByRole('button', { name: 'Create' }).click()
+  return { page, close: () => context.close() }
 }
 
-export const signUp = async (page: Page, email: string, username: string) => {
-  await submitSignup(page, email, username)
-  await expect(page.getByText(`We sent an email to ${email}`)).toBeVisible()
+// The admin invites a new author, who opens the invite link on `page` and is logged in.
+export const invite = async (browser: Browser, page: Page, email: string, username: string) => {
+  const admin = await submitInvite(browser, email, username)
+  await expect(admin.page.getByText(`${email} can log in with the link we sent.`)).toBeVisible()
+  await admin.close()
+
   await visit(page, await loginLink(page, email))
   await page.getByRole('button', { name: 'Confirm and stay logged in' }).click()
   await expect(page.getByRole('heading', { name: 'Stories', exact: true })).toBeVisible()
@@ -68,7 +73,7 @@ export const signUp = async (page: Page, email: string, username: string) => {
   await closeFlash(page)
 }
 
-// Asks for a login link and opens it.
+// Asks for a login link and opens it. The user must be confirmed already.
 export const logIn = async (page: Page, email: string) => {
   await visit(page, '/users/log-in')
   await page.getByLabel('Email').first().fill(email)
@@ -97,11 +102,11 @@ type User = { email: string; username: string }
 
 // A fresh account, logged in on `page`, deleted afterwards with everything it made.
 // Every confirm() is accepted.
-const withUser = async (page: Page, use: (user: User) => Promise<void>) => {
+const withUser = async (browser: Browser, page: Page, use: (user: User) => Promise<void>) => {
   page.on('dialog', (dialog) => dialog.accept())
   const username = unique('e2e')
   const user = { email: `${username}@example.com`, username }
-  await signUp(page, user.email, user.username)
+  await invite(browser, page, user.email, user.username)
   await use(user)
   await deleteAccount(page)
 }
@@ -109,11 +114,11 @@ const withUser = async (page: Page, use: (user: User) => Promise<void>) => {
 // `test` with a `user` on `page`, and on request `other`: a second user in a browser of
 // their own.
 export const test = base.extend<{ user: User; other: User & { page: Page } }>({
-  user: async ({ page }, use) => withUser(page, use),
+  user: async ({ browser, page }, use) => withUser(browser, page, use),
   other: async ({ browser }, use) => {
     const context = await browser.newContext()
     const page = await context.newPage()
-    await withUser(page, (user) => use({ ...user, page }))
+    await withUser(browser, page, (user) => use({ ...user, page }))
     await context.close()
   },
 })

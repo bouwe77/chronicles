@@ -115,9 +115,6 @@ defmodule ChroniclesWeb.Layouts do
           </li>
         <% else %>
           <li>
-            <.link href={~p"/users/register"}>{gettext("Sign up")}</.link>
-          </li>
-          <li>
             <.link href={~p"/users/log-in"}>{gettext("Log in")}</.link>
           </li>
           <li>
