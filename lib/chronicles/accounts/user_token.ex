@@ -9,6 +9,9 @@ defmodule Chronicles.Accounts.UserToken do
   # It is very important to keep the magic link token expiry short,
   # since someone with access to the email may take over the account.
   @magic_link_validity_in_minutes 15
+  # An unconfirmed user is someone an admin invited who hasn't logged in yet. Their link
+  # is the invite, which people don't always open right away. It still works only once.
+  @invite_validity_in_days 2
   @change_email_validity_in_days 7
   @session_validity_in_days 14
 
@@ -82,6 +85,31 @@ defmodule Chronicles.Accounts.UserToken do
     build_hashed_token(user, context, user.email)
   end
 
+  @doc """
+  Builds a token for the JSON API. Like an email token, only its hash is stored. It does
+  not expire; it works until the user revokes it or loses API access.
+  """
+  def build_api_token(user), do: build_hashed_token(user, "api", nil)
+
+  @doc "The query for the user of an API token, if that user still has API access."
+  def verify_api_token_query(token) do
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+
+        query =
+          from token in by_token_and_context_query(hashed_token, "api"),
+            join: user in assoc(token, :user),
+            where: user.api_access,
+            select: user
+
+        {:ok, query}
+
+      :error ->
+        :error
+    end
+  end
+
   defp build_hashed_token(user, context, sent_to) do
     token = :crypto.strong_rand_bytes(@rand_size)
     hashed_token = :crypto.hash(@hash_algorithm, token)
@@ -101,8 +129,9 @@ defmodule Chronicles.Accounts.UserToken do
   If found, the query returns a tuple of the form `{user, token}`.
 
   The given token is valid if it matches its hashed counterpart in the
-  database. This function also checks whether the token has expired. The context
-  of a magic link token is always "login".
+  database. This function also checks whether the token has expired: after
+  @magic_link_validity_in_minutes, or after @invite_validity_in_days for an unconfirmed
+  (invited) user. The context of a magic link token is always "login".
   """
   def verify_magic_link_token_query(token) do
     case Base.url_decode64(token, padding: false) do
@@ -112,7 +141,10 @@ defmodule Chronicles.Accounts.UserToken do
         query =
           from token in by_token_and_context_query(hashed_token, "login"),
             join: user in assoc(token, :user),
-            where: token.inserted_at > ago(^@magic_link_validity_in_minutes, "minute"),
+            where:
+              token.inserted_at > ago(^@magic_link_validity_in_minutes, "minute") or
+                (is_nil(user.confirmed_at) and
+                   token.inserted_at > ago(^@invite_validity_in_days, "day")),
             where: token.sent_to == user.email,
             select: {user, token}
 

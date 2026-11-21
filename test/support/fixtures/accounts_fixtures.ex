@@ -10,23 +10,20 @@ defmodule Chronicles.AccountsFixtures do
   alias Chronicles.Accounts.Scope
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
-  def valid_user_password, do: "hello world!"
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       email: unique_user_email(),
       username: "user#{System.unique_integer([:positive])}",
-      invite_code: "test-invite"
+      role: :author
     })
   end
 
   def unconfirmed_user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> valid_user_attributes()
-      |> Accounts.register_user()
-
-    user
+    # As an admin invites a user; the admin scope itself doesn't matter here.
+    %Accounts.User{}
+    |> Accounts.User.admin_changeset(valid_user_attributes(attrs))
+    |> Chronicles.Repo.insert!()
   end
 
   def user_fixture(attrs \\ %{}) do
@@ -52,11 +49,11 @@ defmodule Chronicles.AccountsFixtures do
     Scope.for_user(user)
   end
 
-  def set_password(user) do
-    {:ok, {user, _expired_tokens}} =
-      Accounts.update_user_password(user, %{password: valid_user_password()})
-
-    user
+  @doc "A user with API access and an API token: `{user, token}`."
+  def api_token_fixture(user \\ user_fixture()) do
+    user = user |> Ecto.Changeset.change(api_access: true) |> Chronicles.Repo.update!()
+    {:ok, token} = Accounts.create_api_token(user)
+    {user, token}
   end
 
   def extract_user_token(fun) do

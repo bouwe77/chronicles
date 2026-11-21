@@ -15,11 +15,7 @@ defmodule ChroniclesWeb.UserLive.Login do
               <%= if @current_scope do %>
                 {gettext("Log in again before you change your account.")}
               <% else %>
-                {gettext("No account yet?")} <.link
-                  navigate={~p"/users/register"}
-                  class="font-semibold text-brand hover:underline"
-                  phx-no-format
-                >{gettext("Sign up")}</.link>
+                {gettext("No account yet? Chronicles is invite-only. Ask an admin for an invite.")}
               <% end %>
             </:subtitle>
           </.header>
@@ -39,7 +35,6 @@ defmodule ChroniclesWeb.UserLive.Login do
           :let={f}
           for={@form}
           id="login_form_magic"
-          action={~p"/users/log-in"}
           phx-submit="submit_magic"
         >
           <.input
@@ -56,40 +51,6 @@ defmodule ChroniclesWeb.UserLive.Login do
             {gettext("Log in with email")} <span aria-hidden="true">→</span>
           </.button>
         </.form>
-
-        <div class="divider">{gettext("or")}</div>
-
-        <.form
-          :let={f}
-          for={@form}
-          id="login_form_password"
-          action={~p"/users/log-in"}
-          phx-submit="submit_password"
-          phx-trigger-action={@trigger_submit}
-        >
-          <.input
-            readonly={!!@current_scope}
-            field={f[:email]}
-            type="email"
-            label={gettext("Email")}
-            autocomplete="username"
-            spellcheck="false"
-            required
-          />
-          <.input
-            field={@form[:password]}
-            type="password"
-            label={gettext("Password")}
-            autocomplete="current-password"
-            spellcheck="false"
-          />
-          <.button variant="primary" class="w-full" name={@form[:remember_me].name} value="true">
-            {gettext("Log in and stay logged in")} <span aria-hidden="true">→</span>
-          </.button>
-          <.button class="mt-2 w-full">
-            {gettext("Log in only this time")}
-          </.button>
-        </.form>
       </div>
     </Layouts.app>
     """
@@ -103,14 +64,10 @@ defmodule ChroniclesWeb.UserLive.Login do
 
     form = to_form(%{"email" => email}, as: "user")
 
-    {:ok, assign(socket, form: form, trigger_submit: false)}
+    {:ok, assign(socket, form: form)}
   end
 
   @impl true
-  def handle_event("submit_password", _params, socket) do
-    {:noreply, assign(socket, :trigger_submit, true)}
-  end
-
   def handle_event("submit_magic", %{"user" => %{"email" => email}}, socket) do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_login_instructions(

@@ -1,8 +1,5 @@
 import Config
 
-# Only in tests, remove the complexity from the password hashing algorithm
-config :bcrypt_elixir, :log_rounds, 1
-
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
@@ -25,8 +22,6 @@ config :chronicles, ChroniclesWeb.Endpoint,
 
 # In test we don't send emails
 config :chronicles, Chronicles.Mailer, adapter: Swoosh.Adapters.Test
-
-config :chronicles, invite_code: "test-invite"
 
 # Disable swoosh api client as it is only required for production adapters
 config :swoosh, :api_client, false

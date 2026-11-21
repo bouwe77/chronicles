@@ -1,6 +1,6 @@
 defmodule ChroniclesWeb.Admin.UsersLive do
   @moduledoc """
-  Admins only: every user, with a role picker, and a form that creates a user and emails
+  Admins only: every user, with a role picker and an API access switch, and a form that creates a user and emails
   them a login link. Your own role can't be changed here.
   """
   use ChroniclesWeb, :live_view
@@ -60,13 +60,32 @@ defmodule ChroniclesWeb.Admin.UsersLive do
     end
   end
 
+  def handle_event("set_api_access", %{"user_id" => id, "api_access" => api_access}, socket) do
+    user = Accounts.get_user!(id)
+
+    case Accounts.update_user_api_access(socket.assigns.current_scope, user, api_access) do
+      {:ok, user} ->
+        message =
+          if user.api_access,
+            do: gettext("%{email} can use the API.", email: user.email),
+            else: gettext("%{email} can't use the API anymore.", email: user.email)
+
+        {:noreply, socket |> stream_insert(:users, user) |> put_flash(:info, message)}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not change API access."))}
+    end
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <h1 class="text-2xl font-semibold tracking-tight">{gettext("Users")}</h1>
       <p class="text-sm text-base-content/70">
-        {gettext("A player plays stories. An author also writes them. An admin also manages users.")}
+        {gettext(
+          "A player plays stories. An author also writes them. An admin also manages users. API lets a user create a token for tools and scripts."
+        )}
       </p>
 
       <ul
@@ -80,6 +99,21 @@ defmodule ChroniclesWeb.Admin.UsersLive do
           class="flex items-center justify-between gap-4 px-4 py-3"
         >
           <span class="truncate">{user.email}</span>
+          <.form
+            for={to_form(%{})}
+            id={"api-access-form-#{user.id}"}
+            phx-change="set_api_access"
+            class="ml-auto"
+          >
+            <input type="hidden" name="user_id" value={user.id} />
+            <.input
+              type="checkbox"
+              id={"api-access-#{user.id}"}
+              name="api_access"
+              value={user.api_access}
+              label={gettext("API")}
+            />
+          </.form>
           <%= if user.id == @current_scope.user.id do %>
             <span class="text-sm text-base-content/60">{role_label(user.role)} ({gettext("you")})</span>
           <% else %>

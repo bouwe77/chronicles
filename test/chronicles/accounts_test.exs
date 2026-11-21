@@ -17,24 +17,6 @@ defmodule Chronicles.AccountsTest do
     end
   end
 
-  describe "get_user_by_email_and_password/2" do
-    test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
-    end
-
-    test "does not return the user if the password is not valid" do
-      user = user_fixture() |> set_password()
-      refute Accounts.get_user_by_email_and_password(user.email, "invalid")
-    end
-
-    test "returns the user if the email and password are valid" do
-      %{id: id} = user = user_fixture() |> set_password()
-
-      assert %User{id: ^id} =
-               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
-    end
-  end
-
   describe "get_user!/1" do
     test "raises if id is invalid" do
       assert_raise Ecto.NoResultsError, fn ->
@@ -48,42 +30,50 @@ defmodule Chronicles.AccountsTest do
     end
   end
 
-  describe "register_user/1" do
-    test "requires email to be set" do
-      {:error, changeset} = Accounts.register_user(%{})
+  describe "create_user/2" do
+    setup do
+      admin = user_fixture(role: :admin)
+      %{scope: user_scope_fixture(admin)}
+    end
+
+    test "requires email to be set", %{scope: scope} do
+      {:error, changeset} = Accounts.create_user(scope, %{})
 
       assert %{email: ["can't be blank"]} = errors_on(changeset)
     end
 
-    test "validates email when given" do
-      {:error, changeset} = Accounts.register_user(%{email: "not valid"})
+    test "validates email when given", %{scope: scope} do
+      {:error, changeset} = Accounts.create_user(scope, %{email: "not valid"})
 
       assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
     end
 
-    test "validates maximum values for email for security" do
+    test "validates maximum values for email for security", %{scope: scope} do
       too_long = String.duplicate("db", 100)
-      {:error, changeset} = Accounts.register_user(%{email: too_long})
+      {:error, changeset} = Accounts.create_user(scope, %{email: too_long})
       assert "should be at most 160 character(s)" in errors_on(changeset).email
     end
 
-    test "validates email uniqueness" do
+    test "validates email uniqueness", %{scope: scope} do
       %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
+      {:error, changeset} = Accounts.create_user(scope, %{email: email})
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the uppercased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
+      {:error, changeset} = Accounts.create_user(scope, %{email: String.upcase(email)})
       assert "has already been taken" in errors_on(changeset).email
     end
 
-    test "registers users without password" do
+    test "creates an unconfirmed user", %{scope: scope} do
       email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
+      {:ok, user} = Accounts.create_user(scope, valid_user_attributes(email: email))
       assert user.email == email
-      assert is_nil(user.hashed_password)
       assert is_nil(user.confirmed_at)
-      assert is_nil(user.password)
+    end
+
+    test "only an admin may" do
+      assert {:error, :unauthorized} =
+               Accounts.create_user(user_scope_fixture(), valid_user_attributes())
     end
   end
 
@@ -180,78 +170,6 @@ defmodule Chronicles.AccountsTest do
     end
   end
 
-  describe "change_user_password/3" do
-    test "returns a user changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_password(%User{})
-      assert changeset.required == [:password]
-    end
-
-    test "allows fields to be set" do
-      changeset =
-        Accounts.change_user_password(
-          %User{},
-          %{
-            "password" => "new valid password"
-          },
-          hash_password: false
-        )
-
-      assert changeset.valid?
-      assert get_change(changeset, :password) == "new valid password"
-      assert is_nil(get_change(changeset, :hashed_password))
-    end
-  end
-
-  describe "update_user_password/2" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "validates password", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_password(user, %{
-          password: "not valid",
-          password_confirmation: "another"
-        })
-
-      assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
-    end
-
-    test "validates maximum values for password for security", %{user: user} do
-      too_long = String.duplicate("db", 100)
-
-      {:error, changeset} =
-        Accounts.update_user_password(user, %{password: too_long})
-
-      assert "should be at most 72 character(s)" in errors_on(changeset).password
-    end
-
-    test "updates the password", %{user: user} do
-      {:ok, {user, expired_tokens}} =
-        Accounts.update_user_password(user, %{
-          password: "new valid password"
-        })
-
-      assert expired_tokens == []
-      assert is_nil(user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
-    end
-
-    test "deletes all tokens for the given user", %{user: user} do
-      _ = Accounts.generate_user_session_token(user)
-
-      {:ok, {_, _}} =
-        Accounts.update_user_password(user, %{
-          password: "new valid password"
-        })
-
-      refute Repo.get_by(UserToken, user_id: user.id)
-    end
-  end
-
   describe "generate_user_session_token/1" do
     setup do
       %{user: user_fixture()}
@@ -330,6 +248,27 @@ defmodule Chronicles.AccountsTest do
   end
 
   describe "login_user_by_magic_link/1" do
+    test "a login link works for 15 minutes" do
+      user = user_fixture()
+      {encoded_token, hashed_token} = generate_user_magic_link_token(user)
+      offset_user_token(hashed_token, -16, :minute)
+
+      assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
+    end
+
+    test "an invite link (unconfirmed user) works for 2 days" do
+      user = unconfirmed_user_fixture()
+      {encoded_token, hashed_token} = generate_user_magic_link_token(user)
+
+      offset_user_token(hashed_token, -3, :day)
+      assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
+
+      offset_user_token(hashed_token, -1, :day)
+
+      assert {:ok, {%User{confirmed_at: %DateTime{}}, _tokens}} =
+               Accounts.login_user_by_magic_link(encoded_token)
+    end
+
     test "confirms user and expires tokens" do
       user = unconfirmed_user_fixture()
       refute user.confirmed_at
@@ -348,16 +287,6 @@ defmodule Chronicles.AccountsTest do
       assert {:ok, {^user, []}} = Accounts.login_user_by_magic_link(encoded_token)
       # one time use only
       assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
-    end
-
-    test "raises when unconfirmed user has password set" do
-      user = unconfirmed_user_fixture()
-      {1, nil} = Repo.update_all(User, set: [hashed_password: "hashed"])
-      {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
-
-      assert_raise RuntimeError, ~r/magic link log in is not allowed/, fn ->
-        Accounts.login_user_by_magic_link(encoded_token)
-      end
     end
   end
 
@@ -389,9 +318,71 @@ defmodule Chronicles.AccountsTest do
     end
   end
 
-  describe "inspect/2 for the User module" do
-    test "does not include password" do
-      refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
+  describe "update_user_api_access/3" do
+    test "only an admin may turn it on, also for themselves" do
+      admin = user_fixture() |> User.role_changeset(%{role: :admin}) |> Repo.update!()
+      admin_scope = user_scope_fixture(admin)
+      user = user_fixture()
+
+      assert {:error, :unauthorized} =
+               Accounts.update_user_api_access(user_scope_fixture(user), user, true)
+
+      assert {:ok, %User{api_access: true}} =
+               Accounts.update_user_api_access(admin_scope, user, true)
+
+      assert {:ok, %User{api_access: true}} =
+               Accounts.update_user_api_access(admin_scope, admin, true)
+    end
+
+    test "turning it off revokes the token" do
+      admin_scope =
+        user_fixture()
+        |> User.role_changeset(%{role: :admin})
+        |> Repo.update!()
+        |> user_scope_fixture()
+
+      {user, token} = api_token_fixture()
+
+      {:ok, user} = Accounts.update_user_api_access(admin_scope, user, false)
+      refute Accounts.api_token?(user)
+
+      {:ok, _user} = Accounts.update_user_api_access(admin_scope, user, true)
+      refute Accounts.get_user_by_api_token(token)
+    end
+  end
+
+  describe "API tokens" do
+    test "a new user has no API access" do
+      user = user_fixture()
+      refute user.api_access
+      assert {:error, :unauthorized} = Accounts.create_api_token(user)
+    end
+
+    test "a token finds its user until it is revoked" do
+      {%{id: id} = user, token} = api_token_fixture()
+      assert %User{id: ^id} = Accounts.get_user_by_api_token(token)
+
+      :ok = Accounts.delete_api_token(user)
+      refute Accounts.get_user_by_api_token(token)
+    end
+
+    test "a new token replaces the old one" do
+      {user, old_token} = api_token_fixture()
+      {:ok, new_token} = Accounts.create_api_token(user)
+
+      refute Accounts.get_user_by_api_token(old_token)
+      assert Accounts.get_user_by_api_token(new_token)
+    end
+
+    test "a token stops working when the user loses API access" do
+      {user, token} = api_token_fixture()
+      Repo.update!(Ecto.Changeset.change(user, api_access: false))
+      refute Accounts.get_user_by_api_token(token)
+    end
+
+    test "an unknown or malformed token finds nobody" do
+      refute Accounts.get_user_by_api_token("not base64!")
+      refute Accounts.get_user_by_api_token(Base.url_encode64("unknown", padding: false))
     end
   end
 end

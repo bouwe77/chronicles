@@ -13,7 +13,7 @@ defmodule ChroniclesWeb.UserLive.AccountTest do
         |> live(~p"/account")
 
       assert html =~ "Change email"
-      assert html =~ "Save password"
+      refute html =~ "password"
     end
 
     test "redirects if user is not logged in", %{conn: conn} do
@@ -101,74 +101,33 @@ defmodule ChroniclesWeb.UserLive.AccountTest do
     end
   end
 
-  describe "update password form" do
-    setup %{conn: conn} do
-      user = user_fixture()
-      %{conn: log_in_user(conn, user), user: user}
+  describe "API token" do
+    test "is hidden without API access", %{conn: conn} do
+      {:ok, lv, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/account")
+      refute has_element?(lv, "#api-token")
     end
 
-    test "updates the user password", %{conn: conn, user: user} do
-      new_password = valid_user_password()
+    test "is created once, shown once, and revoked", %{conn: conn} do
+      user =
+        user_fixture() |> Ecto.Changeset.change(api_access: true) |> Chronicles.Repo.update!()
 
-      {:ok, lv, _html} = live(conn, ~p"/account")
+      {:ok, lv, _html} = conn |> log_in_user(user) |> live(~p"/account")
 
-      form =
-        form(lv, "#password_form", %{
-          "user" => %{
-            "email" => user.email,
-            "password" => new_password,
-            "password_confirmation" => new_password
-          }
-        })
+      refute has_element?(lv, "#revoke-api-token")
+      lv |> element("#create-api-token") |> render_click()
 
-      render_submit(form)
-
-      new_password_conn = follow_trigger_action(form, conn)
-
-      assert redirected_to(new_password_conn) == ~p"/account"
-
-      assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
-
-      assert Phoenix.Flash.get(new_password_conn.assigns.flash, :info) =~
-               "Password updated successfully"
-
-      assert Accounts.get_user_by_email_and_password(user.email, new_password)
-    end
-
-    test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/account")
-
-      result =
+      token =
         lv
-        |> element("#password_form")
-        |> render_change(%{
-          "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
-          }
-        })
+        |> element("#api-token-value")
+        |> render()
+        |> LazyHTML.from_fragment()
+        |> LazyHTML.text()
 
-      assert result =~ "Save password"
-      assert result =~ "should be at least 12 character(s)"
-      assert result =~ "does not match password"
-    end
+      assert Accounts.get_user_by_api_token(String.trim(token))
 
-    test "renders errors with invalid data (phx-submit)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/account")
-
-      result =
-        lv
-        |> form("#password_form", %{
-          "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
-          }
-        })
-        |> render_submit()
-
-      assert result =~ "Save password"
-      assert result =~ "should be at least 12 character(s)"
-      assert result =~ "does not match password"
+      lv |> element("#revoke-api-token") |> render_click()
+      refute has_element?(lv, "#api-token-value")
+      refute Accounts.get_user_by_api_token(String.trim(token))
     end
   end
 

@@ -30,20 +30,13 @@ start it (`mix phx.server` in the repo root).
 
 ## Log in
 
-Every API call except the login needs a token. Log in with `CHRONICLES_EMAIL` and
-`CHRONICLES_PASSWORD` from the shell profile; if they are not set, ask the user to set
-them. The account needs a password: an account that only uses email links sets one in
-Settings. The token lasts a day. Keep it in a file, because shell variables do not last
-between commands:
+Every API call needs the API token in `CHRONICLES_TOKEN` from the shell profile. If it is
+not set, ask the user to set it. An admin turns on API access for the account on the
+Users page; the user then creates the token on the Account page.
 
-```bash
-jq -n --arg email "$CHRONICLES_EMAIL" --arg password "$CHRONICLES_PASSWORD" '{email: $email, password: $password}' \
-  | curl -s -X POST http://localhost:9278/api/session -H "Content-Type: application/json" --data @- \
-  | jq -r .token > "$TMPDIR/chronicles-token"
-```
-
-Every call below sends it with `-H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")"`.
-A `401` means the token is missing or expired: log in again.
+Every call below sends it with `-H "Authorization: Bearer $CHRONICLES_TOKEN"`.
+A `401` means the token is missing, revoked, or the account lost API access: ask the user
+for a new token.
 
 ## Whose story?
 
@@ -58,14 +51,14 @@ Keep the JSON in a temp file outside the repo (for example in your scratchpad).
 
 ```bash
 # Edit: fetch the head content
-curl -s -H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")" \
+curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" \
   http://localhost:9278/api/stories/the-front-door | jq .data.content > "$TMPDIR/story.json"
 
 # … write or edit story.json …
 
 # Save: wrap it as {content} and PUT it
 jq '{content: .}' "$TMPDIR/story.json" \
-  | curl -s -H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")" -X PUT \
+  | curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" -X PUT \
     http://localhost:9278/api/stories/the-front-door -H "Content-Type: application/json" --data @-
 ```
 
@@ -100,7 +93,7 @@ One call removes the story with all its versions and every game of them, other p
 games included:
 
 ```bash
-curl -s -H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")" -X DELETE \
+curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" -X DELETE \
   http://localhost:9278/api/stories/the-front-door
 ```
 
@@ -116,9 +109,9 @@ series only names them. Save every story first, then the series:
 
 ```bash
 jq -n '{title: "The Number", stories: ["the-number", "the-number-returns"]}' \
-  | curl -s -H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")" -X PUT \
+  | curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" -X PUT \
     http://localhost:9278/api/series/the-number -H "Content-Type: application/json" --data @-
-curl -s -H "Authorization: Bearer $(cat "$TMPDIR/chronicles-token")" http://localhost:9278/api/series
+curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" http://localhost:9278/api/series
 ```
 
 A `PUT` creates or replaces the series, after checking each story's head content; a

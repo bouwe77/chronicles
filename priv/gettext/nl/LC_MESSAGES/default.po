@@ -95,17 +95,12 @@ msgstr[1] "%{count} problemen"
 msgid "A new slug makes a new, private story. The slug of one of your stories gives it new content; games in progress keep the content they started with."
 msgstr "Een nieuwe slug maakt een nieuw, privé verhaal. De slug van een van je verhalen geeft dat verhaal nieuwe inhoud; lopende spellen houden de inhoud waarmee ze begonnen."
 
-#: lib/chronicles_web/live/admin/users_live.ex:69
-#, elixir-autogen, elixir-format
-msgid "A player plays stories. An author also writes them. An admin also manages users."
-msgstr "Een speler speelt verhalen. Een auteur schrijft ze ook. Een beheerder beheert ook gebruikers."
-
-#: lib/chronicles_web/live/user_live/account.ex:222
+#: lib/chronicles_web/live/user_live/account.ex:212
 #, elixir-autogen, elixir-format
 msgid "A story of yours is in another user's series. Ask them to remove it first."
 msgstr "Een verhaal van jou zit in de reeks van iemand anders. Vraag die persoon om het eerst te verwijderen."
 
-#: lib/chronicles_web/components/core_components.ex:383
+#: lib/chronicles_web/components/core_components.ex:401
 #: lib/chronicles_web/live/edit_story_live.ex:327
 #: lib/chronicles_web/live/game_live.ex:253
 #, elixir-autogen, elixir-format
@@ -117,28 +112,23 @@ msgstr "Acties"
 msgid "Add"
 msgstr "Toevoegen"
 
-#: lib/chronicles_web/live/admin/users_live.ex:136
+#: lib/chronicles_web/live/admin/users_live.ex:170
 #, elixir-autogen, elixir-format
 msgid "Admin"
 msgstr "Beheerder"
-
-#: lib/chronicles_web/live/user_live/registration.ex:16
-#, elixir-autogen, elixir-format
-msgid "Already have an account?"
-msgstr "Heb je al een account?"
 
 #: lib/chronicles_web/live/story_upload_live.ex:68
 #, elixir-autogen, elixir-format
 msgid "Another author already has a story with this slug."
 msgstr "Een andere auteur heeft al een verhaal met deze slug."
 
-#: lib/chronicles_web/components/layouts.ex:166
-#: lib/chronicles_web/components/layouts.ex:181
+#: lib/chronicles_web/components/layouts.ex:163
+#: lib/chronicles_web/components/layouts.ex:178
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr "Opnieuw verbinden"
 
-#: lib/chronicles_web/live/admin/users_live.ex:135
+#: lib/chronicles_web/live/admin/users_live.ex:169
 #, elixir-autogen, elixir-format
 msgid "Author"
 msgstr "Auteur"
@@ -195,11 +185,6 @@ msgstr "Bevestig en log alleen deze keer in"
 msgid "Confirm and stay logged in"
 msgstr "Bevestig en blijf ingelogd"
 
-#: lib/chronicles_web/live/user_live/account.ex:69
-#, elixir-autogen, elixir-format
-msgid "Confirm new password"
-msgstr "Bevestig nieuw wachtwoord"
-
 #: lib/chronicles_web/live/user_live/confirmation.ex:28
 #: lib/chronicles_web/live/user_live/confirmation.ex:34
 #, elixir-autogen, elixir-format
@@ -255,22 +240,12 @@ msgstr "Het verhaal kon niet worden verwijderd."
 msgid "Could not start a game."
 msgstr "Er kon geen spel worden gestart."
 
-#: lib/chronicles_web/live/user_live/registration.ex:45
-#, elixir-autogen, elixir-format
-msgid "Create an account"
-msgstr "Account maken"
-
 #: lib/chronicles_web/live/new_story_live.ex:119
 #, elixir-autogen, elixir-format
 msgid "Create the story"
 msgstr "Verhaal maken"
 
-#: lib/chronicles_web/live/user_live/registration.ex:44
-#, elixir-autogen, elixir-format
-msgid "Creating account..."
-msgstr "Bezig met account maken..."
-
-#: lib/chronicles_web/live/admin/users_live.ex:121
+#: lib/chronicles_web/live/admin/users_live.ex:155
 #: lib/chronicles_web/live/new_story_live.ex:117
 #, elixir-autogen, elixir-format
 msgid "Creating..."
@@ -281,12 +256,12 @@ msgstr "Bezig met maken..."
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: lib/chronicles_web/live/user_live/account.ex:81
+#: lib/chronicles_web/live/user_live/account.ex:77
 #, elixir-autogen, elixir-format
 msgid "Delete account"
 msgstr "Account verwijderen"
 
-#: lib/chronicles_web/live/user_live/account.ex:93
+#: lib/chronicles_web/live/user_live/account.ex:89
 #, elixir-autogen, elixir-format
 msgid "Delete my account"
 msgstr "Mijn account verwijderen"
@@ -306,7 +281,7 @@ msgstr "Dit spel verwijderen?"
 msgid "Delete this story? Every game of it goes too, other players' games as well."
 msgstr "Dit verhaal verwijderen? Alle spellen ervan verdwijnen ook, ook die van andere spelers."
 
-#: lib/chronicles_web/live/user_live/account.ex:90
+#: lib/chronicles_web/live/user_live/account.ex:86
 #, elixir-autogen, elixir-format
 msgid "Delete your account and everything you own?"
 msgstr "Je account en alles wat van jou is verwijderen?"
@@ -326,11 +301,9 @@ msgstr "Bewerken"
 msgid "Edit %{title}"
 msgstr "%{title} bewerken"
 
-#: lib/chronicles_web/live/admin/users_live.ex:109
+#: lib/chronicles_web/live/admin/users_live.ex:143
 #: lib/chronicles_web/live/user_live/account.ex:32
-#: lib/chronicles_web/live/user_live/login.ex:49
-#: lib/chronicles_web/live/user_live/login.ex:74
-#: lib/chronicles_web/live/user_live/registration.ex:28
+#: lib/chronicles_web/live/user_live/login.ex:44
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr "E-mailadres"
@@ -381,20 +354,10 @@ msgstr "Geef het eerst een id."
 msgid "Give this story new content?"
 msgstr "Dit verhaal nieuwe inhoud geven?"
 
-#: lib/chronicles_web/live/user_live/login.ex:123
+#: lib/chronicles_web/live/user_live/login.ex:80
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will get an email to log in shortly."
 msgstr "Als je e-mailadres bij ons bekend is, krijg je zo een e-mail om in te loggen."
-
-#: lib/chronicles_web/controllers/user_session_controller.ex:43
-#, elixir-autogen, elixir-format
-msgid "Invalid email or password"
-msgstr "Onjuist e-mailadres of wachtwoord"
-
-#: lib/chronicles_web/live/user_live/registration.ex:42
-#, elixir-autogen, elixir-format
-msgid "Invite code"
-msgstr "Uitnodigingscode"
 
 #: lib/chronicles_web/live/edit_story_live.ex:405
 #: lib/chronicles_web/live/game_live.ex:237
@@ -427,10 +390,9 @@ msgstr "Locaties"
 msgid "Log"
 msgstr "Logboek"
 
-#: lib/chronicles_web/components/layouts.ex:121
+#: lib/chronicles_web/components/layouts.ex:118
 #: lib/chronicles_web/live/user_live/confirmation.ex:51
 #: lib/chronicles_web/live/user_live/login.ex:13
-#: lib/chronicles_web/live/user_live/registration.ex:18
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr "Inloggen"
@@ -445,17 +407,7 @@ msgstr "Log opnieuw in voordat je je account wijzigt."
 msgid "Log in again to open this page."
 msgstr "Log opnieuw in om deze pagina te openen."
 
-#: lib/chronicles_web/live/user_live/login.ex:87
-#, elixir-autogen, elixir-format
-msgid "Log in and stay logged in"
-msgstr "Inloggen en ingelogd blijven"
-
-#: lib/chronicles_web/live/user_live/login.ex:90
-#, elixir-autogen, elixir-format
-msgid "Log in only this time"
-msgstr "Alleen deze keer inloggen"
-
-#: lib/chronicles_web/live/user_live/login.ex:56
+#: lib/chronicles_web/live/user_live/login.ex:51
 #, elixir-autogen, elixir-format
 msgid "Log in with email"
 msgstr "Inloggen met e-mail"
@@ -470,7 +422,7 @@ msgstr "Log me alleen deze keer in"
 msgid "Log out"
 msgstr "Uitloggen"
 
-#: lib/chronicles_web/controllers/user_session_controller.ex:64
+#: lib/chronicles_web/controllers/user_session_controller.ex:33
 #, elixir-autogen, elixir-format
 msgid "Logged out successfully."
 msgstr "Je bent uitgelogd."
@@ -502,22 +454,12 @@ msgstr "Dit verhaal openbaar maken? Iedereen ziet het dan."
 msgid "New game"
 msgstr "Nieuw spel"
 
-#: lib/chronicles_web/live/user_live/account.ex:61
-#, elixir-autogen, elixir-format
-msgid "New password"
-msgstr "Nieuw wachtwoord"
-
 #: lib/chronicles_web/live/new_story_live.ex:17
 #: lib/chronicles_web/live/new_story_live.ex:78
 #: lib/chronicles_web/live/stories_live.ex:40
 #, elixir-autogen, elixir-format
 msgid "New story"
 msgstr "Nieuw verhaal"
-
-#: lib/chronicles_web/live/user_live/login.ex:18
-#, elixir-autogen, elixir-format
-msgid "No account yet?"
-msgstr "Nog geen account?"
 
 #: lib/chronicles_web/live/story_live.ex:172
 #, elixir-autogen, elixir-format
@@ -586,22 +528,12 @@ msgstr "Deel %{n} van %{total} van %{title}"
 msgid "Parts of the story"
 msgstr "Delen van het verhaal"
 
-#: lib/chronicles_web/live/user_live/login.ex:82
-#, elixir-autogen, elixir-format
-msgid "Password"
-msgstr "Wachtwoord"
-
-#: lib/chronicles_web/controllers/user_session_controller.ex:59
-#, elixir-autogen, elixir-format
-msgid "Password updated successfully!"
-msgstr "Je wachtwoord is gewijzigd."
-
 #: lib/chronicles_web/live/game_live.ex:349
 #, elixir-autogen, elixir-format
 msgid "Play again"
 msgstr "Opnieuw spelen"
 
-#: lib/chronicles_web/live/admin/users_live.ex:134
+#: lib/chronicles_web/live/admin/users_live.ex:168
 #, elixir-autogen, elixir-format
 msgid "Player"
 msgstr "Speler"
@@ -657,7 +589,7 @@ msgstr "Hernoemen"
 msgid "Rename to"
 msgstr "Hernoemen naar"
 
-#: lib/chronicles_web/live/admin/users_live.ex:93
+#: lib/chronicles_web/live/admin/users_live.ex:127
 #, elixir-autogen, elixir-format
 msgid "Role of %{email}"
 msgstr "Rol van %{email}"
@@ -672,11 +604,6 @@ msgstr "Regels"
 msgid "Save"
 msgstr "Opslaan"
 
-#: lib/chronicles_web/live/user_live/account.ex:74
-#, elixir-autogen, elixir-format
-msgid "Save password"
-msgstr "Wachtwoord opslaan"
-
 #: lib/chronicles_web/live/edit_story_live.ex:153
 #, elixir-autogen, elixir-format
 msgid "Saved. New games play this version."
@@ -684,17 +611,9 @@ msgstr "Opgeslagen. Nieuwe spellen spelen deze versie."
 
 #: lib/chronicles_web/live/story_upload_live.ex:153
 #: lib/chronicles_web/live/user_live/account.ex:23
-#: lib/chronicles_web/live/user_live/account.ex:73
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Bezig met opslaan..."
-
-#: lib/chronicles_web/components/layouts.ex:118
-#: lib/chronicles_web/live/user_live/login.ex:22
-#: lib/chronicles_web/live/user_live/registration.ex:14
-#, elixir-autogen, elixir-format
-msgid "Sign up"
-msgstr "Aanmelden"
 
 #: lib/chronicles_web/live/new_story_live.ex:100
 #, elixir-autogen, elixir-format
@@ -711,7 +630,7 @@ msgstr "Schets de ruimtes en hoe ze verbonden zijn. Elke uitgang krijgt ook een 
 msgid "Slug (in the story's URL)"
 msgstr "Slug (in de URL van het verhaal)"
 
-#: lib/chronicles_web/components/layouts.ex:173
+#: lib/chronicles_web/components/layouts.ex:170
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Er ging iets mis!"
@@ -761,7 +680,7 @@ msgstr "Het bestand is te groot."
 msgid "The id of a new %{kind}"
 msgstr "Het id van een nieuwe %{kind}"
 
-#: lib/chronicles_web/controllers/user_session_controller.ex:27
+#: lib/chronicles_web/controllers/user_session_controller.ex:26
 #, elixir-autogen, elixir-format
 msgid "The link is invalid or it has expired."
 msgstr "De link is ongeldig of verlopen."
@@ -781,7 +700,7 @@ msgstr "De startlocatie kan niet worden verwijderd."
 msgid "The story was not saved"
 msgstr "Het verhaal is niet opgeslagen"
 
-#: lib/chronicles_web/live/user_live/account.ex:83
+#: lib/chronicles_web/live/user_live/account.ex:79
 #, elixir-autogen, elixir-format
 msgid "This deletes your account, your stories with every game of them, and your games. It can't be undone."
 msgstr "Dit verwijdert je account, je verhalen met alle spellen ervan, en je spellen. Dit kan niet ongedaan worden gemaakt."
@@ -796,12 +715,12 @@ msgstr "Dit bestand is geen JSON-object."
 msgid "This gives %{title} new content."
 msgstr "Dit geeft %{title} nieuwe inhoud."
 
-#: lib/chronicles_web/live/user_live/account.ex:108
+#: lib/chronicles_web/live/user_live/account.ex:104
 #, elixir-autogen, elixir-format
 msgid "This link is not valid or has expired."
 msgstr "Deze link is ongeldig of verlopen."
 
-#: lib/chronicles_web/live/user_live/confirmation.ex:87
+#: lib/chronicles_web/live/user_live/confirmation.ex:83
 #, elixir-autogen, elixir-format
 msgid "This login link is not valid or has expired."
 msgstr "Deze inloglink is ongeldig of verlopen."
@@ -836,11 +755,6 @@ msgstr "Tijd"
 msgid "Timeline"
 msgstr "Tijdlijn"
 
-#: lib/chronicles_web/live/user_live/confirmation.ex:70
-#, elixir-autogen, elixir-format
-msgid "Tip: if you prefer a password, you can set one in your settings."
-msgstr "Tip: wil je liever een wachtwoord, dan kun je dat instellen bij je instellingen."
-
 #: lib/chronicles_web/live/new_story_live.ex:89
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -864,14 +778,13 @@ msgid "User confirmed successfully."
 msgstr "Je account is bevestigd."
 
 #: lib/chronicles_web/live/user_live/account.ex:18
-#: lib/chronicles_web/live/user_live/registration.ex:37
 #, elixir-autogen, elixir-format
 msgid "Username (shown to other players)"
 msgstr "Gebruikersnaam (zichtbaar voor andere spelers)"
 
 #: lib/chronicles_web/components/layouts.ex:70
 #: lib/chronicles_web/live/admin/users_live.ex:14
-#: lib/chronicles_web/live/admin/users_live.ex:67
+#: lib/chronicles_web/live/admin/users_live.ex:84
 #, elixir-autogen, elixir-format
 msgid "Users"
 msgstr "Gebruikers"
@@ -887,20 +800,15 @@ msgstr "Wachten"
 msgid "Way back (optional)"
 msgstr "Weg terug (niet verplicht)"
 
-#: lib/chronicles_web/components/layouts.ex:158
+#: lib/chronicles_web/components/layouts.ex:155
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr "We kunnen het internet niet vinden"
 
-#: lib/chronicles_web/live/user_live/account.ex:156
+#: lib/chronicles_web/live/user_live/account.ex:150
 #, elixir-autogen, elixir-format
 msgid "We sent a link to the new address. Open it to confirm the change."
 msgstr "We hebben een link naar het nieuwe adres gestuurd. Open die om de wijziging te bevestigen."
-
-#: lib/chronicles_web/live/user_live/registration.ex:79
-#, elixir-autogen, elixir-format
-msgid "We sent an email to %{email}. Open it to confirm your account."
-msgstr "We hebben een e-mail gestuurd naar %{email}. Open die om je account te bevestigen."
 
 #: lib/chronicles_web/live/user_live/confirmation.ex:12
 #, elixir-autogen, elixir-format
@@ -948,12 +856,12 @@ msgstr "Log in om deze pagina te openen."
 msgid "You won!"
 msgstr "Je hebt gewonnen!"
 
-#: lib/chronicles_web/live/user_live/account.ex:214
+#: lib/chronicles_web/live/user_live/account.ex:204
 #, elixir-autogen, elixir-format
 msgid "Your account is deleted."
 msgstr "Je account is verwijderd."
 
-#: lib/chronicles_web/live/user_live/account.ex:105
+#: lib/chronicles_web/live/user_live/account.ex:101
 #, elixir-autogen, elixir-format
 msgid "Your email address is changed."
 msgstr "Je e-mailadres is gewijzigd."
@@ -963,7 +871,7 @@ msgstr "Je e-mailadres is gewijzigd."
 msgid "Your games"
 msgstr "Je spellen"
 
-#: lib/chronicles_web/live/user_live/account.ex:198
+#: lib/chronicles_web/live/user_live/account.ex:188
 #, elixir-autogen, elixir-format
 msgid "Your username is now %{username}."
 msgstr "Je gebruikersnaam is nu %{username}."
@@ -974,7 +882,7 @@ msgstr "Je gebruikersnaam is nu %{username}."
 msgid "by %{name}"
 msgstr "door %{name}"
 
-#: lib/chronicles_web/components/core_components.ex:81
+#: lib/chronicles_web/components/core_components.ex:83
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "sluiten"
@@ -1004,11 +912,6 @@ msgstr "bestaat al."
 msgid "new id"
 msgstr "nieuw id"
 
-#: lib/chronicles_web/live/user_live/login.ex:60
-#, elixir-autogen, elixir-format
-msgid "or"
-msgstr "of"
-
 #: lib/chronicles_web/live/edit_story_live.ex:444
 #, elixir-autogen, elixir-format
 msgid "start"
@@ -1029,7 +932,7 @@ msgstr "onbereikbaar"
 msgid "unsaved"
 msgstr "niet opgeslagen"
 
-#: lib/chronicles_web/live/admin/users_live.ex:84
+#: lib/chronicles_web/live/admin/users_live.ex:118
 #, elixir-autogen, elixir-format
 msgid "you"
 msgstr "jij"
@@ -1110,7 +1013,7 @@ msgstr "%{email} kan inloggen met de link die we stuurden."
 msgid "All stories"
 msgstr "Alle verhalen"
 
-#: lib/chronicles_web/live/admin/users_live.ex:123
+#: lib/chronicles_web/live/admin/users_live.ex:157
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr "Aanmaken"
@@ -1120,7 +1023,7 @@ msgstr "Aanmaken"
 msgid "Mine and public"
 msgstr "Van mij en openbaar"
 
-#: lib/chronicles_web/live/admin/users_live.ex:101
+#: lib/chronicles_web/live/admin/users_live.ex:135
 #, elixir-autogen, elixir-format
 msgid "New user"
 msgstr "Nieuwe gebruiker"
@@ -1130,17 +1033,17 @@ msgstr "Nieuwe gebruiker"
 msgid "Only admins can create users."
 msgstr "Alleen admins kunnen gebruikers aanmaken."
 
-#: lib/chronicles_web/live/admin/users_live.ex:114
+#: lib/chronicles_web/live/admin/users_live.ex:148
 #, elixir-autogen, elixir-format
 msgid "Role"
 msgstr "Rol"
 
-#: lib/chronicles_web/live/admin/users_live.ex:127
+#: lib/chronicles_web/live/admin/users_live.ex:161
 #, elixir-autogen, elixir-format
 msgid "They get an email with a link to log in. No password needed."
 msgstr "Diegene krijgt een e-mail met een link om in te loggen. Een wachtwoord is niet nodig."
 
-#: lib/chronicles_web/live/admin/users_live.ex:110
+#: lib/chronicles_web/live/admin/users_live.ex:144
 #, elixir-autogen, elixir-format
 msgid "Username"
 msgstr "Gebruikersnaam"
@@ -1150,17 +1053,17 @@ msgstr "Gebruikersnaam"
 msgid "Which stories"
 msgstr "Welke verhalen"
 
-#: lib/chronicles_web/components/layouts.ex:94
+#: lib/chronicles_web/components/layouts.ex:102
 #: lib/chronicles_web/live/user_live/account.ex:12
 #, elixir-autogen, elixir-format
 msgid "Account"
 msgstr "Account"
 
-#: lib/chronicles_web/components/layouts.ex:102
-#: lib/chronicles_web/components/layouts.ex:126
-#: lib/chronicles_web/components/layouts.ex:127
+#: lib/chronicles_web/components/layouts.ex:94
+#: lib/chronicles_web/components/layouts.ex:123
+#: lib/chronicles_web/components/layouts.ex:124
 #: lib/chronicles_web/live/settings_live.ex:12
-#: lib/chronicles_web/live/settings_live.ex:42
+#: lib/chronicles_web/live/settings_live.ex:43
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Instellingen"
@@ -1169,3 +1072,78 @@ msgstr "Instellingen"
 #, elixir-autogen, elixir-format
 msgid "Theme"
 msgstr "Thema"
+
+#: lib/chronicles_web/live/admin/users_live.ex:70
+#, elixir-autogen, elixir-format
+msgid "%{email} can use the API."
+msgstr "%{email} kan de API gebruiken."
+
+#: lib/chronicles_web/live/admin/users_live.ex:71
+#, elixir-autogen, elixir-format
+msgid "%{email} can't use the API anymore."
+msgstr "%{email} kan de API niet meer gebruiken."
+
+#: lib/chronicles_web/live/admin/users_live.ex:86
+#, elixir-autogen, elixir-format
+msgid "A player plays stories. An author also writes them. An admin also manages users. API lets a user create a token for tools and scripts."
+msgstr "Een speler speelt verhalen. Een auteur schrijft ze ook. Een beheerder beheert ook gebruikers. Met API kan een gebruiker een token maken voor tools en scripts."
+
+#: lib/chronicles_web/live/admin/users_live.ex:114
+#, elixir-autogen, elixir-format
+msgid "API"
+msgstr "API"
+
+#: lib/chronicles_web/live/user_live/account.ex:43
+#, elixir-autogen, elixir-format
+msgid "API token"
+msgstr "API-token"
+
+#: lib/chronicles_web/live/admin/users_live.ex:76
+#, elixir-autogen, elixir-format
+msgid "Could not change API access."
+msgstr "De API-toegang kon niet worden gewijzigd."
+
+#: lib/chronicles_web/live/user_live/account.ex:61
+#, elixir-autogen, elixir-format
+msgid "Create token"
+msgstr "Token aanmaken"
+
+#: lib/chronicles_web/live/user_live/account.ex:61
+#, elixir-autogen, elixir-format
+msgid "Replace token"
+msgstr "Token vervangen"
+
+#: lib/chronicles_web/live/user_live/account.ex:59
+#, elixir-autogen, elixir-format
+msgid "Replace your token? The old one stops working."
+msgstr "Je token vervangen? De oude werkt dan niet meer."
+
+#: lib/chronicles_web/live/user_live/account.ex:69
+#, elixir-autogen, elixir-format
+msgid "Revoke token"
+msgstr "Token intrekken"
+
+#: lib/chronicles_web/live/user_live/account.ex:67
+#, elixir-autogen, elixir-format
+msgid "Revoke your token? Tools that use it stop working."
+msgstr "Je token intrekken? Tools die hem gebruiken werken dan niet meer."
+
+#: lib/chronicles_web/live/user_live/account.ex:45
+#, elixir-autogen, elixir-format
+msgid "Tools and scripts use this token for the API. Keep it secret. You see it only once, right after you create it."
+msgstr "Tools en scripts gebruiken deze token voor de API. Houd hem geheim. Je ziet hem maar één keer, direct nadat je hem hebt aangemaakt."
+
+#: lib/chronicles_web/live/user_live/account.ex:167
+#, elixir-autogen, elixir-format
+msgid "You don't have API access."
+msgstr "Je hebt geen toegang tot de API."
+
+#: lib/chronicles_web/live/user_live/account.ex:177
+#, elixir-autogen, elixir-format
+msgid "Your API token is revoked."
+msgstr "Je API-token is ingetrokken."
+
+#: lib/chronicles_web/live/user_live/login.ex:18
+#, elixir-autogen, elixir-format
+msgid "No account yet? Chronicles is invite-only. Ask an admin for an invite."
+msgstr "Nog geen account? Chronicles werkt alleen op uitnodiging. Vraag een beheerder om een uitnodiging."

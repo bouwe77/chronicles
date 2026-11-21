@@ -25,6 +25,21 @@ defmodule ChroniclesWeb.Admin.UsersLiveTest do
     assert Accounts.get_user!(other.id).role == :player
   end
 
+  test "an admin turns API access on and off, also their own", %{conn: conn} do
+    admin = user_fixture() |> Accounts.User.role_changeset(%{role: :admin}) |> Repo.update!()
+    other = user_fixture()
+    {:ok, view, _html} = conn |> log_in_user(admin) |> live(~p"/admin/users")
+
+    for user <- [admin, other] do
+      form = element(view, "#api-access-form-#{user.id}")
+      render_change(form, %{"user_id" => user.id, "api_access" => "true"})
+      assert Accounts.get_user!(user.id).api_access
+
+      render_change(form, %{"user_id" => user.id, "api_access" => "false"})
+      refute Accounts.get_user!(user.id).api_access
+    end
+  end
+
   test "an admin creates a user, who gets a login link", %{conn: conn} do
     admin = user_fixture() |> Accounts.User.role_changeset(%{role: :admin}) |> Repo.update!()
     {:ok, view, _html} = conn |> log_in_user(admin) |> live(~p"/admin/users")

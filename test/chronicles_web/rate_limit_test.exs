@@ -19,7 +19,7 @@ defmodule ChroniclesWeb.RateLimitTest do
   end
 
   test "the API pipeline is limited", %{conn: conn} do
-    conn = post(conn, ~p"/api/session", %{})
+    conn = get(conn, ~p"/api/stories")
     refute conn.status == 429
     assert [{{127, 0, 0, 1}, _count}] = :ets.lookup(RateLimit, {127, 0, 0, 1})
   end

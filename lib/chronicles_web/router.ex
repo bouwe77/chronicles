@@ -31,12 +31,6 @@ defmodule ChroniclesWeb.Router do
 
   # The JSON API, for tools and scripts. See ChroniclesWeb.APIAuth.
   scope "/api", ChroniclesWeb.API do
-    pipe_through :api
-
-    post "/session", SessionController, :create
-  end
-
-  scope "/api", ChroniclesWeb.API do
     pipe_through [:api, :require_api_user]
 
     resources "/stories", StoryController, only: [:index, :show, :update, :delete], param: "slug"
@@ -79,7 +73,6 @@ defmodule ChroniclesWeb.Router do
       live "/games/:id", GameLive
     end
 
-    post "/users/update-password", UserSessionController, :update_password
     get "/story-kit/:file", StoryKitController, :show
 
     live_session :require_admin,
@@ -96,7 +89,6 @@ defmodule ChroniclesWeb.Router do
 
     live_session :current_user,
       on_mount: [{ChroniclesWeb.UserAuth, :mount_current_scope}] do
-      live "/users/register", UserLive.Registration, :new
       live "/users/log-in", UserLive.Login, :new
       live "/users/log-in/:token", UserLive.Confirmation, :new
       # Language and theme, which visitors can change too.

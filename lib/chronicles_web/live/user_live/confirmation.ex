@@ -65,10 +65,6 @@ defmodule ChroniclesWeb.UserLive.Confirmation do
             </.button>
           <% end %>
         </.form>
-
-        <p :if={!@user.confirmed_at} class="alert alert-outline mt-8">
-          {gettext("Tip: if you prefer a password, you can set one in your settings.")}
-        </p>
       </div>
     </Layouts.app>
     """

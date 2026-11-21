@@ -5,16 +5,10 @@ defmodule ChroniclesWeb.API.SeriesControllerTest do
   import Chronicles.StoriesFixtures
 
   setup %{conn: conn} do
-    user = user_fixture() |> set_password()
+    {user, token} = api_token_fixture()
     scope = Chronicles.Accounts.Scope.for_user(user)
     story_fixture(scope, "the-number")
     story_fixture(scope, "the-number-returns")
-
-    token =
-      conn
-      |> post(~p"/api/session", %{email: user.email, password: valid_user_password()})
-      |> json_response(200)
-      |> Map.fetch!("token")
 
     %{conn: put_req_header(conn, "authorization", "Bearer " <> token)}
   end
