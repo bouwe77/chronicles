@@ -6,15 +6,17 @@ const HOUSE = `- porch
 `
 
 test('switch the language to Dutch and back', async ({ page, user: _ }) => {
-  await page.getByRole('link', { name: 'NL', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Verhalen', exact: true })).toBeVisible()
+  await visit(page, '/settings')
+  await page.getByRole('link', { name: 'Nederlands', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Instellingen', exact: true })).toBeVisible()
 
   // The choice stays on the account, whatever the browser says.
-  await reload(page)
+  await visit(page, '/stories')
   await expect(page.getByRole('heading', { name: 'Verhalen', exact: true })).toBeVisible()
 
-  await page.getByRole('link', { name: 'EN', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Stories', exact: true })).toBeVisible()
+  await visit(page, '/settings')
+  await page.getByRole('link', { name: 'English', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Settings', exact: true })).toBeVisible()
 })
 
 test('notes, when the story allows them', async ({ page, user: _ }) => {
