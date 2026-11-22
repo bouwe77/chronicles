@@ -114,7 +114,7 @@ defmodule ChroniclesWeb.CoreComponents do
       <.button navigate={~p"/"} variant="ghost" size="sm">Home</.button>
       <.button variant="primary" class="w-full">Log in</.button>
   """
-  attr :rest, :global, include: ~w(href navigate patch method download name value disabled)
+  attr :rest, :global, include: ~w(href navigate patch method download name value disabled type)
   attr :class, :any, default: nil, doc: "extra classes, added to the button's own"
   attr :variant, :string, values: [nil, "primary", "ghost"], default: nil
   attr :size, :string, values: ~w(sm md), default: "md"

@@ -34,6 +34,8 @@ item says why it waits. Remove an item when it is done or dropped.
 
 ## Writing stories
 
+- **More cues.** Effects like `flash`, `blackout`, `heartbeat`, weather and sound. Ideas
+  only; no story asked for them yet. See `plans/more-cues.md`.
 - **The editor keeps one draft per story, not per tab.** Two tabs on the same story
   overwrite each other's draft; the last change wins. Text that isn't valid JSON yet is
   not kept either. Fine for one author at a time.
@@ -41,12 +43,10 @@ item says why it waits. Remove an item when it is done or dropped.
   the order an author wrote them in. Harmless, but less readable for big parts.
 - **The editor's toolbar alignment.** The rename and connect forms don't line up neatly
   with the buttons. Part of the restyle.
-- **Sagas in the app.** Sagas are created and changed through the API only. The saga
-  page (`/sagas/:slug`) is the natural place to create and edit them later.
 - **Key mapping in a saga.** If one story is used in two sagas with different input
   key names, the saga could map them. Add it when that happens.
-- **A picture per location.** An optional photo or picture that the game shows in that
-  location. How images are stored and shown is not decided.
+- **A picture per location.** An optional picture that the game shows in that location.
+  Decided (a banner in the log), not built. See `plans/location-images.md`.
 - **Regions.** An optional `region` on a location and an `inRegion` condition, so a rule
   like "lose warmth in the forest" needs one condition instead of an `anyOf` of rooms.
   Waits until a story has about 10 rooms that share a rule.

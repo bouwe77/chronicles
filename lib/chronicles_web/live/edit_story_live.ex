@@ -24,7 +24,7 @@ defmodule ChroniclesWeb.EditStoryLive do
   }
 
   @impl true
-  def mount(%{"slug" => slug}, _session, socket) do
+  def mount(%{"slug" => slug} = params, _session, socket) do
     scope = socket.assigns.current_scope
     story = Stories.get_story!(scope, slug)
 
@@ -35,7 +35,8 @@ defmodule ChroniclesWeb.EditStoryLive do
        |> assign(saved: story.head_version.content, find: "", rev: 0, tool_error: nil)
        |> assign(save_errors: [], save_warnings: [])
        |> put_content(story.draft || story.head_version.content)
-       |> select_part(:story)}
+       # `?part=endings` opens that part, for links from elsewhere (the saga editor).
+       |> select_part(Map.get(@parts, params["part"], :story))}
     else
       {:ok,
        socket

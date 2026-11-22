@@ -65,6 +65,9 @@ defmodule ChroniclesWeb.StoriesLive do
           <.button id="upload-story" navigate={~p"/stories/upload"} size="sm">
             <.icon name="hero-arrow-up-tray" class="size-4" /> {gettext("Upload a story")}
           </.button>
+          <.button id="new-saga" navigate={~p"/sagas/new"} size="sm">
+            <.icon name="hero-queue-list" class="size-4" /> {gettext("New saga")}
+          </.button>
         </div>
       </div>
 

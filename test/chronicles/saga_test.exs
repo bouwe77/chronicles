@@ -11,6 +11,13 @@ defmodule Chronicles.SagaTest do
 
   defp content(slug), do: Chronicles.Play.story(slug)
 
+  defp admin_scope do
+    user_fixture()
+    |> Accounts.User.role_changeset(%{role: :admin})
+    |> Repo.update!()
+    |> Scope.for_user()
+  end
+
   describe "the saga checks" do
     test "The Number saga is playable" do
       assert Validator.saga_errors([
@@ -158,17 +165,35 @@ defmodule Chronicles.SagaTest do
       {:ok, _} =
         Stories.create_story(other.user, "their-part", content("the-number-returns"), :public)
 
+      # Only an admin manages other authors' stories, so only an admin makes this saga.
+      admin = admin_scope()
+
       {:ok, _} =
-        Stories.save_saga(scope, "mixed", %{
+        Stories.save_saga(admin, "mixed", %{
           "title" => "Mixed",
           "stories" => ["the-number", "their-part"]
         })
 
       assert {:error, _changeset} = Accounts.delete_user(other.user)
 
-      # The saga's author goes with their saga, which frees the other user's story.
-      assert {:ok, _} = Accounts.delete_user(scope.user)
+      # The saga's author goes with their saga, which frees the stories in it.
+      assert {:ok, _} = Accounts.delete_user(admin.user)
       assert {:ok, _} = Accounts.delete_user(other.user)
+    end
+
+    test "only stories you manage can be chapters", %{scope: scope} do
+      story_fixture(scope, "the-number", :public)
+      other = user_scope_fixture()
+
+      {:ok, _} =
+        Stories.create_story(other.user, "their-part", content("the-number-returns"), :public)
+
+      attrs = %{"title" => "Mixed", "stories" => ["the-number", "their-part"]}
+      assert {:error, changeset} = Stories.save_saga(scope, "mixed", attrs)
+
+      assert errors_on(changeset).stories == [
+               ~s(you don't manage the story "their-part", so it can't be a chapter)
+             ]
     end
 
     test "the stories of a saga must share their visibility", %{scope: scope} do
@@ -202,7 +227,7 @@ defmodule Chronicles.SagaTest do
         Stories.create_story(other.user, "their-part", content("the-number-returns"), :public)
 
       {:ok, _} =
-        Stories.save_saga(scope, "mixed", %{
+        Stories.save_saga(admin_scope(), "mixed", %{
           "title" => "Mixed",
           "stories" => ["the-number", "their-part"]
         })
@@ -232,6 +257,37 @@ defmodule Chronicles.SagaTest do
       assert Stories.saga_warnings(story_fixture(scope, "the-number-returns")) == [
                "the story takes input but is in no saga, so no game of it can start"
              ]
+    end
+  end
+
+  describe "saving two chapters at once" do
+    setup do
+      scope = user_scope_fixture()
+      Map.put(number_saga_fixture(scope), :scope, scope)
+    end
+
+    test "both get a new head version", %{scope: scope, one: one, two: two} do
+      one_content = put_in(one.head_version.content, ["story_title"], "One, edited")
+      two_content = put_in(two.head_version.content, ["story_title"], "Two, edited")
+
+      assert {:ok, [_, _]} = Stories.save_stories(scope, [{one, one_content}, {two, two_content}])
+      assert Stories.title(Stories.get_story!(scope, one.slug)) == "One, edited"
+      assert Stories.title(Stories.get_story!(scope, two.slug)) == "Two, edited"
+    end
+
+    test "when one is invalid, neither is saved", %{scope: scope, one: one, two: two} do
+      one_content = put_in(one.head_version.content, ["story_title"], "One, edited")
+      invalid = Map.delete(two.head_version.content, "locations")
+
+      assert {:error, %Ecto.Changeset{}} =
+               Stories.save_stories(scope, [{one, one_content}, {two, invalid}])
+
+      assert Stories.title(Stories.get_story!(scope, one.slug)) == "The Number"
+    end
+
+    test "only for someone who manages every story", %{one: one} do
+      assert Stories.save_stories(user_scope_fixture(), [{one, one.head_version.content}]) ==
+               {:error, :unauthorized}
     end
   end
 

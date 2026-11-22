@@ -80,6 +80,16 @@ defmodule Chronicles.Stories.Validator do
     ])
   end
 
+  @doc """
+  How a story's endings hand on to the next story of a saga: each ending, with whether
+  the next story accepts its output. An output that is one placeholder counts as
+  accepted, since its value is only known when the game ends.
+  """
+  def handover(content, next_content) do
+    for ending <- content["endings"] || [],
+        do: {ending, may_accept_input?(next_content, ending["output"])}
+  end
+
   # Before any game is played, an output value that is one placeholder (`"{/points}"`) is
   # unknown, so a schema error on it doesn't count. `accepts_input?/2` checks the real value
   # when the game ends.

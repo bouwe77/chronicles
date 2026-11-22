@@ -37,8 +37,23 @@ defmodule ChroniclesWeb.SagaLive do
     {:ok,
      socket
      |> assign(page_title: saga.title, saga: saga)
+     |> assign(can_manage?: Stories.can_manage_saga?(scope, saga))
      |> assign(private?: hd(saga.chapters).story.visibility == :private)
      |> stream(:chapters, chapters)}
+  end
+
+  @impl true
+  def handle_event("delete", _params, socket) do
+    case Stories.delete_saga(socket.assigns.current_scope, socket.assigns.saga) do
+      {:ok, saga} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, gettext("%{title} is deleted.", title: saga.title))
+         |> push_navigate(to: ~p"/stories")}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not delete the saga."))}
+    end
   end
 
   @impl true
@@ -64,6 +79,25 @@ defmodule ChroniclesWeb.SagaLive do
           </p>
         </div>
         <.icon :if={@private?} name="hero-lock-closed" class="mt-2 size-5 text-base-content/50" />
+      </div>
+
+      <div :if={@can_manage?} id="manage-saga" class="flex flex-wrap gap-2">
+        <.button id="edit-saga" navigate={~p"/sagas/#{@saga.slug}/edit"} size="sm">
+          <.icon name="hero-pencil-square" class="size-4" /> {gettext("Edit")}
+        </.button>
+        <.button
+          id="delete-saga"
+          phx-click="delete"
+          data-confirm={
+            gettext(
+              "Delete this saga? Its chapters stay as stories, but chapters 2 and up can't be started anymore."
+            )
+          }
+          variant="ghost"
+          size="sm"
+        >
+          <.icon name="hero-trash" class="size-4" /> {gettext("Delete")}
+        </.button>
       </div>
 
       <ol id="chapters" phx-update="stream" class="grid gap-3">

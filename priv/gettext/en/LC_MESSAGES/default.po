@@ -16,12 +16,12 @@ msgstr ""
 msgid "%{email} is now %{role}."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:85
+#: lib/chronicles_web/live/edit_story_live.ex:86
 #, elixir-autogen, elixir-format
 msgid "%{id} is already taken."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:439
+#: lib/chronicles_web/live/edit_story_live.ex:440
 #, elixir-autogen, elixir-format
 msgid "%{in} exits in, %{out} out"
 msgstr ""
@@ -36,7 +36,7 @@ msgstr ""
 msgid "%{slug} is saved."
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:42
+#: lib/chronicles_web/live/new_story_live.ex:48
 #, elixir-autogen, elixir-format
 msgid "%{title} is created."
 msgstr ""
@@ -48,42 +48,42 @@ msgid_plural "+%{count} turns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/new_story_live.ex:134
+#: lib/chronicles_web/live/new_story_live.ex:164
 #, elixir-autogen, elixir-format
 msgid "1 action"
 msgid_plural "%{count} actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/new_story_live.ex:135
+#: lib/chronicles_web/live/new_story_live.ex:165
 #, elixir-autogen, elixir-format
 msgid "1 ending"
 msgid_plural "%{count} endings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/new_story_live.ex:132
+#: lib/chronicles_web/live/new_story_live.ex:162
 #, elixir-autogen, elixir-format
 msgid "1 exit"
 msgid_plural "%{count} exits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/new_story_live.ex:133
+#: lib/chronicles_web/live/new_story_live.ex:163
 #, elixir-autogen, elixir-format
 msgid "1 item"
 msgid_plural "%{count} items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/new_story_live.ex:131
+#: lib/chronicles_web/live/new_story_live.ex:161
 #, elixir-autogen, elixir-format
 msgid "1 location"
 msgid_plural "%{count} locations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:369
+#: lib/chronicles_web/live/edit_story_live.ex:370
 #, elixir-autogen, elixir-format
 msgid "1 problem"
 msgid_plural "%{count} problems"
@@ -101,13 +101,14 @@ msgid "A story of yours is in another user's saga. Ask them to remove it first."
 msgstr ""
 
 #: lib/chronicles_web/components/core_components.ex:401
-#: lib/chronicles_web/live/edit_story_live.ex:328
+#: lib/chronicles_web/live/edit_story_live.ex:329
 #: lib/chronicles_web/live/game_live.ex:253
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:503
+#: lib/chronicles_web/live/edit_story_live.ex:504
+#: lib/chronicles_web/live/saga_form_live.ex:450
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr ""
@@ -133,7 +134,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:275
+#: lib/chronicles_web/live/edit_story_live.ex:276
 #: lib/chronicles_web/live/game_live.ex:134
 #: lib/chronicles_web/live/game_live.ex:342
 #, elixir-autogen, elixir-format
@@ -191,17 +192,17 @@ msgstr ""
 msgid "Confirming..."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:537
+#: lib/chronicles_web/live/edit_story_live.ex:538
 #, elixir-autogen, elixir-format
 msgid "Connect"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:534
+#: lib/chronicles_web/live/edit_story_live.ex:535
 #, elixir-autogen, elixir-format
 msgid "Connect to"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:413
+#: lib/chronicles_web/live/edit_story_live.ex:414
 #: lib/chronicles_web/live/game_live.ex:213
 #, elixir-autogen, elixir-format
 msgid "Context"
@@ -217,7 +218,7 @@ msgstr ""
 msgid "Could not change who can see this story."
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:46
+#: lib/chronicles_web/live/new_story_live.ex:52
 #, elixir-autogen, elixir-format
 msgid "Could not create the story."
 msgstr ""
@@ -234,17 +235,18 @@ msgstr ""
 msgid "Could not start a game."
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:119
+#: lib/chronicles_web/live/new_story_live.ex:149
 #, elixir-autogen, elixir-format
 msgid "Create the story"
 msgstr ""
 
 #: lib/chronicles_web/live/admin/users_live.ex:155
-#: lib/chronicles_web/live/new_story_live.ex:117
+#: lib/chronicles_web/live/new_story_live.ex:147
 #, elixir-autogen, elixir-format
 msgid "Creating..."
 msgstr ""
 
+#: lib/chronicles_web/live/saga_live.ex:99
 #: lib/chronicles_web/live/story_live.ex:166
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -285,12 +287,14 @@ msgstr ""
 msgid "Drop"
 msgstr ""
 
+#: lib/chronicles_web/live/saga_live.ex:86
 #: lib/chronicles_web/live/story_live.ex:124
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
 
 #: lib/chronicles_web/live/edit_story_live.ex:34
+#: lib/chronicles_web/live/saga_form_live.ex:58
 #, elixir-autogen, elixir-format
 msgid "Edit %{title}"
 msgstr ""
@@ -302,17 +306,17 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:418
+#: lib/chronicles_web/live/edit_story_live.ex:419
 #, elixir-autogen, elixir-format
 msgid "Endings"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:338
+#: lib/chronicles_web/live/edit_story_live.ex:339
 #, elixir-autogen, elixir-format
 msgid "Everything, as one JSON"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:535
+#: lib/chronicles_web/live/edit_story_live.ex:536
 #, elixir-autogen, elixir-format
 msgid "Exit label"
 msgstr ""
@@ -322,23 +326,23 @@ msgstr ""
 msgid "Exits"
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:95
+#: lib/chronicles_web/live/stories_live.ex:98
 #, elixir-autogen, elixir-format
 msgid "Filter by tag"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:522
-#: lib/chronicles_web/live/edit_story_live.ex:560
+#: lib/chronicles_web/live/edit_story_live.ex:523
+#: lib/chronicles_web/live/edit_story_live.ex:561
 #, elixir-autogen, elixir-format
 msgid "Find uses"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:392
+#: lib/chronicles_web/live/edit_story_live.ex:393
 #, elixir-autogen, elixir-format
 msgid "Find uses of an id or a context path"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:82
+#: lib/chronicles_web/live/edit_story_live.ex:83
 #, elixir-autogen, elixir-format
 msgid "Give it an id first."
 msgstr ""
@@ -353,13 +357,13 @@ msgstr ""
 msgid "If your email is in our system, you will get an email to log in shortly."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:414
+#: lib/chronicles_web/live/edit_story_live.ex:415
 #: lib/chronicles_web/live/game_live.ex:237
 #, elixir-autogen, elixir-format
 msgid "Items"
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:94
+#: lib/chronicles_web/live/new_story_live.ex:124
 #, elixir-autogen, elixir-format
 msgid "Its address: /stories/%{slug}"
 msgstr ""
@@ -374,7 +378,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:320
+#: lib/chronicles_web/live/edit_story_live.ex:321
 #, elixir-autogen, elixir-format
 msgid "Locations"
 msgstr ""
@@ -448,8 +452,8 @@ msgstr ""
 msgid "New game"
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:17
-#: lib/chronicles_web/live/new_story_live.ex:78
+#: lib/chronicles_web/live/new_story_live.ex:22
+#: lib/chronicles_web/live/new_story_live.ex:102
 #: lib/chronicles_web/live/stories_live.ex:63
 #, elixir-autogen, elixir-format
 msgid "New story"
@@ -460,22 +464,22 @@ msgstr ""
 msgid "No games yet."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:366
+#: lib/chronicles_web/live/edit_story_live.ex:367
 #, elixir-autogen, elixir-format
 msgid "No problems found."
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:115
+#: lib/chronicles_web/live/stories_live.ex:118
 #, elixir-autogen, elixir-format
 msgid "No stories match."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:401
+#: lib/chronicles_web/live/edit_story_live.ex:402
 #, elixir-autogen, elixir-format
 msgid "Not used anywhere."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:361
+#: lib/chronicles_web/live/edit_story_live.ex:362
 #, elixir-autogen, elixir-format
 msgid "Not valid JSON yet: %{message}"
 msgstr ""
@@ -502,12 +506,12 @@ msgstr ""
 msgid "Only authors can upload stories."
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:25
+#: lib/chronicles_web/live/new_story_live.ex:31
 #, elixir-autogen, elixir-format
 msgid "Only authors can write stories."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:42
+#: lib/chronicles_web/live/edit_story_live.ex:43
 #, elixir-autogen, elixir-format
 msgid "Only the author can edit this story."
 msgstr ""
@@ -517,7 +521,7 @@ msgstr ""
 msgid "Chapter %{n} of %{total} of the saga %{title}"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:311
+#: lib/chronicles_web/live/edit_story_live.ex:312
 #, elixir-autogen, elixir-format
 msgid "Parts of the story"
 msgstr ""
@@ -532,7 +536,7 @@ msgstr ""
 msgid "Player"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:585
+#: lib/chronicles_web/live/edit_story_live.ex:586
 #, elixir-autogen, elixir-format
 msgid "Players get a notes panel"
 msgstr ""
@@ -552,33 +556,33 @@ msgstr ""
 msgid "Public"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:549
-#: lib/chronicles_web/live/edit_story_live.ex:568
+#: lib/chronicles_web/live/edit_story_live.ex:550
+#: lib/chronicles_web/live/edit_story_live.ex:569
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:261
+#: lib/chronicles_web/live/edit_story_live.ex:262
 #, elixir-autogen, elixir-format
 msgid "Remove the action %{id}? It also leaves every location that shows it."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:247
+#: lib/chronicles_web/live/edit_story_live.ex:248
 #, elixir-autogen, elixir-format
 msgid "Remove the location %{id}?"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:250
+#: lib/chronicles_web/live/edit_story_live.ex:251
 #, elixir-autogen, elixir-format
 msgid "Remove the location %{id}? These exits to it go too: %{exits}"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:525
+#: lib/chronicles_web/live/edit_story_live.ex:526
 #, elixir-autogen, elixir-format
 msgid "Rename"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:524
+#: lib/chronicles_web/live/edit_story_live.ex:525
 #, elixir-autogen, elixir-format
 msgid "Rename to"
 msgstr ""
@@ -588,17 +592,18 @@ msgstr ""
 msgid "Role of %{email}"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:417
+#: lib/chronicles_web/live/edit_story_live.ex:418
 #, elixir-autogen, elixir-format
 msgid "Rules"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:302
+#: lib/chronicles_web/live/edit_story_live.ex:303
+#: lib/chronicles_web/live/saga_form_live.ex:476
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:154
+#: lib/chronicles_web/live/edit_story_live.ex:155
 #, elixir-autogen, elixir-format
 msgid "Saved. New games play this version."
 msgstr ""
@@ -609,12 +614,12 @@ msgstr ""
 msgid "Saving..."
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:100
+#: lib/chronicles_web/live/new_story_live.ex:130
 #, elixir-autogen, elixir-format
 msgid "Sketch"
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:80
+#: lib/chronicles_web/live/new_story_live.ex:110
 #, elixir-autogen, elixir-format
 msgid "Sketch the rooms and how they connect. Every exit also gets a way back, unless you mark it (one-way). The details come later, in the editor."
 msgstr ""
@@ -630,8 +635,9 @@ msgid "Something went wrong!"
 msgstr ""
 
 #: lib/chronicles_web/components/layouts.ex:67
-#: lib/chronicles_web/live/new_story_live.ex:76
-#: lib/chronicles_web/live/saga_live.ex:52
+#: lib/chronicles_web/live/new_story_live.ex:100
+#: lib/chronicles_web/live/saga_form_live.ex:352
+#: lib/chronicles_web/live/saga_live.ex:67
 #: lib/chronicles_web/live/stories_live.ex:15
 #: lib/chronicles_web/live/stories_live.ex:60
 #: lib/chronicles_web/live/story_live.ex:97
@@ -640,12 +646,12 @@ msgstr ""
 msgid "Stories"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:412
+#: lib/chronicles_web/live/edit_story_live.ex:413
 #, elixir-autogen, elixir-format
 msgid "Story"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:415
+#: lib/chronicles_web/live/edit_story_live.ex:416
 #, elixir-autogen, elixir-format
 msgid "Supplies"
 msgstr ""
@@ -670,7 +676,7 @@ msgstr ""
 msgid "The file is too large."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:500
+#: lib/chronicles_web/live/edit_story_live.ex:501
 #, elixir-autogen, elixir-format
 msgid "The id of a new %{kind}"
 msgstr ""
@@ -680,12 +686,12 @@ msgstr ""
 msgid "The link is invalid or it has expired."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:356
+#: lib/chronicles_web/live/edit_story_live.ex:357
 #, elixir-autogen, elixir-format
 msgid "The selected part, as JSON"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:543
+#: lib/chronicles_web/live/edit_story_live.ex:544
 #, elixir-autogen, elixir-format
 msgid "The starting location can't be removed."
 msgstr ""
@@ -720,7 +726,7 @@ msgstr ""
 msgid "This login link is not valid or has expired."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:436
+#: lib/chronicles_web/live/edit_story_live.ex:437
 #, elixir-autogen, elixir-format
 msgid "This part has invalid JSON. Leave it and lose that edit?"
 msgstr ""
@@ -745,12 +751,13 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:416
+#: lib/chronicles_web/live/edit_story_live.ex:417
 #, elixir-autogen, elixir-format
 msgid "Timeline"
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:89
+#: lib/chronicles_web/live/new_story_live.ex:119
+#: lib/chronicles_web/live/saga_form_live.ex:357
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
@@ -790,7 +797,7 @@ msgstr ""
 msgid "Wait"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:536
+#: lib/chronicles_web/live/edit_story_live.ex:537
 #, elixir-autogen, elixir-format
 msgid "Way back (optional)"
 msgstr ""
@@ -815,7 +822,7 @@ msgstr ""
 msgid "Welcome back!"
 msgstr ""
 
-#: lib/chronicles_web/live/saga_live.ex:112
+#: lib/chronicles_web/live/saga_live.ex:146
 #: lib/chronicles_web/live/story_live.ex:294
 #, elixir-autogen, elixir-format
 msgid "Won"
@@ -836,7 +843,7 @@ msgstr ""
 msgid "You lost"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:161
+#: lib/chronicles_web/live/edit_story_live.ex:162
 #, elixir-autogen, elixir-format
 msgid "You may not change this story."
 msgstr ""
@@ -872,7 +879,7 @@ msgstr ""
 msgid "Your username is now %{username}."
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:187
+#: lib/chronicles_web/live/stories_live.ex:190
 #: lib/chronicles_web/live/story_live.ex:102
 #, elixir-autogen, elixir-format
 msgid "by %{name}"
@@ -898,17 +905,17 @@ msgstr ""
 msgid "drop %{item}"
 msgstr ""
 
-#: lib/chronicles_web/live/new_story_live.ex:95
+#: lib/chronicles_web/live/new_story_live.ex:125
 #, elixir-autogen, elixir-format
 msgid "is already taken."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:499
+#: lib/chronicles_web/live/edit_story_live.ex:500
 #, elixir-autogen, elixir-format
 msgid "new id"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:453
+#: lib/chronicles_web/live/edit_story_live.ex:454
 #, elixir-autogen, elixir-format
 msgid "start"
 msgstr ""
@@ -918,12 +925,12 @@ msgstr ""
 msgid "take %{item}"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:459
+#: lib/chronicles_web/live/edit_story_live.ex:460
 #, elixir-autogen, elixir-format
 msgid "unreachable"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:283
+#: lib/chronicles_web/live/edit_story_live.ex:284
 #, elixir-autogen, elixir-format
 msgid "unsaved"
 msgstr ""
@@ -984,17 +991,17 @@ msgstr ""
 msgid "Write a story as a JSON file, by hand or with an AI tool like ChatGPT, Gemini or Claude. Give the tool the format and the schema, or the skill if it supports skills. Then upload the file it makes."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:207
+#: lib/chronicles_web/live/edit_story_live.ex:208
 #, elixir-autogen, elixir-format
 msgid "Could not keep your changes."
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:294
+#: lib/chronicles_web/live/edit_story_live.ex:295
 #, elixir-autogen, elixir-format
 msgid "Discard"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:292
+#: lib/chronicles_web/live/edit_story_live.ex:293
 #, elixir-autogen, elixir-format
 msgid "Discard your unsaved changes?"
 msgstr ""
@@ -1004,7 +1011,7 @@ msgstr ""
 msgid "%{email} can log in with the link we sent."
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:74
+#: lib/chronicles_web/live/stories_live.ex:77
 #, elixir-autogen, elixir-format
 msgid "All stories"
 msgstr ""
@@ -1014,7 +1021,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:74
+#: lib/chronicles_web/live/stories_live.ex:77
 #, elixir-autogen, elixir-format
 msgid "Mine and public"
 msgstr ""
@@ -1044,7 +1051,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: lib/chronicles_web/live/stories_live.ex:71
+#: lib/chronicles_web/live/stories_live.ex:74
 #, elixir-autogen, elixir-format
 msgid "Which stories"
 msgstr ""
@@ -1160,20 +1167,20 @@ msgstr ""
 msgid "Continue in chapter %{n}: %{title}"
 msgstr ""
 
-#: lib/chronicles_web/live/saga_live.ex:58
-#: lib/chronicles_web/live/stories_live.ex:143
+#: lib/chronicles_web/live/saga_live.ex:73
+#: lib/chronicles_web/live/stories_live.ex:146
 #, elixir-autogen, elixir-format
 msgid "Saga by %{name} · %{count} chapter"
 msgid_plural "Saga by %{name} · %{count} chapters"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/chronicles_web/live/saga_live.ex:116
+#: lib/chronicles_web/live/saga_live.ex:150
 #, elixir-autogen, elixir-format
 msgid "Locked"
 msgstr ""
 
-#: lib/chronicles_web/live/saga_live.ex:114
+#: lib/chronicles_web/live/saga_live.ex:148
 #, elixir-autogen, elixir-format
 msgid "Ready to play"
 msgstr ""
@@ -1183,7 +1190,7 @@ msgstr ""
 msgid "%{slug} is saved, with warnings: %{warnings}"
 msgstr ""
 
-#: lib/chronicles_web/live/edit_story_live.ex:380
+#: lib/chronicles_web/live/edit_story_live.ex:381
 #, elixir-autogen, elixir-format
 msgid "Saved, with warnings:"
 msgstr ""
@@ -1191,4 +1198,261 @@ msgstr ""
 #: lib/chronicles_web/live/story_live.ex:187
 #, elixir-autogen, elixir-format
 msgid "This story needs input from a chapter before it, but it is in no saga, so it can't start yet."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "%{title} is deleted."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:151
+#, elixir-autogen, elixir-format
+msgid "%{title} is saved."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:443
+#, elixir-autogen, elixir-format
+msgid "Add a chapter"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:364
+#, elixir-autogen, elixir-format
+msgid "Address: /sagas/%{slug}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:361
+#, elixir-autogen, elixir-format
+msgid "Another saga already uses the address /sagas/%{slug}."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:529
+#, elixir-autogen, elixir-format
+msgid "Chapter %{n} needs:"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:543
+#, elixir-autogen, elixir-format
+msgid "Chapter %{n} takes no input, so nothing links it to chapter %{m}."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:370
+#, elixir-autogen, elixir-format
+msgid "Chapters"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:444
+#, elixir-autogen, elixir-format
+msgid "Choose one of your stories"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_live.ex:55
+#, elixir-autogen, elixir-format
+msgid "Could not delete the saga."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:476
+#, elixir-autogen, elixir-format
+msgid "Create saga"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_live.ex:92
+#, elixir-autogen, elixir-format
+msgid "Delete this saga? Its chapters stay as stories, but chapters 2 and up can't be started anymore."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:563
+#, elixir-autogen, elixir-format
+msgid "Edit the endings of chapter %{n}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:569
+#, elixir-autogen, elixir-format
+msgid "Edit the input of chapter %{n}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:407
+#, elixir-autogen, elixir-format
+msgid "Move down"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:395
+#, elixir-autogen, elixir-format
+msgid "Move up"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:57
+#: lib/chronicles_web/live/stories_live.ex:69
+#, elixir-autogen, elixir-format
+msgid "New saga"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:372
+#, elixir-autogen, elixir-format
+msgid "No chapters yet. Add the stories of this saga in the order they are played."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:46
+#, elixir-autogen, elixir-format
+msgid "Only authors can make sagas."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:54
+#, elixir-autogen, elixir-format
+msgid "Only the author can edit this saga."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:417
+#, elixir-autogen, elixir-format
+msgid "Remove from the saga"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:159
+#, elixir-autogen, elixir-format
+msgid "You may not change this saga."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:322
+#, elixir-autogen, elixir-format
+msgid "in the saga %{title}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:327
+#, elixir-autogen, elixir-format
+msgid "private, the saga is public"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:326
+#, elixir-autogen, elixir-format
+msgid "public, the saga is private"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:537
+#, elixir-autogen, elixir-format
+msgid "JSON Schema"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:691
+#, elixir-autogen, elixir-format
+msgid "required"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:506
+#: lib/chronicles_web/live/saga_form_live.ex:591
+#, elixir-autogen, elixir-format
+msgid "How chapter %{n} can end"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:513
+#: lib/chronicles_web/live/saga_form_live.ex:598
+#, elixir-autogen, elixir-format
+msgid "Loss"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:513
+#: lib/chronicles_web/live/saga_form_live.ex:598
+#, elixir-autogen, elixir-format
+msgid "Win"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:740
+#, elixir-autogen, elixir-format
+msgid "chapter %{n} stays locked"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:745
+#, elixir-autogen, elixir-format
+msgid "doesn't open chapter %{n}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:517
+#: lib/chronicles_web/live/saga_form_live.ex:603
+#, elixir-autogen, elixir-format
+msgid "hands on"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:609
+#: lib/chronicles_web/live/saga_form_live.ex:708
+#, elixir-autogen, elixir-format
+msgid "nothing"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:742
+#, elixir-autogen, elixir-format
+msgid "opens chapter %{n}"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:737
+#, elixir-autogen, elixir-format
+msgid "opens chapter %{n}, but a loss shouldn't"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:672
+#, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:627
+#, elixir-autogen, elixir-format
+msgid "Chapter %{n} needs"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:557
+#, elixir-autogen, elixir-format
+msgid "Edit link"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:629
+#, elixir-autogen, elixir-format
+msgid "Generate from the endings"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:638
+#, elixir-autogen, elixir-format
+msgid "No input: empty means this chapter takes none."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:654
+#, elixir-autogen, elixir-format
+msgid "One of these chapters has unsaved work in the story editor. Saving the link saves a new version without it."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:669
+#, elixir-autogen, elixir-format
+msgid "Save link"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:261
+#, elixir-autogen, elixir-format
+msgid "The input is not valid JSON."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:129
+#, elixir-autogen, elixir-format
+msgid "The link is saved, in both chapters."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:253
+#, elixir-autogen, elixir-format
+msgid "The output of ending %{n} is not valid JSON."
+msgstr ""
+
+#: lib/chronicles_web/live/new_story_live.ex:104
+#, elixir-autogen, elixir-format
+msgid "This story becomes chapter %{n} of the saga %{title}."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:460
+#, elixir-autogen, elixir-format
+msgid "Write a new chapter"
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:136
+#, elixir-autogen, elixir-format
+msgid "You may not change both chapters."
+msgstr ""
+
+#: lib/chronicles_web/live/saga_form_live.ex:272
+#: lib/chronicles_web/live/saga_form_live.ex:276
+#, elixir-autogen, elixir-format
+msgid "chapter %{n}: %{error}"
 msgstr ""

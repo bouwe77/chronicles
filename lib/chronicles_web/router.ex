@@ -71,7 +71,10 @@ defmodule ChroniclesWeb.Router do
       live "/stories/:slug", StoryLive
       live "/stories/:slug/edit", EditStoryLive
       live "/games/:id", GameLive
+      # Before /sagas/:slug, which would take "new" as a slug.
+      live "/sagas/new", SagaFormLive, :new
       live "/sagas/:slug", SagaLive
+      live "/sagas/:slug/edit", SagaFormLive, :edit
     end
 
     get "/story-kit/:file", StoryKitController, :show

@@ -251,4 +251,43 @@ defmodule Chronicles.Stories.Authoring do
 
   defp name({kind, _id}), do: kind
   defp name(part), do: part
+
+  ## Sagas
+
+  @whole_placeholder ~r/^\{(\/[^{}\s]*|supply:[^{}\s]+)\}$/
+
+  @doc """
+  An input schema that accepts what the win endings of a story hand on, for the next
+  chapter of a saga: an object with every key a win output has, required when every win
+  output has it. Each key is typed from its values: an integer or number range, a choice
+  of strings, or a boolean. A value that is a placeholder (`"{/points}"`) is only known
+  when the game ends, so its key gets no type. Nil when no win ending has an output.
+  """
+  def input_schema(content) do
+    outputs =
+      for %{"outcome" => "win", "output" => %{} = out} <- content["endings"] || [], do: out
+
+    if outputs != [] do
+      keys = outputs |> Enum.flat_map(&Map.keys/1) |> Enum.uniq() |> Enum.sort()
+      required = Enum.filter(keys, fn key -> Enum.all?(outputs, &Map.has_key?(&1, key)) end)
+      values = fn key -> for out <- outputs, Map.has_key?(out, key), do: out[key] end
+
+      %{"type" => "object", "properties" => Map.new(keys, &{&1, property(values.(&1))})}
+      |> then(&if(required == [], do: &1, else: Map.put(&1, "required", required)))
+    end
+  end
+
+  defp property(values) do
+    cond do
+      Enum.any?(values, &(is_binary(&1) and &1 =~ @whole_placeholder)) -> %{}
+      Enum.all?(values, &is_integer/1) -> range("integer", values)
+      Enum.all?(values, &is_number/1) -> range("number", values)
+      Enum.all?(values, &is_binary/1) -> %{"type" => "string", "enum" => Enum.uniq(values)}
+      Enum.all?(values, &is_boolean/1) -> %{"type" => "boolean"}
+      true -> %{}
+    end
+  end
+
+  defp range(type, values),
+    do: %{"type" => type, "minimum" => Enum.min(values), "maximum" => Enum.max(values)}
 end

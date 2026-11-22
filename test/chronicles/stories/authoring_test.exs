@@ -173,4 +173,37 @@ defmodule Chronicles.Stories.AuthoringTest do
              "effects" => []
            }
   end
+
+  describe "input_schema/1" do
+    test "accepts what the win endings hand on, and it is what The Number Returns needs" do
+      one = Chronicles.Play.story("the-number")
+      two = Chronicles.Play.story("the-number-returns")
+
+      assert Authoring.input_schema(one) == two["input"]["schema"]
+    end
+
+    test "types each key from its values; a placeholder or a mix gets no type" do
+      content = %{
+        "endings" => [
+          %{"outcome" => "win", "output" => %{"by" => "sword", "gold" => 2.5, "hero" => true}},
+          %{"outcome" => "win", "output" => %{"by" => "wits", "gold" => "{/gold}"}},
+          %{"outcome" => "loss", "output" => %{"lost" => 1}}
+        ]
+      }
+
+      assert Authoring.input_schema(content) == %{
+               "type" => "object",
+               "properties" => %{
+                 "by" => %{"type" => "string", "enum" => ["sword", "wits"]},
+                 "gold" => %{},
+                 "hero" => %{"type" => "boolean"}
+               },
+               "required" => ["by", "gold"]
+             }
+    end
+
+    test "no win ending with output gives nothing" do
+      assert Authoring.input_schema(%{"endings" => [%{"outcome" => "loss"}]}) == nil
+    end
+  end
 end

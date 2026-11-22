@@ -115,4 +115,9 @@ defmodule ChroniclesWeb.EditStoryLiveTest do
 
     assert has_element?(view, "#save-warnings", "in no saga")
   end
+
+  test "?part= opens that part, for links from the saga editor", ctx do
+    {:ok, view, _html} = live(ctx.conn, ~p"/stories/#{ctx.story.slug}/edit?part=endings")
+    assert has_element?(view, ~s(#parts button[phx-value-part="endings"][aria-current="true"]))
+  end
 end

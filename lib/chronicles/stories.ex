@@ -118,6 +118,29 @@ defmodule Chronicles.Stories do
   end
 
   @doc """
+  Saves new content for several existing stories at once, as their new head versions:
+  all of them, or none. For two halves that must fit, like the endings of a chapter and
+  the input of the next. The user must manage every story.
+
+  Returns `{:ok, stories}` in the same order, `{:error, changeset}` for the first invalid
+  content, or `{:error, :unauthorized}`.
+  """
+  def save_stories(%Scope{} = scope, changes) do
+    if Enum.all?(changes, fn {story, _content} -> can_manage?(scope, story) end) do
+      Repo.transact(fn ->
+        Enum.reduce_while(changes, {:ok, []}, fn {story, content}, {:ok, saved} ->
+          case new_version(story, content) do
+            {:ok, story} -> {:cont, {:ok, saved ++ [story]}}
+            {:error, changeset} -> {:halt, {:error, changeset}}
+          end
+        end)
+      end)
+    else
+      {:error, :unauthorized}
+    end
+  end
+
+  @doc """
   Problems a saved story causes that don't stop the save. For a chapter: the checks of
   its saga, run again on every chapter's head content, since a changed ending or input
   can break the link between two chapters. For a story outside a saga: input that no
@@ -150,6 +173,9 @@ defmodule Chronicles.Stories do
 
   @doc "Whether any story, of any author, has this slug."
   def slug_taken?(slug), do: Repo.exists?(where(Story, slug: ^slug))
+
+  @doc "Whether any saga, of any author, has this slug."
+  def saga_slug_taken?(slug), do: Repo.exists?(where(Saga, slug: ^slug))
 
   defp new_version(story, content) do
     Repo.transact(fn ->
@@ -225,7 +251,7 @@ defmodule Chronicles.Stories do
   end
 
   def get_saga(slug),
-    do: Saga |> preload([:author, chapters: :story]) |> Repo.get_by(slug: slug)
+    do: Saga |> preload([:author, chapters: [story: :head_version]]) |> Repo.get_by(slug: slug)
 
   @doc """
   A saga with only the chapters whose story the user may see, in order, each with its
@@ -281,40 +307,69 @@ defmodule Chronicles.Stories do
 
   @doc """
   Creates or replaces a saga from `%{"title" => ..., "stories" => [slug, ...]}`. Only
-  authors and admins make sagas; only its author or an admin changes one. Every story
-  must be one the user may see, all must share their visibility, and the saga must be playable: see
-  `Chronicles.Stories.Validator.saga_errors/1`. A story is in at most one saga.
+  authors and admins make sagas; only its author or an admin changes one. The stories
+  must pass `saga_errors/3`.
   """
   def save_saga(%Scope{user: user} = scope, slug, attrs) do
     saga = get_saga(slug) || %Saga{author_id: user.id, chapters: []}
 
     cond do
-      not can_write?(scope) ->
-        {:error, :unauthorized}
-
-      saga.id && not (user.role == :admin or saga.author_id == user.id) ->
-        {:error, :unauthorized}
-
-      true ->
-        do_save_saga(scope, saga, slug, attrs)
+      not can_write?(scope) -> {:error, :unauthorized}
+      saga.id && not can_manage_saga?(scope, saga) -> {:error, :unauthorized}
+      true -> do_save_saga(scope, saga, slug, attrs)
     end
   end
 
-  defp do_save_saga(scope, saga, slug, attrs) do
-    slugs = List.wrap(attrs["stories"])
+  @doc "Whether the user changes or deletes the saga: its author, or an admin."
+  def can_manage_saga?(%Scope{user: %User{role: :admin}}, %Saga{}), do: true
+
+  def can_manage_saga?(%Scope{user: %User{id: id}}, %Saga{author_id: author_id}),
+    do: id == author_id
+
+  @doc """
+  What is wrong with these stories, by slug and in order, as the chapters of `saga` (a
+  new one has no id). Each story must be one the user manages, in no other saga, and
+  all must share their visibility; then the saga must be playable: see
+  `Chronicles.Stories.Validator.saga_errors/1`. Empty when the saga can be saved.
+  """
+  def saga_errors(%Scope{} = scope, %Saga{} = saga, slugs),
+    do: scope |> check_saga(saga, slugs) |> elem(1)
+
+  defp check_saga(scope, saga, slugs) do
     stories = Enum.map(slugs, &find_story(scope, &1))
-    changeset = Saga.changeset(saga, %{slug: slug, title: attrs["title"]})
 
     errors =
-      case Enum.find_index(stories, &is_nil/1) do
-        nil ->
+      cond do
+        i = Enum.find_index(stories, &is_nil/1) ->
+          [~s(there is no story "#{Enum.at(slugs, i)}")]
+
+        story = Enum.find(stories, &(not can_manage?(scope, &1))) ->
+          [~s(you don't manage the story "#{story.slug}", so it can't be a chapter)]
+
+        true ->
           in_other_saga(saga, stories) ++
             mixed_visibility(stories) ++
             Validator.saga_errors(Enum.map(stories, &{&1.slug, &1.head_version.content}))
-
-        i ->
-          [~s(there is no story "#{Enum.at(slugs, i)}")]
       end
+
+    {stories, errors}
+  end
+
+  @doc """
+  The stories the user may add as chapters: those they manage, by title, each with its
+  head version and the saga it is in, if any.
+  """
+  def chapter_candidates(%Scope{} = scope) do
+    scope
+    |> managed()
+    |> preload([:head_version, chapter: :saga])
+    |> Repo.all()
+    |> Enum.sort_by(&String.downcase(title(&1) || ""))
+  end
+
+  defp do_save_saga(scope, saga, slug, attrs) do
+    {stories, errors} = check_saga(scope, saga, List.wrap(attrs["stories"]))
+    changeset = Saga.changeset(saga, %{slug: slug, title: attrs["title"]})
 
     # add_error puts each error first, so add them in reverse to keep their order.
     changeset =
@@ -354,11 +409,13 @@ defmodule Chronicles.Stories do
   end
 
   @doc "Deletes a saga. Its stories stay. Only for its author or an admin."
-  def delete_saga(%Scope{user: user}, %Saga{} = saga) do
-    if user.role == :admin or saga.author_id == user.id,
-      do: Repo.delete(saga),
-      else: {:error, :unauthorized}
+  def delete_saga(%Scope{} = scope, %Saga{} = saga) do
+    if can_manage_saga?(scope, saga), do: Repo.delete(saga), else: {:error, :unauthorized}
   end
+
+  # The stories a user manages: their own, or every story for an admin.
+  defp managed(%Scope{user: %User{role: :admin}}), do: Story
+  defp managed(%Scope{user: user}), do: where(Story, author_id: ^user.id)
 
   # The stories a user may open and play. Admins manage every story, so they may open it.
   defp visible(%Scope{user: %User{role: :admin}}), do: Story

@@ -3,6 +3,9 @@ defmodule ChroniclesWeb.NewStoryLive do
   Start a story from a title and a sketch: an outline of locations, exits, items, actions
   and endings (see `Chronicles.Stories.Sketch`), checked while you type. Creating it saves
   the first version.
+
+  From the saga editor (`?saga=<slug>`), the new story becomes the next chapter: it gets the
+  saga's visibility, and creating it goes back to the saga editor with the story added.
   """
   use ChroniclesWeb, :live_view
 
@@ -10,11 +13,14 @@ defmodule ChroniclesWeb.NewStoryLive do
   alias Chronicles.Stories.{Sketch, Validator}
 
   @impl true
-  def mount(_params, _session, socket) do
-    if Stories.can_write?(socket.assigns.current_scope) do
+  def mount(params, _session, socket) do
+    scope = socket.assigns.current_scope
+
+    if Stories.can_write?(scope) do
       {:ok,
        socket
        |> assign(:page_title, gettext("New story"))
+       |> assign(:saga, saga(scope, params["saga"]))
        |> check(%{
          "title" => "",
          "sketch" => Sketch.example(Gettext.get_locale(ChroniclesWeb.Gettext))
@@ -40,7 +46,7 @@ defmodule ChroniclesWeb.NewStoryLive do
           {:noreply,
            socket
            |> put_flash(:info, gettext("%{title} is created.", title: content["story_title"]))
-           |> push_navigate(to: ~p"/stories/#{story.slug}")}
+           |> push_navigate(to: after_create(socket, story))}
 
         {:error, _} ->
           {:noreply, put_flash(socket, :error, gettext("Could not create the story."))}
@@ -48,6 +54,24 @@ defmodule ChroniclesWeb.NewStoryLive do
     else
       {:noreply, socket}
     end
+  end
+
+  # The saga the new story is the next chapter of, when the user may change that saga.
+  defp saga(_scope, nil), do: nil
+
+  defp saga(scope, slug) do
+    saga = Stories.get_saga(slug)
+    if saga && saga.chapters != [] && Stories.can_manage_saga?(scope, saga), do: saga
+  end
+
+  # A new chapter gets its saga's visibility (a new story starts private), and goes back to
+  # the saga editor, which adds it.
+  defp after_create(%{assigns: %{saga: nil}}, story), do: ~p"/stories/#{story.slug}"
+
+  defp after_create(%{assigns: %{saga: saga, current_scope: scope}}, story) do
+    visibility = hd(saga.chapters).story.visibility
+    if visibility != story.visibility, do: Stories.set_visibility(scope, story, visibility)
+    ~p"/sagas/#{saga.slug}/edit?#{[add: story.slug]}"
   end
 
   # Parses the sketch and checks the content it makes, the same way a save would.
@@ -76,6 +100,12 @@ defmodule ChroniclesWeb.NewStoryLive do
         <.icon name="hero-chevron-left" class="size-4" /> {gettext("Stories")}
       </.link>
       <h1 class="text-2xl font-semibold tracking-tight">{gettext("New story")}</h1>
+      <p :if={@saga} id="new-chapter-of" class="rounded-lg bg-primary/10 p-3 text-sm">
+        {gettext("This story becomes chapter %{n} of the saga %{title}.",
+          n: length(@saga.chapters) + 1,
+          title: @saga.title
+        )}
+      </p>
       <p class="text-sm text-base-content/70">
         {gettext(
           "Sketch the rooms and how they connect. Every exit also gets a way back, unless you mark it (one-way). The details come later, in the editor."
