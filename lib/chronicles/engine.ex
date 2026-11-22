@@ -14,7 +14,7 @@ defmodule Chronicles.Engine do
   # Context keys the engine manages; the story's context.schema doesn't cover them.
   @reserved ~w(notes visits input)
 
-  @doc "A fresh game, and the cues of the starting room. `input` is a series story's input."
+  @doc "A fresh game, and the cues of the starting room. `input` is the input of a later chapter in a saga."
   def new_game(version, input \\ nil) do
     start = version["starting_location"]
 

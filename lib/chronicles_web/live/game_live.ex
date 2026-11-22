@@ -349,7 +349,10 @@ defmodule ChroniclesWeb.GameLive do
               {gettext("Play again")}
             </.button>
             <.button :if={@sequel} id="continue" phx-click="continue" variant="primary">
-              {gettext("Continue in %{title}", title: Stories.title(@sequel))}
+              {gettext("Continue in chapter %{n}: %{title}",
+                n: @sequel.chapter.position,
+                title: Stories.title(@sequel)
+              )}
             </.button>
           </div>
         </div>

@@ -58,4 +58,18 @@ defmodule ChroniclesWeb.API.StoryControllerTest do
     assert conn |> put(~p"/api/stories/#{story.slug}", %{content: %{}}) |> json_response(403)
     assert conn |> delete(~p"/api/stories/#{story.slug}") |> json_response(403)
   end
+
+  test "a save answers with the warnings that didn't stop it", %{conn: conn, token: token} do
+    conn = logged_in(conn, token)
+    plain = Chronicles.Play.story("the-number")
+    saved = conn |> put(~p"/api/stories/my-number", %{content: plain}) |> json_response(200)
+    assert saved["warnings"] == []
+
+    sequel = Chronicles.Play.story("the-number-returns")
+    saved = conn |> put(~p"/api/stories/sequel", %{content: sequel}) |> json_response(200)
+
+    assert saved["warnings"] == [
+             "the story takes input but is in no saga, so no game of it can start"
+           ]
+  end
 end

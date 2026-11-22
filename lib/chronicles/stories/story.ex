@@ -13,7 +13,7 @@ defmodule Chronicles.Stories.Story do
     belongs_to :author, Chronicles.Accounts.User
     belongs_to :head_version, Chronicles.Stories.Version
     has_many :versions, Chronicles.Stories.Version
-    has_one :series_entry, Chronicles.Stories.SeriesEntry
+    has_one :chapter, Chronicles.Stories.Chapter
 
     timestamps(type: :utc_datetime)
   end

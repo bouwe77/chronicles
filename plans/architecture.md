@@ -27,7 +27,7 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
    lines, `confetti`, `shake`, …). The browser never gets the full story, so no spoilers
    and no fake wins.
 2. **Postgres with Ecto.** The data is relational (stories, versions,
-   games, series, users), and Ecto gives foreign keys with cascades, `phx.gen.auth`,
+   games, sagas, users), and Ecto gives foreign keys with cascades, `phx.gen.auth`,
    changesets, migrations and the SQL sandbox for tests. Locally Postgres runs in
    Podman; in production on Fly, next to the app.
 3. **Stories are JSON.** A version's content is the story JSON (`docs/story-format.md`),
@@ -42,7 +42,7 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
    the engine and writes to the database. No GenServer per game until multiplayer or
    chat; the engine is pure, so that change only moves who calls it.
 7. **A small JSON API, only for tools.** The story skills use HTTP. The API has only
-   what they need: read a story and a version, save a story, series. A revocable API token from the
+   what they need: read a story and a version, save a story, sagas. A revocable API token from the
    account page, only for users an admin gave API access. Each route
    calls the same context function as the LiveView.
 8. **IDs.** Ecto's default integer ids. Stories get a unique `slug` for URLs such as
@@ -59,5 +59,5 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
 1. Postgres in Podman, Chronicles generated with Ecto and `phx.gen.auth`.
 2. The engine, test first.
 3. `GameLive`: play a story.
-4. The story picker, editor, upload, account pages and series.
+4. The story picker, editor, upload, account pages and sagas.
 5. Deployment on Fly with Postgres.

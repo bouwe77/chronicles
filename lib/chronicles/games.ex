@@ -24,6 +24,19 @@ defmodule Chronicles.Games do
     |> Repo.all()
   end
 
+  @doc "Of these stories, the ids of those the user has won a game of, on any version."
+  def won_story_ids(%Scope{user: user}, story_ids) do
+    from(g in Game,
+      join: v in assoc(g, :version),
+      where: g.user_id == ^user.id and v.story_id in ^story_ids,
+      where: fragment("?->'ending'->>'outcome' = 'win'", g.state),
+      distinct: true,
+      select: v.story_id
+    )
+    |> Repo.all()
+    |> MapSet.new()
+  end
+
   @doc "One of the user's games, with its version. Raises when there is none."
   def get_game!(%Scope{user: user}, id) do
     Game |> where(id: ^id, user_id: ^user.id) |> preload(version: :story) |> Repo.one!()
@@ -31,7 +44,7 @@ defmodule Chronicles.Games do
 
   @doc """
   Starts a new game on the story's head version. Returns the game and the cues of the
-  starting room. A story that needs input (the next part of a series) can't start on its
+  starting room. A story that needs input (a later chapter of a saga) can't start on its
   own yet.
   """
   def start_game(%Scope{user: user}, %Story{head_version: version}) do
@@ -47,7 +60,7 @@ defmodule Chronicles.Games do
   end
 
   @doc """
-  The story a finished game continues in: the next story of its series, when the user
+  The story a finished game continues in: the next story of its saga, when the user
   may play it and its input accepts the game's ending output. Nil otherwise.
   """
   def sequel(%Scope{} = scope, %Game{state: %State{ending: %Ending{output: output}}} = game) do

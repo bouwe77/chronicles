@@ -147,21 +147,21 @@ defmodule Chronicles.Accounts do
   end
 
   @doc """
-  Deletes a user with everything they own: their series, their stories (with every game of
+  Deletes a user with everything they own: their sagas, their stories (with every game of
   those) and their games. The foreign keys do the cascade. While a story of theirs is in
-  another user's series, nothing is deleted.
+  another user's saga, nothing is deleted.
   """
   def delete_user(%User{} = user) do
     Repo.transact(fn ->
-      # Their own series first: the database checks a series' stories as each cascade
-      # runs, so a series of their own stories would otherwise stop the delete.
-      Repo.delete_all(from s in Chronicles.Stories.Series, where: s.author_id == ^user.id)
+      # Their own sagas first: the database checks a saga's stories as each cascade
+      # runs, so a saga of their own stories would otherwise stop the delete.
+      Repo.delete_all(from s in Chronicles.Stories.Saga, where: s.author_id == ^user.id)
 
       user
       |> Ecto.Changeset.change()
       |> Ecto.Changeset.foreign_key_constraint(:id,
-        name: :series_stories_story_id_fkey,
-        message: "has a story in another user's series; that series must change first"
+        name: :chapters_story_id_fkey,
+        message: "has a story in another user's saga; that saga must change first"
       )
       |> Repo.delete()
     end)

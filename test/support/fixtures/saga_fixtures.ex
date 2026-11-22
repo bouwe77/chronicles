@@ -1,21 +1,21 @@
-defmodule Chronicles.SeriesFixtures do
-  @moduledoc "The Number series for tests: two stories, where a win of the first unlocks the second."
+defmodule Chronicles.SagaFixtures do
+  @moduledoc "The Number saga for tests: two stories, where a win of the first unlocks the second."
 
   import Chronicles.StoriesFixtures
 
   alias Chronicles.{Games, Stories}
 
-  def number_series_fixture(scope, visibility \\ :public) do
+  def number_saga_fixture(scope, visibility \\ :public) do
     one = story_fixture(scope, "the-number", visibility)
     two = story_fixture(scope, "the-number-returns", visibility)
 
-    {:ok, series} =
-      Stories.save_series(scope, "the-number", %{
+    {:ok, saga} =
+      Stories.save_saga(scope, "the-number", %{
         "title" => "The Number",
         "stories" => [one.slug, two.slug]
       })
 
-    %{series: series, one: one, two: two}
+    %{saga: saga, one: one, two: two}
   end
 
   # A finished game of The Number: the fastest win, or a loss.

@@ -1,7 +1,7 @@
 defmodule Chronicles.Engine.Ending do
   @moduledoc """
   How a game ended, on which turn. `output` is what the ending hands on to the next story
-  of a series.
+  of a saga.
   """
   use Ecto.Schema
 

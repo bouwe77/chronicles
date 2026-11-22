@@ -3,9 +3,12 @@ defmodule ChroniclesWeb.API.StoryJSON do
 
   def index(%{stories: stories}), do: %{data: Enum.map(stories, &summary/1)}
 
-  # One story, with its head version's content.
-  def show(%{story: story}),
-    do: %{data: Map.put(summary(story), :content, story.head_version.content)}
+  # One story, with its head version's content. After a save, also the problems it causes
+  # that didn't stop the save (see `Chronicles.Stories.saga_warnings/1`).
+  def show(%{story: story} = assigns) do
+    data = %{data: Map.put(summary(story), :content, story.head_version.content)}
+    if warnings = assigns[:warnings], do: Map.put(data, :warnings, warnings), else: data
+  end
 
   defp summary(story) do
     %{

@@ -14,7 +14,7 @@ defmodule Chronicles.EngineStoriesTest do
   defp wait_until_ending(p),
     do: if(p.state.ending, do: p, else: p |> wait() |> wait_until_ending())
 
-  describe "The Number series: part 1's ending output is part 2's input" do
+  describe "The Number saga: chapter 1's ending output is chapter 2's input" do
     setup do
       %{one: story("the-number"), two: story("the-number-returns")}
     end

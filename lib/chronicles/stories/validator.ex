@@ -42,17 +42,17 @@ defmodule Chronicles.Stories.Validator do
   end
 
   @doc """
-  The errors in a series, given each story's slug and head content in order: the first
+  The errors in a saga, given each story's slug and head content in order: the first
   story starts without input, and each next one accepts the output of at least one win
   ending of the story before it, and of no loss ending.
   """
-  def series_errors([]), do: ["a series needs at least one story"]
+  def saga_errors([]), do: ["a saga needs at least one story"]
 
-  def series_errors([{first, first_content} | _] = stories) do
+  def saga_errors([{first, first_content} | _] = stories) do
     slugs = Enum.map(stories, &elem(&1, 0))
 
     List.flatten([
-      for(slug <- duplicates(slugs), do: ~s("#{slug}" is in the series more than once)),
+      for(slug <- duplicates(slugs), do: ~s("#{slug}" is in the saga more than once)),
       if(first_content["input"],
         do: [~s(the first story "#{first}" needs input, so it can never start)],
         else: []

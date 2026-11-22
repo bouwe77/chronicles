@@ -209,7 +209,7 @@ defmodule ChroniclesWeb.UserLive.Account do
          put_flash(
            socket,
            :error,
-           gettext("A story of yours is in another user's series. Ask them to remove it first.")
+           gettext("A story of yours is in another user's saga. Ask them to remove it first.")
          )}
     end
   end

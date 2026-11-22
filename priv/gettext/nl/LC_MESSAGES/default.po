@@ -21,7 +21,7 @@ msgstr "%{email} is nu %{role}."
 msgid "%{id} is already taken."
 msgstr "%{id} bestaat al."
 
-#: lib/chronicles_web/live/edit_story_live.ex:430
+#: lib/chronicles_web/live/edit_story_live.ex:439
 #, elixir-autogen, elixir-format
 msgid "%{in} exits in, %{out} out"
 msgstr "%{in} uitgangen naartoe, %{out} vandaan"
@@ -31,7 +31,7 @@ msgstr "%{in} uitgangen naartoe, %{out} vandaan"
 msgid "%{slug} is deleted."
 msgstr "%{slug} is verwijderd."
 
-#: lib/chronicles_web/live/story_upload_live.ex:60
+#: lib/chronicles_web/live/story_upload_live.ex:61
 #, elixir-autogen, elixir-format
 msgid "%{slug} is saved."
 msgstr "%{slug} is opgeslagen."
@@ -41,7 +41,7 @@ msgstr "%{slug} is opgeslagen."
 msgid "%{title} is created."
 msgstr "%{title} is gemaakt."
 
-#: lib/chronicles_web/live/game_live.ex:382
+#: lib/chronicles_web/live/game_live.ex:385
 #, elixir-autogen, elixir-format
 msgid "+%{count} turn"
 msgid_plural "+%{count} turns"
@@ -83,31 +83,31 @@ msgid_plural "%{count} locations"
 msgstr[0] "1 locatie"
 msgstr[1] "%{count} locaties"
 
-#: lib/chronicles_web/live/edit_story_live.ex:368
+#: lib/chronicles_web/live/edit_story_live.ex:369
 #, elixir-autogen, elixir-format
 msgid "1 problem"
 msgid_plural "%{count} problems"
 msgstr[0] "1 probleem"
 msgstr[1] "%{count} problemen"
 
-#: lib/chronicles_web/live/story_upload_live.ex:103
+#: lib/chronicles_web/live/story_upload_live.ex:116
 #, elixir-autogen, elixir-format
 msgid "A new slug makes a new, private story. The slug of one of your stories gives it new content; games in progress keep the content they started with."
 msgstr "Een nieuwe slug maakt een nieuw, privé verhaal. De slug van een van je verhalen geeft dat verhaal nieuwe inhoud; lopende spellen houden de inhoud waarmee ze begonnen."
 
 #: lib/chronicles_web/live/user_live/account.ex:212
 #, elixir-autogen, elixir-format
-msgid "A story of yours is in another user's series. Ask them to remove it first."
-msgstr "Een verhaal van jou zit in de reeks van iemand anders. Vraag die persoon om het eerst te verwijderen."
+msgid "A story of yours is in another user's saga. Ask them to remove it first."
+msgstr "Een verhaal van jou zit in de saga van iemand anders. Vraag die persoon om het eerst te verwijderen."
 
 #: lib/chronicles_web/components/core_components.ex:401
-#: lib/chronicles_web/live/edit_story_live.ex:327
+#: lib/chronicles_web/live/edit_story_live.ex:328
 #: lib/chronicles_web/live/game_live.ex:253
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acties"
 
-#: lib/chronicles_web/live/edit_story_live.ex:494
+#: lib/chronicles_web/live/edit_story_live.ex:503
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr "Toevoegen"
@@ -117,7 +117,7 @@ msgstr "Toevoegen"
 msgid "Admin"
 msgstr "Beheerder"
 
-#: lib/chronicles_web/live/story_upload_live.ex:68
+#: lib/chronicles_web/live/story_upload_live.ex:81
 #, elixir-autogen, elixir-format
 msgid "Another author already has a story with this slug."
 msgstr "Een andere auteur heeft al een verhaal met deze slug."
@@ -133,7 +133,7 @@ msgstr "Opnieuw verbinden"
 msgid "Author"
 msgstr "Auteur"
 
-#: lib/chronicles_web/live/edit_story_live.ex:274
+#: lib/chronicles_web/live/edit_story_live.ex:275
 #: lib/chronicles_web/live/game_live.ex:134
 #: lib/chronicles_web/live/game_live.ex:342
 #, elixir-autogen, elixir-format
@@ -160,7 +160,7 @@ msgstr "Gebruikersnaam wijzigen"
 msgid "Changing..."
 msgstr "Bezig met wijzigen..."
 
-#: lib/chronicles_web/live/story_upload_live.ex:207
+#: lib/chronicles_web/live/story_upload_live.ex:220
 #, elixir-autogen, elixir-format
 msgid "Choose a .json file."
 msgstr "Kies een .json-bestand."
@@ -170,7 +170,7 @@ msgstr "Kies een .json-bestand."
 msgid "Choose a JSON file first."
 msgstr "Kies eerst een JSON-bestand."
 
-#: lib/chronicles_web/live/story_upload_live.ex:208
+#: lib/chronicles_web/live/story_upload_live.ex:221
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr "Kies één bestand."
@@ -191,27 +191,21 @@ msgstr "Bevestig en blijf ingelogd"
 msgid "Confirming..."
 msgstr "Bezig met bevestigen..."
 
-#: lib/chronicles_web/live/edit_story_live.ex:528
+#: lib/chronicles_web/live/edit_story_live.ex:537
 #, elixir-autogen, elixir-format
 msgid "Connect"
 msgstr "Verbinden"
 
-#: lib/chronicles_web/live/edit_story_live.ex:525
+#: lib/chronicles_web/live/edit_story_live.ex:534
 #, elixir-autogen, elixir-format
 msgid "Connect to"
 msgstr "Verbinden met"
 
-#: lib/chronicles_web/live/edit_story_live.ex:404
+#: lib/chronicles_web/live/edit_story_live.ex:413
 #: lib/chronicles_web/live/game_live.ex:213
 #, elixir-autogen, elixir-format
 msgid "Context"
 msgstr "Context"
-
-#: lib/chronicles_web/live/game_live.ex:352
-#: lib/chronicles_web/live/story_live.ex:191
-#, elixir-autogen, elixir-format
-msgid "Continue in %{title}"
-msgstr "Verder in %{title}"
 
 #: lib/chronicles_web/live/admin/users_live.ex:59
 #, elixir-autogen, elixir-format
@@ -251,7 +245,7 @@ msgstr "Verhaal maken"
 msgid "Creating..."
 msgstr "Bezig met maken..."
 
-#: lib/chronicles_web/live/story_live.ex:149
+#: lib/chronicles_web/live/story_live.ex:166
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Verwijderen"
@@ -266,17 +260,17 @@ msgstr "Account verwijderen"
 msgid "Delete my account"
 msgstr "Mijn account verwijderen"
 
-#: lib/chronicles_web/live/story_live.ex:200
+#: lib/chronicles_web/live/story_live.ex:233
 #, elixir-autogen, elixir-format
 msgid "Delete this game"
 msgstr "Dit spel verwijderen"
 
-#: lib/chronicles_web/live/story_live.ex:197
+#: lib/chronicles_web/live/story_live.ex:230
 #, elixir-autogen, elixir-format
 msgid "Delete this game?"
 msgstr "Dit spel verwijderen?"
 
-#: lib/chronicles_web/live/story_live.ex:144
+#: lib/chronicles_web/live/story_live.ex:161
 #, elixir-autogen, elixir-format
 msgid "Delete this story? Every game of it goes too, other players' games as well."
 msgstr "Dit verhaal verwijderen? Alle spellen ervan verdwijnen ook, ook die van andere spelers."
@@ -291,7 +285,7 @@ msgstr "Je account en alles wat van jou is verwijderen?"
 msgid "Drop"
 msgstr "Neerleggen"
 
-#: lib/chronicles_web/live/story_live.ex:117
+#: lib/chronicles_web/live/story_live.ex:124
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Bewerken"
@@ -308,17 +302,17 @@ msgstr "%{title} bewerken"
 msgid "Email"
 msgstr "E-mailadres"
 
-#: lib/chronicles_web/live/edit_story_live.ex:409
+#: lib/chronicles_web/live/edit_story_live.ex:418
 #, elixir-autogen, elixir-format
 msgid "Endings"
 msgstr "Eindes"
 
-#: lib/chronicles_web/live/edit_story_live.ex:337
+#: lib/chronicles_web/live/edit_story_live.ex:338
 #, elixir-autogen, elixir-format
 msgid "Everything, as one JSON"
 msgstr "Alles, als één JSON"
 
-#: lib/chronicles_web/live/edit_story_live.ex:526
+#: lib/chronicles_web/live/edit_story_live.ex:535
 #, elixir-autogen, elixir-format
 msgid "Exit label"
 msgstr "Naam van de uitgang"
@@ -328,18 +322,18 @@ msgstr "Naam van de uitgang"
 msgid "Exits"
 msgstr "Uitgangen"
 
-#: lib/chronicles_web/live/stories_live.ex:72
+#: lib/chronicles_web/live/stories_live.ex:95
 #, elixir-autogen, elixir-format
 msgid "Filter by tag"
 msgstr "Filter op tag"
 
-#: lib/chronicles_web/live/edit_story_live.ex:513
-#: lib/chronicles_web/live/edit_story_live.ex:551
+#: lib/chronicles_web/live/edit_story_live.ex:522
+#: lib/chronicles_web/live/edit_story_live.ex:560
 #, elixir-autogen, elixir-format
 msgid "Find uses"
 msgstr "Waar gebruikt"
 
-#: lib/chronicles_web/live/edit_story_live.ex:383
+#: lib/chronicles_web/live/edit_story_live.ex:392
 #, elixir-autogen, elixir-format
 msgid "Find uses of an id or a context path"
 msgstr "Zoek waar een id of contextpad wordt gebruikt"
@@ -349,7 +343,7 @@ msgstr "Zoek waar een id of contextpad wordt gebruikt"
 msgid "Give it an id first."
 msgstr "Geef het eerst een id."
 
-#: lib/chronicles_web/live/story_upload_live.ex:154
+#: lib/chronicles_web/live/story_upload_live.ex:167
 #, elixir-autogen, elixir-format
 msgid "Give this story new content?"
 msgstr "Dit verhaal nieuwe inhoud geven?"
@@ -359,7 +353,7 @@ msgstr "Dit verhaal nieuwe inhoud geven?"
 msgid "If your email is in our system, you will get an email to log in shortly."
 msgstr "Als je e-mailadres bij ons bekend is, krijg je zo een e-mail om in te loggen."
 
-#: lib/chronicles_web/live/edit_story_live.ex:405
+#: lib/chronicles_web/live/edit_story_live.ex:414
 #: lib/chronicles_web/live/game_live.ex:237
 #, elixir-autogen, elixir-format
 msgid "Items"
@@ -380,7 +374,7 @@ msgstr "Houd me ingelogd op dit apparaat"
 msgid "Language"
 msgstr "Taal"
 
-#: lib/chronicles_web/live/edit_story_live.ex:319
+#: lib/chronicles_web/live/edit_story_live.ex:320
 #, elixir-autogen, elixir-format
 msgid "Locations"
 msgstr "Locaties"
@@ -434,54 +428,54 @@ msgstr "Je bent uitgelogd."
 msgid "Logging in..."
 msgstr "Bezig met inloggen..."
 
-#: lib/chronicles_web/live/story_live.ex:243
+#: lib/chronicles_web/live/story_live.ex:295
 #, elixir-autogen, elixir-format
 msgid "Lost"
 msgstr "Verloren"
 
-#: lib/chronicles_web/live/story_live.ex:124
+#: lib/chronicles_web/live/story_live.ex:134
 #, elixir-autogen, elixir-format
 msgid "Make this story private? Only you will see it."
 msgstr "Dit verhaal privé maken? Alleen jij ziet het dan."
 
-#: lib/chronicles_web/live/story_live.ex:134
+#: lib/chronicles_web/live/story_live.ex:149
 #, elixir-autogen, elixir-format
 msgid "Make this story public? Every user will see it."
 msgstr "Dit verhaal openbaar maken? Iedereen ziet het dan."
 
-#: lib/chronicles_web/live/story_live.ex:165
+#: lib/chronicles_web/live/story_live.ex:195
 #, elixir-autogen, elixir-format
 msgid "New game"
 msgstr "Nieuw spel"
 
 #: lib/chronicles_web/live/new_story_live.ex:17
 #: lib/chronicles_web/live/new_story_live.ex:78
-#: lib/chronicles_web/live/stories_live.ex:40
+#: lib/chronicles_web/live/stories_live.ex:63
 #, elixir-autogen, elixir-format
 msgid "New story"
 msgstr "Nieuw verhaal"
 
-#: lib/chronicles_web/live/story_live.ex:172
+#: lib/chronicles_web/live/story_live.ex:202
 #, elixir-autogen, elixir-format
 msgid "No games yet."
 msgstr "Nog geen spellen."
 
-#: lib/chronicles_web/live/edit_story_live.ex:365
+#: lib/chronicles_web/live/edit_story_live.ex:366
 #, elixir-autogen, elixir-format
 msgid "No problems found."
 msgstr "Geen problemen gevonden."
 
-#: lib/chronicles_web/live/stories_live.ex:92
+#: lib/chronicles_web/live/stories_live.ex:115
 #, elixir-autogen, elixir-format
 msgid "No stories match."
 msgstr "Geen verhalen gevonden."
 
-#: lib/chronicles_web/live/edit_story_live.ex:392
+#: lib/chronicles_web/live/edit_story_live.ex:401
 #, elixir-autogen, elixir-format
 msgid "Not used anywhere."
 msgstr "Nergens gebruikt."
 
-#: lib/chronicles_web/live/edit_story_live.ex:360
+#: lib/chronicles_web/live/edit_story_live.ex:361
 #, elixir-autogen, elixir-format
 msgid "Not valid JSON yet: %{message}"
 msgstr "Nog geen geldige JSON: %{message}"
@@ -518,12 +512,12 @@ msgstr "Alleen auteurs kunnen verhalen schrijven."
 msgid "Only the author can edit this story."
 msgstr "Alleen de auteur kan dit verhaal bewerken."
 
-#: lib/chronicles_web/live/story_live.ex:105
+#: lib/chronicles_web/live/story_live.ex:108
 #, elixir-autogen, elixir-format
-msgid "Part %{n} of %{total} of %{title}"
-msgstr "Deel %{n} van %{total} van %{title}"
+msgid "Chapter %{n} of %{total} of the saga %{title}"
+msgstr "Hoofdstuk %{n} van %{total} van de saga %{title}"
 
-#: lib/chronicles_web/live/edit_story_live.ex:310
+#: lib/chronicles_web/live/edit_story_live.ex:311
 #, elixir-autogen, elixir-format
 msgid "Parts of the story"
 msgstr "Delen van het verhaal"
@@ -538,53 +532,53 @@ msgstr "Opnieuw spelen"
 msgid "Player"
 msgstr "Speler"
 
-#: lib/chronicles_web/live/edit_story_live.ex:576
+#: lib/chronicles_web/live/edit_story_live.ex:585
 #, elixir-autogen, elixir-format
 msgid "Players get a notes panel"
 msgstr "Spelers krijgen een notitiepaneel"
 
-#: lib/chronicles_web/live/story_live.ex:244
+#: lib/chronicles_web/live/story_live.ex:296
 #, elixir-autogen, elixir-format
 msgid "Playing, turn %{turn}"
 msgstr "Bezig, beurt %{turn}"
 
-#: lib/chronicles_web/live/story_live.ex:137
+#: lib/chronicles_web/live/story_live.ex:154
 #, elixir-autogen, elixir-format
 msgid "Private"
 msgstr "Privé"
 
-#: lib/chronicles_web/live/story_live.ex:127
+#: lib/chronicles_web/live/story_live.ex:139
 #, elixir-autogen, elixir-format
 msgid "Public"
 msgstr "Openbaar"
 
-#: lib/chronicles_web/live/edit_story_live.ex:540
-#: lib/chronicles_web/live/edit_story_live.ex:559
+#: lib/chronicles_web/live/edit_story_live.ex:549
+#: lib/chronicles_web/live/edit_story_live.ex:568
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: lib/chronicles_web/live/edit_story_live.ex:260
+#: lib/chronicles_web/live/edit_story_live.ex:261
 #, elixir-autogen, elixir-format
 msgid "Remove the action %{id}? It also leaves every location that shows it."
 msgstr "De actie %{id} verwijderen? Ze verdwijnt ook uit elke locatie die haar toont."
 
-#: lib/chronicles_web/live/edit_story_live.ex:246
+#: lib/chronicles_web/live/edit_story_live.ex:247
 #, elixir-autogen, elixir-format
 msgid "Remove the location %{id}?"
 msgstr "De locatie %{id} verwijderen?"
 
-#: lib/chronicles_web/live/edit_story_live.ex:249
+#: lib/chronicles_web/live/edit_story_live.ex:250
 #, elixir-autogen, elixir-format
 msgid "Remove the location %{id}? These exits to it go too: %{exits}"
 msgstr "De locatie %{id} verwijderen? Deze uitgangen ernaartoe verdwijnen ook: %{exits}"
 
-#: lib/chronicles_web/live/edit_story_live.ex:516
+#: lib/chronicles_web/live/edit_story_live.ex:525
 #, elixir-autogen, elixir-format
 msgid "Rename"
 msgstr "Hernoemen"
 
-#: lib/chronicles_web/live/edit_story_live.ex:515
+#: lib/chronicles_web/live/edit_story_live.ex:524
 #, elixir-autogen, elixir-format
 msgid "Rename to"
 msgstr "Hernoemen naar"
@@ -594,22 +588,22 @@ msgstr "Hernoemen naar"
 msgid "Role of %{email}"
 msgstr "Rol van %{email}"
 
-#: lib/chronicles_web/live/edit_story_live.ex:408
+#: lib/chronicles_web/live/edit_story_live.ex:417
 #, elixir-autogen, elixir-format
 msgid "Rules"
 msgstr "Regels"
 
-#: lib/chronicles_web/live/edit_story_live.ex:301
+#: lib/chronicles_web/live/edit_story_live.ex:302
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Opslaan"
 
-#: lib/chronicles_web/live/edit_story_live.ex:153
+#: lib/chronicles_web/live/edit_story_live.ex:154
 #, elixir-autogen, elixir-format
 msgid "Saved. New games play this version."
 msgstr "Opgeslagen. Nieuwe spellen spelen deze versie."
 
-#: lib/chronicles_web/live/story_upload_live.ex:153
+#: lib/chronicles_web/live/story_upload_live.ex:166
 #: lib/chronicles_web/live/user_live/account.ex:23
 #, elixir-autogen, elixir-format
 msgid "Saving..."
@@ -625,7 +619,7 @@ msgstr "Schets"
 msgid "Sketch the rooms and how they connect. Every exit also gets a way back, unless you mark it (one-way). The details come later, in the editor."
 msgstr "Schets de ruimtes en hoe ze verbonden zijn. Elke uitgang krijgt ook een weg terug, tenzij je hem markeert met (one-way). De details komen later, in de editor."
 
-#: lib/chronicles_web/live/story_upload_live.ex:142
+#: lib/chronicles_web/live/story_upload_live.ex:155
 #, elixir-autogen, elixir-format
 msgid "Slug (in the story's URL)"
 msgstr "Slug (in de URL van het verhaal)"
@@ -637,20 +631,21 @@ msgstr "Er ging iets mis!"
 
 #: lib/chronicles_web/components/layouts.ex:67
 #: lib/chronicles_web/live/new_story_live.ex:76
+#: lib/chronicles_web/live/saga_live.ex:52
 #: lib/chronicles_web/live/stories_live.ex:15
-#: lib/chronicles_web/live/stories_live.ex:37
+#: lib/chronicles_web/live/stories_live.ex:60
 #: lib/chronicles_web/live/story_live.ex:97
-#: lib/chronicles_web/live/story_upload_live.ex:99
+#: lib/chronicles_web/live/story_upload_live.ex:112
 #, elixir-autogen, elixir-format
 msgid "Stories"
 msgstr "Verhalen"
 
-#: lib/chronicles_web/live/edit_story_live.ex:403
+#: lib/chronicles_web/live/edit_story_live.ex:412
 #, elixir-autogen, elixir-format
 msgid "Story"
 msgstr "Verhaal"
 
-#: lib/chronicles_web/live/edit_story_live.ex:406
+#: lib/chronicles_web/live/edit_story_live.ex:415
 #, elixir-autogen, elixir-format
 msgid "Supplies"
 msgstr "Voorraden"
@@ -665,17 +660,17 @@ msgstr "Pak"
 msgid "That doesn't work right now."
 msgstr "Dat kan nu niet."
 
-#: lib/chronicles_web/live/story_upload_live.ex:209
+#: lib/chronicles_web/live/story_upload_live.ex:222
 #, elixir-autogen, elixir-format
 msgid "The file could not be read."
 msgstr "Het bestand kon niet worden gelezen."
 
-#: lib/chronicles_web/live/story_upload_live.ex:206
+#: lib/chronicles_web/live/story_upload_live.ex:219
 #, elixir-autogen, elixir-format
 msgid "The file is too large."
 msgstr "Het bestand is te groot."
 
-#: lib/chronicles_web/live/edit_story_live.ex:491
+#: lib/chronicles_web/live/edit_story_live.ex:500
 #, elixir-autogen, elixir-format
 msgid "The id of a new %{kind}"
 msgstr "Het id van een nieuwe %{kind}"
@@ -685,17 +680,17 @@ msgstr "Het id van een nieuwe %{kind}"
 msgid "The link is invalid or it has expired."
 msgstr "De link is ongeldig of verlopen."
 
-#: lib/chronicles_web/live/edit_story_live.ex:355
+#: lib/chronicles_web/live/edit_story_live.ex:356
 #, elixir-autogen, elixir-format
 msgid "The selected part, as JSON"
 msgstr "Het gekozen deel, als JSON"
 
-#: lib/chronicles_web/live/edit_story_live.ex:534
+#: lib/chronicles_web/live/edit_story_live.ex:543
 #, elixir-autogen, elixir-format
 msgid "The starting location can't be removed."
 msgstr "De startlocatie kan niet worden verwijderd."
 
-#: lib/chronicles_web/live/story_upload_live.ex:162
+#: lib/chronicles_web/live/story_upload_live.ex:175
 #, elixir-autogen, elixir-format
 msgid "The story was not saved"
 msgstr "Het verhaal is niet opgeslagen"
@@ -705,12 +700,12 @@ msgstr "Het verhaal is niet opgeslagen"
 msgid "This deletes your account, your stories with every game of them, and your games. It can't be undone."
 msgstr "Dit verwijdert je account, je verhalen met alle spellen ervan, en je spellen. Dit kan niet ongedaan worden gemaakt."
 
-#: lib/chronicles_web/live/story_upload_live.ex:73
+#: lib/chronicles_web/live/story_upload_live.ex:86
 #, elixir-autogen, elixir-format
 msgid "This file is not a JSON object."
 msgstr "Dit bestand is geen JSON-object."
 
-#: lib/chronicles_web/live/story_upload_live.ex:147
+#: lib/chronicles_web/live/story_upload_live.ex:160
 #, elixir-autogen, elixir-format
 msgid "This gives %{title} new content."
 msgstr "Dit geeft %{title} nieuwe inhoud."
@@ -725,32 +720,32 @@ msgstr "Deze link is ongeldig of verlopen."
 msgid "This login link is not valid or has expired."
 msgstr "Deze inloglink is ongeldig of verlopen."
 
-#: lib/chronicles_web/live/edit_story_live.ex:427
+#: lib/chronicles_web/live/edit_story_live.ex:436
 #, elixir-autogen, elixir-format
 msgid "This part has invalid JSON. Leave it and lose that edit?"
 msgstr "Dit deel heeft ongeldige JSON. Verlaten en die wijziging kwijtraken?"
 
-#: lib/chronicles_web/live/story_live.ex:156
+#: lib/chronicles_web/live/story_live.ex:176
 #, elixir-autogen, elixir-format
 msgid "This story continues %{title}. Start it from a game of that story you won."
 msgstr "Dit verhaal gaat verder na %{title}. Begin het vanuit een gewonnen spel van dat verhaal."
 
-#: lib/chronicles_web/live/story_live.ex:160
+#: lib/chronicles_web/live/story_live.ex:185
 #, elixir-autogen, elixir-format
 msgid "This story continues a story before it. Start it from a game you won."
 msgstr "Dit verhaal gaat verder na een eerder verhaal. Begin het vanuit een gewonnen spel."
 
 #: lib/chronicles_web/live/story_live.ex:81
 #, elixir-autogen, elixir-format
-msgid "This story is part of a series. Change or delete the series first."
-msgstr "Dit verhaal hoort bij een reeks. Wijzig of verwijder eerst de reeks."
+msgid "This story is a chapter of a saga. Change or delete the saga first."
+msgstr "Dit verhaal is een hoofdstuk van een saga. Wijzig of verwijder eerst de saga."
 
 #: lib/chronicles_web/live/game_live.ex:284
 #, elixir-autogen, elixir-format
 msgid "Time"
 msgstr "Tijd"
 
-#: lib/chronicles_web/live/edit_story_live.ex:407
+#: lib/chronicles_web/live/edit_story_live.ex:416
 #, elixir-autogen, elixir-format
 msgid "Timeline"
 msgstr "Tijdlijn"
@@ -760,14 +755,14 @@ msgstr "Tijdlijn"
 msgid "Title"
 msgstr "Titel"
 
-#: lib/chronicles_web/live/story_upload_live.ex:156
+#: lib/chronicles_web/live/story_upload_live.ex:169
 #, elixir-autogen, elixir-format
 msgid "Upload"
 msgstr "Uploaden"
 
-#: lib/chronicles_web/live/stories_live.ex:43
+#: lib/chronicles_web/live/stories_live.ex:66
 #: lib/chronicles_web/live/story_upload_live.ex:16
-#: lib/chronicles_web/live/story_upload_live.ex:101
+#: lib/chronicles_web/live/story_upload_live.ex:114
 #, elixir-autogen, elixir-format
 msgid "Upload a story"
 msgstr "Verhaal uploaden"
@@ -795,7 +790,7 @@ msgstr "Gebruikers"
 msgid "Wait"
 msgstr "Wachten"
 
-#: lib/chronicles_web/live/edit_story_live.ex:527
+#: lib/chronicles_web/live/edit_story_live.ex:536
 #, elixir-autogen, elixir-format
 msgid "Way back (optional)"
 msgstr "Weg terug (niet verplicht)"
@@ -820,7 +815,8 @@ msgstr "Welkom %{email}"
 msgid "Welcome back!"
 msgstr "Welkom terug!"
 
-#: lib/chronicles_web/live/story_live.ex:242
+#: lib/chronicles_web/live/saga_live.ex:112
+#: lib/chronicles_web/live/story_live.ex:294
 #, elixir-autogen, elixir-format
 msgid "Won"
 msgstr "Gewonnen"
@@ -840,7 +836,7 @@ msgstr "Jij"
 msgid "You lost"
 msgstr "Je hebt verloren"
 
-#: lib/chronicles_web/live/edit_story_live.ex:160
+#: lib/chronicles_web/live/edit_story_live.ex:161
 #, elixir-autogen, elixir-format
 msgid "You may not change this story."
 msgstr "Je mag dit verhaal niet wijzigen."
@@ -866,7 +862,7 @@ msgstr "Je account is verwijderd."
 msgid "Your email address is changed."
 msgstr "Je e-mailadres is gewijzigd."
 
-#: lib/chronicles_web/live/story_live.ex:169
+#: lib/chronicles_web/live/story_live.ex:199
 #, elixir-autogen, elixir-format
 msgid "Your games"
 msgstr "Je spellen"
@@ -876,7 +872,7 @@ msgstr "Je spellen"
 msgid "Your username is now %{username}."
 msgstr "Je gebruikersnaam is nu %{username}."
 
-#: lib/chronicles_web/live/stories_live.ex:103
+#: lib/chronicles_web/live/stories_live.ex:187
 #: lib/chronicles_web/live/story_live.ex:102
 #, elixir-autogen, elixir-format
 msgid "by %{name}"
@@ -887,12 +883,12 @@ msgstr "door %{name}"
 msgid "close"
 msgstr "sluiten"
 
-#: lib/chronicles_web/live/story_live.ex:216
+#: lib/chronicles_web/live/story_live.ex:249
 #, elixir-autogen, elixir-format
 msgid "continued in"
 msgstr "verder in"
 
-#: lib/chronicles_web/live/story_live.ex:210
+#: lib/chronicles_web/live/story_live.ex:243
 #, elixir-autogen, elixir-format
 msgid "continues"
 msgstr "vervolg op"
@@ -907,12 +903,12 @@ msgstr "leg %{item} neer"
 msgid "is already taken."
 msgstr "bestaat al."
 
-#: lib/chronicles_web/live/edit_story_live.ex:490
+#: lib/chronicles_web/live/edit_story_live.ex:499
 #, elixir-autogen, elixir-format
 msgid "new id"
 msgstr "nieuw id"
 
-#: lib/chronicles_web/live/edit_story_live.ex:444
+#: lib/chronicles_web/live/edit_story_live.ex:453
 #, elixir-autogen, elixir-format
 msgid "start"
 msgstr "start"
@@ -922,12 +918,12 @@ msgstr "start"
 msgid "take %{item}"
 msgstr "pak %{item}"
 
-#: lib/chronicles_web/live/edit_story_live.ex:450
+#: lib/chronicles_web/live/edit_story_live.ex:459
 #, elixir-autogen, elixir-format
 msgid "unreachable"
 msgstr "onbereikbaar"
 
-#: lib/chronicles_web/live/edit_story_live.ex:282
+#: lib/chronicles_web/live/edit_story_live.ex:283
 #, elixir-autogen, elixir-format
 msgid "unsaved"
 msgstr "niet opgeslagen"
@@ -958,47 +954,47 @@ msgstr "een oudere versie"
 msgid "the latest"
 msgstr "de nieuwste"
 
-#: lib/chronicles_web/live/story_upload_live.ex:175
+#: lib/chronicles_web/live/story_upload_live.ex:188
 #, elixir-autogen, elixir-format
 msgid "Copied"
 msgstr "Gekopieerd"
 
-#: lib/chronicles_web/live/story_upload_live.ex:172
+#: lib/chronicles_web/live/story_upload_live.ex:185
 #, elixir-autogen, elixir-format
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: lib/chronicles_web/live/story_upload_live.ex:116
+#: lib/chronicles_web/live/story_upload_live.ex:129
 #, elixir-autogen, elixir-format
 msgid "Format"
 msgstr "Formaat"
 
-#: lib/chronicles_web/live/story_upload_live.ex:119
+#: lib/chronicles_web/live/story_upload_live.ex:132
 #, elixir-autogen, elixir-format
 msgid "Schema"
 msgstr "Schema"
 
-#: lib/chronicles_web/live/story_upload_live.ex:122
+#: lib/chronicles_web/live/story_upload_live.ex:135
 #, elixir-autogen, elixir-format
 msgid "Skill"
 msgstr "Skill"
 
-#: lib/chronicles_web/live/story_upload_live.ex:110
+#: lib/chronicles_web/live/story_upload_live.ex:123
 #, elixir-autogen, elixir-format
 msgid "Write a story as a JSON file, by hand or with an AI tool like ChatGPT, Gemini or Claude. Give the tool the format and the schema, or the skill if it supports skills. Then upload the file it makes."
 msgstr "Schrijf een verhaal als JSON-bestand, zelf of met een AI-tool zoals ChatGPT, Gemini of Claude. Geef de tool het formaat en het schema, of de skill als de tool skills ondersteunt. Upload daarna het bestand dat eruit komt."
 
-#: lib/chronicles_web/live/edit_story_live.ex:206
+#: lib/chronicles_web/live/edit_story_live.ex:207
 #, elixir-autogen, elixir-format
 msgid "Could not keep your changes."
 msgstr "Je wijzigingen konden niet worden bewaard."
 
-#: lib/chronicles_web/live/edit_story_live.ex:293
+#: lib/chronicles_web/live/edit_story_live.ex:294
 #, elixir-autogen, elixir-format
 msgid "Discard"
 msgstr "Weggooien"
 
-#: lib/chronicles_web/live/edit_story_live.ex:291
+#: lib/chronicles_web/live/edit_story_live.ex:292
 #, elixir-autogen, elixir-format
 msgid "Discard your unsaved changes?"
 msgstr "Je niet-opgeslagen wijzigingen weggooien?"
@@ -1008,7 +1004,7 @@ msgstr "Je niet-opgeslagen wijzigingen weggooien?"
 msgid "%{email} can log in with the link we sent."
 msgstr "%{email} kan inloggen met de link die we stuurden."
 
-#: lib/chronicles_web/live/stories_live.ex:51
+#: lib/chronicles_web/live/stories_live.ex:74
 #, elixir-autogen, elixir-format
 msgid "All stories"
 msgstr "Alle verhalen"
@@ -1018,7 +1014,7 @@ msgstr "Alle verhalen"
 msgid "Create"
 msgstr "Aanmaken"
 
-#: lib/chronicles_web/live/stories_live.ex:51
+#: lib/chronicles_web/live/stories_live.ex:74
 #, elixir-autogen, elixir-format
 msgid "Mine and public"
 msgstr "Van mij en openbaar"
@@ -1048,7 +1044,7 @@ msgstr "Diegene krijgt een e-mail met een link om in te loggen. Een wachtwoord i
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: lib/chronicles_web/live/stories_live.ex:48
+#: lib/chronicles_web/live/stories_live.ex:71
 #, elixir-autogen, elixir-format
 msgid "Which stories"
 msgstr "Welke verhalen"
@@ -1147,3 +1143,52 @@ msgstr "Je API-token is ingetrokken."
 #, elixir-autogen, elixir-format
 msgid "No account yet? Chronicles is invite-only. Ask an admin for an invite."
 msgstr "Nog geen account? Chronicles werkt alleen op uitnodiging. Vraag een beheerder om een uitnodiging."
+
+#: lib/chronicles_web/live/story_live.ex:133
+#, elixir-autogen, elixir-format
+msgid "Make the whole saga private? Only you will see its chapters."
+msgstr "De hele saga privé maken? Alleen jij ziet de hoofdstukken dan."
+
+#: lib/chronicles_web/live/story_live.ex:148
+#, elixir-autogen, elixir-format
+msgid "Make the whole saga public? Every user will see its chapters."
+msgstr "De hele saga openbaar maken? Iedereen ziet de hoofdstukken dan."
+
+#: lib/chronicles_web/live/game_live.ex:352
+#: lib/chronicles_web/live/story_live.ex:221
+#, elixir-autogen, elixir-format
+msgid "Continue in chapter %{n}: %{title}"
+msgstr "Verder in hoofdstuk %{n}: %{title}"
+
+#: lib/chronicles_web/live/saga_live.ex:58
+#: lib/chronicles_web/live/stories_live.ex:143
+#, elixir-autogen, elixir-format
+msgid "Saga by %{name} · %{count} chapter"
+msgid_plural "Saga by %{name} · %{count} chapters"
+msgstr[0] "Saga door %{name} · %{count} hoofdstuk"
+msgstr[1] "Saga door %{name} · %{count} hoofdstukken"
+
+#: lib/chronicles_web/live/saga_live.ex:116
+#, elixir-autogen, elixir-format
+msgid "Locked"
+msgstr "Op slot"
+
+#: lib/chronicles_web/live/saga_live.ex:114
+#, elixir-autogen, elixir-format
+msgid "Ready to play"
+msgstr "Klaar om te spelen"
+
+#: lib/chronicles_web/live/story_upload_live.ex:67
+#, elixir-autogen, elixir-format
+msgid "%{slug} is saved, with warnings: %{warnings}"
+msgstr "%{slug} is opgeslagen, met waarschuwingen: %{warnings}"
+
+#: lib/chronicles_web/live/edit_story_live.ex:380
+#, elixir-autogen, elixir-format
+msgid "Saved, with warnings:"
+msgstr "Opgeslagen, met waarschuwingen:"
+
+#: lib/chronicles_web/live/story_live.ex:187
+#, elixir-autogen, elixir-format
+msgid "This story needs input from a chapter before it, but it is in no saga, so it can't start yet."
+msgstr "Dit verhaal heeft invoer nodig van een hoofdstuk ervoor, maar het zit in geen saga, dus het kan nog niet beginnen."

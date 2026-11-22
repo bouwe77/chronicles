@@ -34,7 +34,7 @@ defmodule ChroniclesWeb.Router do
     pipe_through [:api, :require_api_user]
 
     resources "/stories", StoryController, only: [:index, :show, :update, :delete], param: "slug"
-    resources "/series", SeriesController, only: [:index, :show, :update, :delete], param: "slug"
+    resources "/sagas", SagaController, only: [:index, :show, :update, :delete], param: "slug"
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -71,6 +71,7 @@ defmodule ChroniclesWeb.Router do
       live "/stories/:slug", StoryLive
       live "/stories/:slug/edit", EditStoryLive
       live "/games/:id", GameLive
+      live "/sagas/:slug", SagaLive
     end
 
     get "/story-kit/:file", StoryKitController, :show

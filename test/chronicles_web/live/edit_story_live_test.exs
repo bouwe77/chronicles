@@ -103,4 +103,16 @@ defmodule ChroniclesWeb.EditStoryLiveTest do
 
     assert {:error, {:live_redirect, _}} = live(ctx.conn, ~p"/stories/#{story.slug}/edit")
   end
+
+  test "saving shows warnings that didn't stop the save", ctx do
+    sequel = story_fixture(ctx.scope, "the-number-returns")
+    {:ok, view, _html} = live(ctx.conn, ~p"/stories/#{sequel.slug}/edit")
+    refute has_element?(view, "#save-warnings")
+
+    story = Stories.Authoring.fragment(sequel.head_version.content, :story)
+    edit_text(view, Jason.encode!(Map.put(story, "story_title", "Returns, edited")))
+    view |> element("#save") |> render_click()
+
+    assert has_element?(view, "#save-warnings", "in no saga")
+  end
 end

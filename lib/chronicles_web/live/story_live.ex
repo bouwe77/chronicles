@@ -18,7 +18,7 @@ defmodule ChroniclesWeb.StoryLive do
      socket
      |> assign(page_title: Stories.title(story), story: story)
      |> assign(can_manage?: Stories.can_manage?(scope, story))
-     |> assign(series: Stories.series_part(story))
+     |> assign(chapter: Stories.saga_of(story))
      # Per finished game: the story it continues in, if any.
      |> assign(sequels: sequels(scope, games))
      |> stream(:games, games)}
@@ -78,7 +78,7 @@ defmodule ChroniclesWeb.StoryLive do
          put_flash(
            socket,
            :error,
-           gettext("This story is part of a series. Change or delete the series first.")
+           gettext("This story is a chapter of a saga. Change or delete the saga first.")
          )}
 
       {:error, _} ->
@@ -101,12 +101,19 @@ defmodule ChroniclesWeb.StoryLive do
         <p class="text-sm text-base-content/60">
           {gettext("by %{name}", name: @story.author.username)}
         </p>
-        <p :if={@series} id="series-part" class="text-sm text-base-content/60">
-          {gettext("Part %{n} of %{total} of %{title}",
-            n: @series.position,
-            total: length(@series.stories),
-            title: @series.series.title
-          )}
+        <p :if={@chapter} id="saga-chapter" class="text-sm text-base-content/60">
+          <.linked_title
+            id="saga-link"
+            text={
+              gettext("Chapter %{n} of %{total} of the saga %{title}",
+                n: @chapter.position,
+                total: length(@chapter.stories),
+                title: "%{title}"
+              )
+            }
+            title={@chapter.saga.title}
+            href={~p"/sagas/#{@chapter.saga.slug}"}
+          />
         </p>
       </div>
       <p class="text-base-content/80">{@story.head_version.content["description"]}</p>
@@ -121,7 +128,12 @@ defmodule ChroniclesWeb.StoryLive do
             id="make-private"
             phx-click="set_visibility"
             phx-value-visibility="private"
-            data-confirm={gettext("Make this story private? Only you will see it.")}
+            data-confirm={
+              if(@chapter,
+                do: gettext("Make the whole saga private? Only you will see its chapters."),
+                else: gettext("Make this story private? Only you will see it.")
+              )
+            }
             size="sm"
           >
             <.icon name="hero-lock-open" class="size-4" /> {gettext("Public")}
@@ -131,7 +143,12 @@ defmodule ChroniclesWeb.StoryLive do
             id="make-public"
             phx-click="set_visibility"
             phx-value-visibility="public"
-            data-confirm={gettext("Make this story public? Every user will see it.")}
+            data-confirm={
+              if(@chapter,
+                do: gettext("Make the whole saga public? Every user will see its chapters."),
+                else: gettext("Make this story public? Every user will see it.")
+              )
+            }
             size="sm"
           >
             <.icon name="hero-lock-closed" class="size-4" /> {gettext("Private")}
@@ -152,12 +169,25 @@ defmodule ChroniclesWeb.StoryLive do
 
       <%= if @story.head_version.content["input"] do %>
         <p id="needs-input" class="rounded-xl bg-base-200 p-4 text-sm">
-          <%= if previous = previous_story(@current_scope, @series) do %>
-            {gettext("This story continues %{title}. Start it from a game of that story you won.",
-              title: Stories.title(previous)
-            )}
+          <%= if previous = previous_story(@current_scope, @chapter) do %>
+            <.linked_title
+              id="previous-story"
+              text={
+                gettext("This story continues %{title}. Start it from a game of that story you won.",
+                  title: "%{title}"
+                )
+              }
+              title={Stories.title(previous)}
+              href={~p"/stories/#{previous.slug}"}
+            />
           <% else %>
-            {gettext("This story continues a story before it. Start it from a game you won.")}
+            {if(@chapter,
+              do: gettext("This story continues a story before it. Start it from a game you won."),
+              else:
+                gettext(
+                  "This story needs input from a chapter before it, but it is in no saga, so it can't start yet."
+                )
+            )}
           <% end %>
         </p>
       <% else %>
@@ -188,7 +218,10 @@ defmodule ChroniclesWeb.StoryLive do
             phx-value-id={game.id}
             size="sm"
           >
-            {gettext("Continue in %{title}", title: Stories.title(@sequels[game.id]))}
+            {gettext("Continue in chapter %{n}: %{title}",
+              n: @sequels[game.id].chapter.position,
+              title: Stories.title(@sequels[game.id])
+            )}
           </.button>
           <.button
             id={"delete-game-#{game.id}"}
@@ -201,7 +234,7 @@ defmodule ChroniclesWeb.StoryLive do
           >
             <.icon name="hero-trash" class="size-4" />
           </.button>
-          <%!-- The series chain: the game this one continues, and the games that continue it. --%>
+          <%!-- The saga chain: the game this one continues, and the games that continue it. --%>
           <p
             :if={game.from_game_id || game.sequels != []}
             class="w-full space-x-3 px-4 text-xs text-base-content/60"
@@ -229,13 +262,32 @@ defmodule ChroniclesWeb.StoryLive do
     """
   end
 
-  # The story before this one in its series, when the user may see it.
+  attr :id, :string, required: true
+  attr :text, :string, required: true, doc: "the translated sentence, with %{title} left in"
+  attr :title, :string, required: true
+  attr :href, :string, required: true
+
+  # A sentence is translated whole, then split at its title, so the title can be a link.
+  defp linked_title(assigns) do
+    [before, rest] = String.split(assigns.text, "%{title}", parts: 2)
+    assigns = assign(assigns, before: before, rest: rest)
+
+    ~H"""
+    {@before}<.link
+      id={@id}
+      navigate={@href}
+      class="font-medium underline transition hover:text-primary"
+    >{@title}</.link>{@rest}
+    """
+  end
+
+  # The story before this one in its saga, when the user may see it.
   defp previous_story(scope, %{position: position, stories: stories}) when position > 1 do
     previous = Enum.at(stories, position - 2)
     if Stories.visible?(scope, previous), do: previous
   end
 
-  defp previous_story(_scope, _series), do: nil
+  defp previous_story(_scope, _saga), do: nil
 
   defp status(game) do
     case game.state.ending do

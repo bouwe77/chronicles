@@ -26,7 +26,30 @@ defmodule ChroniclesWeb.StoriesLive do
     {:noreply,
      socket
      |> assign(tags: tags, all?: all?, all_tags: Stories.list_tags(scope, all: all?))
-     |> stream(:stories, Stories.list_stories(scope, tags: tags, all: all?), reset: true)}
+     |> stream(:stories, with_sagas(Stories.list_stories(scope, tags: tags, all: all?)),
+       reset: true
+     )}
+  end
+
+  # A saga shows as one card, where its most recent chapter would be, with the listed
+  # chapters in saga order.
+  defp with_sagas(stories) do
+    chapters =
+      stories |> Enum.filter(& &1.chapter) |> Enum.group_by(& &1.chapter.saga_id)
+
+    stories
+    |> Enum.uniq_by(&if(e = &1.chapter, do: {:saga, e.saga_id}, else: &1.id))
+    |> Enum.map(fn
+      %{chapter: nil} = story ->
+        story
+
+      %{chapter: %{saga: saga}} ->
+        %{
+          id: "saga-#{saga.id}",
+          saga: saga,
+          chapters: Enum.sort_by(chapters[saga.id], & &1.chapter.position)
+        }
+    end)
   end
 
   @impl true
@@ -91,30 +114,88 @@ defmodule ChroniclesWeb.StoriesLive do
         <li id="stories-empty" class="hidden only:block text-base-content/60">
           {gettext("No stories match.")}
         </li>
-        <li :for={{id, story} <- @streams.stories} id={id}>
-          <.link
-            navigate={~p"/stories/#{story.slug}"}
-            class="block space-y-2 rounded-2xl border border-base-300 bg-base-100 p-4 transition hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
-          >
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <span class="font-medium">{Stories.title(story)}</span>
-                <p class="text-sm text-base-content/60">
-                  {gettext("by %{name}", name: story.author.username)}
-                </p>
-              </div>
-              <.icon
-                :if={story.visibility == :private}
-                name="hero-lock-closed"
-                class="size-4 shrink-0 text-base-content/50"
-              />
-            </div>
-            <p class="text-sm text-base-content/70">{story.head_version.content["description"]}</p>
-            <.tags tags={story.head_version.content["tags"]} />
-          </.link>
+        <li :for={{id, item} <- @streams.stories} id={id}>
+          <.saga_card :if={is_map_key(item, :saga)} saga={item.saga} chapters={item.chapters} />
+          <.story_card :if={!is_map_key(item, :saga)} story={item} />
         </li>
       </ul>
     </Layouts.app>
+    """
+  end
+
+  attr :saga, :map, required: true
+  attr :chapters, :list, required: true
+
+  # The stories of a saga share their visibility, so the lock shows once, on the card.
+  defp saga_card(assigns) do
+    ~H"""
+    <div class="space-y-3 rounded-2xl border border-base-300 bg-base-100 p-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <.link
+            id={"saga-link-#{@saga.id}"}
+            navigate={~p"/sagas/#{@saga.slug}"}
+            class="font-medium transition hover:text-primary"
+          >
+            {@saga.title}
+          </.link>
+          <p class="text-sm text-base-content/60">
+            {ngettext(
+              "Saga by %{name} · %{count} chapter",
+              "Saga by %{name} · %{count} chapters",
+              length(@saga.chapters),
+              name: @saga.author.username
+            )}
+          </p>
+        </div>
+        <.icon
+          :if={hd(@chapters).visibility == :private}
+          name="hero-lock-closed"
+          class="size-4 shrink-0 text-base-content/50"
+        />
+      </div>
+      <ol class="grid gap-1.5">
+        <li :for={story <- @chapters}>
+          <.link
+            id={"saga-chapter-#{story.id}"}
+            navigate={~p"/stories/#{story.slug}"}
+            class="flex items-center gap-3 rounded-xl border border-base-300 px-3 py-2 text-sm transition hover:translate-x-0.5 hover:border-primary"
+          >
+            <span class="w-5 text-center tabular-nums text-base-content/50">
+              {story.chapter.position}
+            </span>
+            <span class="flex-1">{Stories.title(story)}</span>
+          </.link>
+        </li>
+      </ol>
+    </div>
+    """
+  end
+
+  attr :story, :map, required: true
+
+  defp story_card(assigns) do
+    ~H"""
+    <.link
+      navigate={~p"/stories/#{@story.slug}"}
+      class="block space-y-2 rounded-2xl border border-base-300 bg-base-100 p-4 transition hover:-translate-y-0.5 hover:border-primary hover:shadow-md"
+    >
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <span class="font-medium">{Stories.title(@story)}</span>
+          <p class="text-sm text-base-content/60">
+            {gettext("by %{name}", name: @story.author.username)}
+          </p>
+        </div>
+        <.icon
+          :if={@story.visibility == :private}
+          name="hero-lock-closed"
+          class="size-4 shrink-0 text-base-content/50"
+        />
+      </div>
+      <p class="text-sm text-base-content/70">{@story.head_version.content["description"]}</p>
+      <.tags tags={@story.head_version.content["tags"]} />
+    </.link>
     """
   end
 

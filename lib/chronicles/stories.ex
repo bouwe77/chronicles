@@ -8,7 +8,7 @@ defmodule Chronicles.Stories do
   alias Chronicles.Accounts.{Scope, User}
   alias Chronicles.Games.Game
   alias Chronicles.Repo
-  alias Chronicles.Stories.{Series, SeriesEntry, Story, Validator, Version}
+  alias Chronicles.Stories.{Saga, Chapter, Story, Validator, Version}
 
   @doc """
   The stories the user may play, with their head version and author. The most recent
@@ -30,7 +30,7 @@ defmodule Chronicles.Stories do
       group_by: [s.id, v.id, a.id],
       # greatest() skips the null of a story without games.
       order_by: [desc: fragment("greatest(?, max(?))", s.updated_at, g.updated_at), asc: s.slug],
-      preload: [head_version: v, author: a]
+      preload: [head_version: v, author: a, chapter: [saga: [:author, :chapters]]]
     )
     |> with_tags(opts[:tags] || [])
     |> Repo.all()
@@ -118,6 +118,29 @@ defmodule Chronicles.Stories do
   end
 
   @doc """
+  Problems a saved story causes that don't stop the save. For a chapter: the checks of
+  its saga, run again on every chapter's head content, since a changed ending or input
+  can break the link between two chapters. For a story outside a saga: input that no
+  game can give it.
+  """
+  def saga_warnings(%Story{} = story) do
+    case saga_of(story) do
+      %{saga: saga, stories: stories} ->
+        stories
+        |> Enum.map(&{&1.slug, &1.head_version.content})
+        |> Validator.saga_errors()
+        |> Enum.map(&~s(saga "#{saga.slug}": #{&1}))
+
+      nil ->
+        story = Repo.preload(story, :head_version, force: true)
+
+        if story.head_version.content["input"],
+          do: ["the story takes input but is in no saga, so no game of it can start"],
+          else: []
+    end
+  end
+
+  @doc """
   Starts a new story with `content` as its first version: like `save_story/3`, but a slug
   that is taken, by any author, is an error and nothing is replaced.
   """
@@ -159,11 +182,22 @@ defmodule Chronicles.Stories do
       else: {:error, :unauthorized}
   end
 
-  @doc "Makes a story `:public` or `:private`. Only for those who manage it."
+  @doc """
+  Makes a story `:public` or `:private`. The stories of a saga share their visibility,
+  so for a story in a saga it changes all of them. Only for those who manage every one.
+  """
   def set_visibility(%Scope{} = scope, %Story{} = story, visibility) do
-    if can_manage?(scope, story),
-      do: story |> Story.changeset(%{visibility: visibility}) |> Repo.update(),
-      else: {:error, :unauthorized}
+    stories = if chapter = saga_of(story), do: chapter.stories, else: [story]
+    ids = Enum.map(stories, & &1.id)
+
+    with true <- Enum.all?(stories, &can_manage?(scope, &1)) || {:error, :unauthorized},
+         {:ok, %{visibility: visibility}} <-
+           story
+           |> Story.changeset(%{visibility: visibility})
+           |> Ecto.Changeset.apply_action(:update) do
+      Repo.update_all(where(Story, [s], s.id in ^ids), set: [visibility: visibility])
+      {:ok, %{story | visibility: visibility}}
+    end
   end
 
   @doc """
@@ -174,8 +208,8 @@ defmodule Chronicles.Stories do
     if can_manage?(scope, story) do
       story
       |> Ecto.Changeset.change()
-      |> Ecto.Changeset.no_assoc_constraint(:series_entry,
-        message: "is part of a series; change or delete the series first"
+      |> Ecto.Changeset.no_assoc_constraint(:chapter,
+        message: "is a chapter of a saga; change or delete the saga first"
       )
       |> Repo.delete()
     else
@@ -183,33 +217,48 @@ defmodule Chronicles.Stories do
     end
   end
 
-  ## Series
+  ## Sagas
 
-  @doc "Every series, with its stories in order. Every user may read them."
-  def list_series do
-    Series |> preload([:author, entries: :story]) |> Repo.all()
+  @doc "Every saga, with its stories in order. Every user may read them."
+  def list_sagas do
+    Saga |> preload([:author, chapters: :story]) |> Repo.all()
   end
 
-  def get_series(slug),
-    do: Series |> preload([:author, entries: :story]) |> Repo.get_by(slug: slug)
+  def get_saga(slug),
+    do: Saga |> preload([:author, chapters: :story]) |> Repo.get_by(slug: slug)
 
   @doc """
-  A story's place in its series, or nil: `%{series, position, stories}`, where `stories`
-  are all the series' stories in order, with their head versions. The UI must not show
+  A saga with only the chapters whose story the user may see, in order, each with its
+  story's head version. Raises `Ecto.NoResultsError` when there is no such saga, or the
+  user may see none of its stories.
+  """
+  def get_visible_saga!(%Scope{} = scope, slug) do
+    saga =
+      Saga |> preload([:author, chapters: [story: :head_version]]) |> Repo.get_by!(slug: slug)
+
+    case Enum.filter(saga.chapters, &visible?(scope, &1.story)) do
+      [] -> raise Ecto.NoResultsError, queryable: Saga
+      chapters -> %{saga | chapters: chapters}
+    end
+  end
+
+  @doc """
+  A story's place in its saga, or nil: `%{saga, position, stories}`, where `stories`
+  are all the saga's stories in order, with their head versions. The UI must not show
   stories the user can't see, so it checks `visible?/2`.
   """
-  def series_part(%Story{id: id}) do
-    entry =
-      SeriesEntry
+  def saga_of(%Story{id: id}) do
+    chapter =
+      Chapter
       |> where(story_id: ^id)
-      |> preload(series: [entries: [story: :head_version]])
+      |> preload(saga: [chapters: [story: [:head_version, :chapter]]])
       |> Repo.one()
 
-    entry &&
+    chapter &&
       %{
-        series: entry.series,
-        position: entry.position,
-        stories: Enum.map(entry.series.entries, & &1.story)
+        saga: chapter.saga,
+        position: chapter.position,
+        stories: Enum.map(chapter.saga.chapters, & &1.story)
       }
   end
 
@@ -219,9 +268,9 @@ defmodule Chronicles.Stories do
   def visible?(%Scope{user: user}, %Story{} = story),
     do: story.visibility == :public or story.author_id == user.id
 
-  @doc "The story after this one in its series, when the user may play it, or nil."
+  @doc "The story after this one in its saga, when the user may play it, or nil."
   def next_story(%Scope{} = scope, %Story{} = story) do
-    with %{position: position, stories: stories} <- series_part(story),
+    with %{position: position, stories: stories} <- saga_of(story),
          %Story{} = next <- Enum.at(stories, position),
          true <- visible?(scope, next) do
       next
@@ -231,36 +280,37 @@ defmodule Chronicles.Stories do
   end
 
   @doc """
-  Creates or replaces a series from `%{"title" => ..., "stories" => [slug, ...]}`. Only
-  authors and admins make series; only its author or an admin changes one. Every story
-  must be one the user may see, and the series must be playable: see
-  `Chronicles.Stories.Validator.series_errors/1`. A story is in at most one series.
+  Creates or replaces a saga from `%{"title" => ..., "stories" => [slug, ...]}`. Only
+  authors and admins make sagas; only its author or an admin changes one. Every story
+  must be one the user may see, all must share their visibility, and the saga must be playable: see
+  `Chronicles.Stories.Validator.saga_errors/1`. A story is in at most one saga.
   """
-  def save_series(%Scope{user: user} = scope, slug, attrs) do
-    series = get_series(slug) || %Series{author_id: user.id, entries: []}
+  def save_saga(%Scope{user: user} = scope, slug, attrs) do
+    saga = get_saga(slug) || %Saga{author_id: user.id, chapters: []}
 
     cond do
       not can_write?(scope) ->
         {:error, :unauthorized}
 
-      series.id && not (user.role == :admin or series.author_id == user.id) ->
+      saga.id && not (user.role == :admin or saga.author_id == user.id) ->
         {:error, :unauthorized}
 
       true ->
-        do_save_series(scope, series, slug, attrs)
+        do_save_saga(scope, saga, slug, attrs)
     end
   end
 
-  defp do_save_series(scope, series, slug, attrs) do
+  defp do_save_saga(scope, saga, slug, attrs) do
     slugs = List.wrap(attrs["stories"])
     stories = Enum.map(slugs, &find_story(scope, &1))
-    changeset = Series.changeset(series, %{slug: slug, title: attrs["title"]})
+    changeset = Saga.changeset(saga, %{slug: slug, title: attrs["title"]})
 
     errors =
       case Enum.find_index(stories, &is_nil/1) do
         nil ->
-          in_other_series(series, stories) ++
-            Validator.series_errors(Enum.map(stories, &{&1.slug, &1.head_version.content}))
+          in_other_saga(saga, stories) ++
+            mixed_visibility(stories) ++
+            Validator.saga_errors(Enum.map(stories, &{&1.slug, &1.head_version.content}))
 
         i ->
           [~s(there is no story "#{Enum.at(slugs, i)}")]
@@ -274,32 +324,39 @@ defmodule Chronicles.Stories do
 
     Repo.transact(fn ->
       with {:ok, saved} <- Repo.insert_or_update(changeset) do
-        Repo.delete_all(where(SeriesEntry, series_id: ^saved.id))
+        Repo.delete_all(where(Chapter, saga_id: ^saved.id))
 
-        entries =
+        chapters =
           for {story, position} <- Enum.with_index(stories, 1),
-              do: %{series_id: saved.id, story_id: story.id, position: position}
+              do: %{saga_id: saved.id, story_id: story.id, position: position}
 
-        Repo.insert_all(SeriesEntry, entries)
-        {:ok, get_series(slug)}
+        Repo.insert_all(Chapter, chapters)
+        {:ok, get_saga(slug)}
       end
     end)
   end
 
-  # A story is in at most one series.
-  defp in_other_series(series, stories) do
+  # A story is in at most one saga.
+  defp in_other_saga(saga, stories) do
     ids = Enum.map(stories, & &1.id)
 
-    for entry <-
-          Repo.all(from e in SeriesEntry, where: e.story_id in ^ids, preload: [:story, :series]),
-        entry.series_id != series.id,
-        do: ~s("#{entry.story.slug}" is already in the series "#{entry.series.slug}")
+    for chapter <-
+          Repo.all(from c in Chapter, where: c.story_id in ^ids, preload: [:story, :saga]),
+        chapter.saga_id != saga.id,
+        do: ~s("#{chapter.story.slug}" is already in the saga "#{chapter.saga.slug}")
   end
 
-  @doc "Deletes a series. Its stories stay. Only for its author or an admin."
-  def delete_series(%Scope{user: user}, %Series{} = series) do
-    if user.role == :admin or series.author_id == user.id,
-      do: Repo.delete(series),
+  # A saga is public or private as a whole, so its stories share their visibility.
+  defp mixed_visibility(stories) do
+    if stories |> Enum.uniq_by(& &1.visibility) |> length() > 1,
+      do: ["the stories must all be public or all be private"],
+      else: []
+  end
+
+  @doc "Deletes a saga. Its stories stay. Only for its author or an admin."
+  def delete_saga(%Scope{user: user}, %Saga{} = saga) do
+    if user.role == :admin or saga.author_id == user.id,
+      do: Repo.delete(saga),
       else: {:error, :unauthorized}
   end
 

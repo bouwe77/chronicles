@@ -87,7 +87,7 @@ no id or slug field.
 | `locations`                                    | object               | Map of location-id → location                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `actions`                                      | object               | Optional; map of action key → action, the buttons a location can show; see [Actions](#actions)                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `context`                                      | object               | **Required** (may be `{}`). Story-wide world state; see [Context](#context)                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `input`                                        | object               | Optional; `{ schema }`, a JSON Schema for the input a game of this story starts from: the `output` of a finished game of the story before it in a series. A story with `input` can only start from such a game. See [Series: input and output](#series-input-and-output)                                                                                                                                                                                                                       |
+| `input`                                        | object               | Optional; `{ schema }`, a JSON Schema for the input a game of this story starts from: the `output` of a finished game of the story before it in a saga. A story with `input` can only start from such a game. See [Sagas: input and output](#sagas-input-and-output)                                                                                                                                                                                                                       |
 | `locations[id].name`                           | string               | Display name of the location. The engine writes it to the log as a heading line on every arrival (and for the starting room when a game begins). Never built into a sentence                                                                                                                                                                                                                                                                                                                   |
 | `locations[id].arrivalText`                    | string or array      | Optional, non-empty; the full arrival line written to the log when the player enters (e.g. `"Je bent in de gang."`, `"You sit down on the couch."`). An array gives one line per visit (first visit, second visit, …); the last line repeats on every later visit. See [Visit counts](#visit-counts). Omitted = the location's `description`, which is usually already the right line ("You are in the kitchen."). Set it only when the arrival should read differently from the `description` |
 | `locations[id].description`                    | string               | The default arrival line, written to the log under the name heading on every arrival. Keep it **short and factual — where the player is, nothing about how it looks.** All flavor, atmosphere, and state prose goes to the narrative **log** via `sideEffects`, so the arrival stays a terse "you are here" line. See [Where text goes](#where-text-goes-the-log-vs-the-panels)                                                                                                                |
@@ -662,7 +662,7 @@ behaviour.
 | `when`    | condition | **Required**; any [condition](#conditions) (`path`/`supply`/`isCarrying`/`at`/`turn*`/`anyOf`/`allOf`/`not`); `{ "at": "<location_id>" }` makes reaching a room a win or loss. For an always-true fallback ending, use `{ "turnAtLeast": 0 }`.                   |
 | `outcome` | string    | **Required**; `"win"` or `"loss"`. Selects the cue (a confetti burst for a win, the screen-shake + red flash for a loss) and the modal styling.                                                                                                                  |
 | `message` | string    | **Required, non-empty**; the ending's narrative line — shown in the modal and appended to the log as an `outcome` line stamped with the turn it fired.                                                                                                           |
-| `output`  | object    | Optional; what this ending hands on to the next story of a series. A string that is one placeholder (`"{/points}"`) becomes that value when the game ends. The next story accepts it when it passes that story's `input.schema`. An ending without `output` unlocks nothing. See [Series: input and output](#series-input-and-output) |
+| `output`  | object    | Optional; what this ending hands on to the next story of a saga. A string that is one placeholder (`"{/points}"`) becomes that value when the game ends. The next story accepts it when it passes that story's `input.schema`. An ending without `output` unlocks nothing. See [Sagas: input and output](#sagas-input-and-output) |
 
 ```json
 "endings": [
@@ -690,11 +690,11 @@ running dry at turn 6 of an 8-turn trek ends the story at turn 6.
 **Persistence.** The terminal state is recorded on the game (`game.ending`), so a
 finished game reloads already locked and shows the modal again, without re-deriving the outcome.
 
-## Series: input and output
+## Sagas: input and output
 
-A **series** links stories in order: a finished game of one story unlocks the next
+A **saga** links stories in order; each story in it is a **chapter**. A finished game of one story unlocks the next
 story, and the way it ended is the next game's **input**. Each story stays a normal
-story. It knows nothing about the stories before or after it; the series is the only link.
+story. It knows nothing about the stories before or after it; the saga is the only link.
 The link is two small parts that the author designs together:
 
 - **Output**: an ending's `output`, an object. It has its own shape. It does not
@@ -727,7 +727,7 @@ The link is two small parts that the author designs together:
 ```
 
 **In the game.** A game of a story with `input` starts from a finished game of the
-story before it in the series, and holds that game's output in its `context` under the
+story before it in the saga, and holds that game's output in its `context` under the
 reserved `input` key. Conditions and placeholders read it like any context value
 (`{ "path": "/input/spare", "equals": 3 }`, `{/input/spare}`). Nothing may declare or
 patch `input`: it is read-only, and the engine leaves it out of the `context.schema`
@@ -738,7 +738,7 @@ happened (`"took_lamp": true`) and the next story decides what that means in its
 world: an item with `availableWhen: { "path": "/input/took_lamp", "equals": true }`
 exists only for a player who earned it.
 
-**The series checks.** A series is saved through the API (see the `game-story` skill).
+**The saga checks.** A saga is saved through the API (see the `game-story` skill).
 The save checks the head content of each story, in order:
 
 - the first story has no `input`, so it can start;
@@ -750,8 +750,8 @@ An output value that is one placeholder is unknown until the game ends, so these
 treat it as a value the schema may accept. When the game ends, the real value must pass
 `input.schema`, or the game has no sequel.
 
-A story is in at most one series, and a story a series names can't be deleted until the
-series changes.
+A story is in at most one saga, the stories of a saga are all public or all private, and
+a story a saga names can't be deleted until the saga changes.
 
 ## The opening log
 
@@ -905,7 +905,7 @@ plays well.
 - Every `ending` has an `outcome` of `"win"`/`"loss"` and a non-empty `message`; its
   `when` references only real items (`isCarrying`) and declared supplies; and endings are
   ordered specific-before-general (the first matching one wins and shorts the rest).
-- In a series: each win ending that should unlock the next story has an `output` that
+- In a saga: each win ending that should unlock the next story has an `output` that
   story's `input.schema` accepts, and no loss ending has one. A story with `input` only
   reads `/input/...` keys its `input.schema` declares, and never declares or patches `input`.
 - Every exit and action that [can be interrupted](#scheduled-events-the-timeline) has an

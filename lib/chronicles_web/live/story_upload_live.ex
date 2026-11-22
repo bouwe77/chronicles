@@ -55,10 +55,23 @@ defmodule ChroniclesWeb.StoryUploadLive do
     # Files from before slugs moved out of the content still carry a story_id.
     case Stories.save_story(socket.assigns.current_scope, slug, Map.delete(content, "story_id")) do
       {:ok, story} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("%{slug} is saved.", slug: story.slug))
-         |> push_navigate(to: ~p"/stories/#{story.slug}")}
+        socket =
+          case Stories.saga_warnings(story) do
+            [] ->
+              put_flash(socket, :info, gettext("%{slug} is saved.", slug: story.slug))
+
+            warnings ->
+              put_flash(
+                socket,
+                :error,
+                gettext("%{slug} is saved, with warnings: %{warnings}",
+                  slug: story.slug,
+                  warnings: Enum.join(warnings, "; ")
+                )
+              )
+          end
+
+        {:noreply, push_navigate(socket, to: ~p"/stories/#{story.slug}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, errors: messages(changeset))}

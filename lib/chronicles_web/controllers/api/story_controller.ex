@@ -21,9 +21,9 @@ defmodule ChroniclesWeb.API.StoryController do
   def update(conn, %{"slug" => slug, "content" => %{} = content}) do
     scope = conn.assigns.current_scope
 
-    with {:ok, _story} <- Stories.save_story(scope, slug, content),
+    with {:ok, saved} <- Stories.save_story(scope, slug, content),
          {:ok, story} <- find(conn, slug) do
-      render(conn, :show, story: story)
+      render(conn, :show, story: story, warnings: Stories.saga_warnings(saved))
     end
   end
 

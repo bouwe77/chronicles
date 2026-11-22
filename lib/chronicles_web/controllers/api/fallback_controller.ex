@@ -6,7 +6,7 @@ defmodule ChroniclesWeb.API.FallbackController do
     errors =
       for {field, {message, _}} <- changeset.errors do
         # These messages name what they are about themselves.
-        if field in [:content, :stories, :series_entry], do: message, else: "#{field} #{message}"
+        if field in [:content, :stories, :chapter], do: message, else: "#{field} #{message}"
       end
 
     conn |> put_status(:unprocessable_entity) |> json(%{errors: errors})

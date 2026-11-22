@@ -33,7 +33,7 @@ defmodule ChroniclesWeb.EditStoryLive do
        socket
        |> assign(page_title: gettext("Edit %{title}", title: Stories.title(story)), story: story)
        |> assign(saved: story.head_version.content, find: "", rev: 0, tool_error: nil)
-       |> assign(save_errors: [])
+       |> assign(save_errors: [], save_warnings: [])
        |> put_content(story.draft || story.head_version.content)
        |> select_part(:story)}
     else
@@ -150,6 +150,7 @@ defmodule ChroniclesWeb.EditStoryLive do
         {:noreply,
          socket
          |> assign(story: story, saved: content, dirty?: false, save_errors: [])
+         |> assign(save_warnings: Stories.saga_warnings(story))
          |> put_flash(:info, gettext("Saved. New games play this version."))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -374,6 +375,14 @@ defmodule ChroniclesWeb.EditStoryLive do
               <ul :if={@save_errors != []} class="list-disc pl-5 font-mono text-xs text-error">
                 <li :for={error <- @save_errors}>{error}</li>
               </ul>
+              <div :if={@save_warnings != []} id="save-warnings" class="space-y-1 text-warning">
+                <p class="text-xs font-medium">
+                  {gettext("Saved, with warnings:")}
+                </p>
+                <ul class="list-disc pl-5 font-mono text-xs">
+                  <li :for={warning <- @save_warnings}>{warning}</li>
+                </ul>
+              </div>
             </section>
 
             <.form for={to_form(%{"find" => @find})} id="find-form" phx-change="find">

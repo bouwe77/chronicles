@@ -67,8 +67,10 @@ jq '{content: .}' "$TMPDIR/story.json" \
   answers `403`, so then pick another.
 - **The save checks first and stores nothing on an error**, so it is also your
   validate step. Answers:
-  - `200 {"data": {slug, title, tags, visibility, author, updated_at, content}}`: report
-    the slug and the title.
+  - `200 {"data": {slug, title, tags, visibility, author, updated_at, content}, "warnings": [...]}`:
+    report the slug and the title. `warnings` lists problems that didn't stop the save: a
+    chapter that breaks its saga, or `input` on a story in no saga. Report them, and fix
+    them unless the user meant it (for example, the saga gets saved next).
   - `422 {"errors": [...]}`: every problem, one line each. Fix them and save again.
   - `403`: you are a player, or the story belongs to another author.
 
@@ -97,28 +99,28 @@ curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" -X DELETE \
   http://localhost:9278/api/stories/the-front-door
 ```
 
-`204` means it is gone. Confirm with the user before you delete. A story that a series
-names answers `422`: change or delete the series first.
+`204` means it is gone. Confirm with the user before you delete. A story that a saga
+names answers `422`: change or delete the saga first.
 
-## Series
+## Sagas
 
-A series links stories in order, so that winning one unlocks the next. The stories carry
+A saga links stories in order, so that winning one unlocks the next. The stories carry
 the link themselves (an ending's `output`, the next story's `input`; see
-[Series: input and output](../../../docs/story-format.md#series-input-and-output)). The
-series only names them. Save every story first, then the series:
+[Sagas: input and output](../../../docs/story-format.md#sagas-input-and-output)). The
+saga only names them. Save every story first, then the saga:
 
 ```bash
 jq -n '{title: "The Number", stories: ["the-number", "the-number-returns"]}' \
   | curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" -X PUT \
-    http://localhost:9278/api/series/the-number -H "Content-Type: application/json" --data @-
-curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" http://localhost:9278/api/series
+    http://localhost:9278/api/sagas/the-number -H "Content-Type: application/json" --data @-
+curl -s -H "Authorization: Bearer $CHRONICLES_TOKEN" http://localhost:9278/api/sagas
 ```
 
-A `PUT` creates or replaces the series, after checking each story's head content; a
-series that can't be played answers `422` with the reasons. A story is in at most one
-series. Saving a story does not run these checks, so after you change an ending's
-`output` or an `input`, `PUT` the series again to check it. `DELETE /api/series/<slug>`
-removes a series; its stories stay. Test a sequel with `mix chronicles.playthrough` and
+A `PUT` creates or replaces the saga, after checking each story's head content; a
+saga that can't be played answers `422` with the reasons. A story is in at most one
+saga, and the stories of a saga are all public or all private. Saving a chapter runs these checks again and lists what broke in the save's `warnings`,
+but still saves; `PUT` the saga again after a fix to check it. `DELETE /api/sagas/<slug>`
+removes a saga; its stories stay. Test a sequel with `mix chronicles.playthrough` and
 an `"input"` on its paths.
 
 ## Workflow
