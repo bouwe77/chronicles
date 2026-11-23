@@ -14,9 +14,10 @@ item says why it waits. Remove an item when it is done or dropped.
   users. Production needs a way to create the first admin, such as a release task.
 - **An email provider for login links.** Production login uses magic links, which need
   a real mail service. Development uses the local mailbox.
-- **The production import.** The stories and the saga `the-number`. The import task
-  does stories; the saga can go through `PUT /api/sagas/:slug`. The first chapter's
-  title is "The Number Rises" in the source file and in dev.
+- **The production import.** The stories and the saga `the-number`. The stories go
+  through the upload page or `PUT /api/stories/:slug`, the saga through
+  `PUT /api/sagas/:slug`. The first chapter's title is "The Number Rises" in the
+  source file and in dev.
 - **The API rate limit counts per machine.** `ChroniclesWeb.RateLimit` keeps its counts
   in memory. With more than one Fly machine, each has its own count; then it needs a
   shared store (Postgres, or Hammer with Redis). Set `RATE_LIMIT` on Fly (default 100).
@@ -34,6 +35,12 @@ item says why it waits. Remove an item when it is done or dropped.
 
 ## Writing stories
 
+- **Markdown in log text.** Planned, not built. See `plans/markdown-log.md`.
+- **Markdown outside the log.** `descriptionWhenCarried` and the story overview stay
+  plain text (decision 2 of the Markdown plan). Add when a story needs structure there.
+- **Links in log text.** Rejected on save for now: they lead players out of the game.
+  Add (http/https only, new tab) when a story, like the course, really needs one.
+- **A Markdown preview in the story editor.** Authors see the result only by playing.
 - **More cues.** Effects like `flash`, `blackout`, `heartbeat`, weather and sound. Ideas
   only; no story asked for them yet. See `plans/more-cues.md`.
 - **The editor keeps one draft per story, not per tab.** Two tabs on the same story
@@ -60,6 +67,9 @@ item says why it waits. Remove an item when it is done or dropped.
   the validator's errors go back to it until the story is valid. Waits until the
   editor and upload are not enough. Open: the user's own API key or a server key,
   which providers, a new story only or also changes, and save at once or show first.
+- **The model course as a saga.** `the-model-course` could be one chapter per part, so
+  it shows a saga in practice. Waits because a chapter only opens after the one before
+  it is won, so nobody could skip to a later part.
 
 ## Accounts and admin
 
