@@ -50,8 +50,7 @@ Browser  ──WebSocket──►  GameLive (one process per open tab)
 9. **Login.** `phx.gen.auth` with magic links only (no passwords) and no sign-up: an
    admin invites users, whose invite link works for 2 days. Production needs an email
    provider; development uses the local mailbox.
-10. **Import.** `mix chronicles.import_stories` loads story JSON files for a user.
-11. **Tests.** ExUnit for the engine and the app. The Playwright suite in `e2e/` finds
+10. **Tests.** ExUnit for the engine and the app. The Playwright suite in `e2e/` finds
     things by role and text only, so it is the acceptance test.
 
 ## Steps
