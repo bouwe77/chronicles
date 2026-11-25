@@ -1,6 +1,6 @@
 # Exit ids
 
-Status: designed (2026-11-26), not built.
+Status: built (2026-11-26).
 
 ## What it is
 

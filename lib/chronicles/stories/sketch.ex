@@ -69,6 +69,9 @@ defmodule Chronicles.Stories.Sketch do
     |> String.trim("-")
   end
 
+  @doc ~S'"Take the turbolift" becomes "take_the_turbolift": an exit id from its name.'
+  def id(name), do: name |> slug() |> String.replace("-", "_")
+
   @doc "`front_door` becomes `Front door`."
   def name(id), do: id |> String.replace("_", " ") |> String.capitalize()
 
@@ -213,7 +216,7 @@ defmodule Chronicles.Stories.Sketch do
         fail(acc, line, ~s(action "#{id}" is already defined))
 
       true ->
-        action = %{"description" => label || name(id), "sideEffects" => log(text)}
+        action = %{"name" => label || name(id), "sideEffects" => log(text)}
 
         locations =
           update_in(acc.locations, [acc.current, Access.key("actions", [])], &(&1 ++ [id]))
@@ -268,17 +271,18 @@ defmodule Chronicles.Stories.Sketch do
     end)
   end
 
-  defp add_exit(acc, from, to, label, line, text) do
+  defp add_exit(acc, from, to, name, line, text) do
     exits = acc.locations[from]["exits"]
+    id = id(name)
 
-    if Map.has_key?(exits, label) do
-      fail(acc, line, ~s("#{from}" already has an exit labeled "#{label}"))
+    if Map.has_key?(exits, id) do
+      fail(acc, line, ~s("#{from}" already has an exit "#{id}"))
     else
       exit =
-        %{"to" => to, "order" => map_size(exits) + 1}
+        %{"name" => name, "to" => to, "order" => map_size(exits) + 1}
         |> put_text("sideEffects", text && log(text))
 
-      put_in(acc.locations[from]["exits"][label], exit)
+      put_in(acc.locations[from]["exits"][id], exit)
     end
   end
 

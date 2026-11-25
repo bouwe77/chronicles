@@ -15,7 +15,7 @@ defmodule Chronicles.EngineTest do
           "a" => %{
             "name" => "A",
             "description" => "You are in A.",
-            "exits" => %{"east" => %{"to" => "b"}},
+            "exits" => %{"east" => %{"name" => "east", "to" => "b"}},
             "actions" => ["think"]
           },
           "b" => %{
@@ -24,10 +24,10 @@ defmodule Chronicles.EngineTest do
             "sideEffects" => [
               %{"type" => "log", "text" => "B at turn 2.", "when" => %{"turnEquals" => 2}}
             ],
-            "exits" => %{"west" => %{"to" => "a"}}
+            "exits" => %{"west" => %{"name" => "west", "to" => "a"}}
           }
         },
-        "actions" => %{"think" => %{"description" => "Think", "timeCost" => 3}}
+        "actions" => %{"think" => %{"name" => "Think", "timeCost" => 3}}
       },
       extra
     )
@@ -109,6 +109,7 @@ defmodule Chronicles.EngineTest do
         ]
       })
       |> put_in(["locations", "a", "exits", "east"], %{
+        "name" => "east",
         "to" => "b",
         "enabledWhen" => %{"path" => "/bridge", "equals" => "down"},
         "interruptedText" => "The bridge is {/bridge}."

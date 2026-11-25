@@ -9,6 +9,8 @@ defmodule Chronicles.Stories.Authoring do
   `:all`. Helpers that can fail return `{:ok, content}` or `{:error, message}`.
   """
 
+  alias Chronicles.Stories.Sketch
+
   # The top-level fields that are parts of their own, so `:story` leaves them out.
   @own_parts ~w(locations actions context items supplies timeline rules endings)
   @lists [:timeline, :rules, :endings]
@@ -83,7 +85,7 @@ defmodule Chronicles.Stories.Authoring do
 
   @doc """
   Removes a location and every exit that leads to it. Returns the content and the
-  removed exits, as `"from → label"`. The starting location can't be removed.
+  removed exits, as `"from → exit id"`. The starting location can't be removed.
   """
   def remove_location(content, id) do
     cond do
@@ -98,17 +100,17 @@ defmodule Chronicles.Stories.Authoring do
 
         removed =
           for {from, loc} <- Enum.sort_by(locations, &elem(&1, 0)),
-              {label, exit} <- Enum.sort_by(loc["exits"] || %{}, &elem(&1, 0)),
+              {exit_id, exit} <- Enum.sort_by(loc["exits"] || %{}, &elem(&1, 0)),
               exit["to"] == id,
-              do: {from, label}
+              do: {from, exit_id}
 
         locations =
-          Enum.reduce(removed, locations, fn {from, label}, locations ->
-            update_in(locations, [from, "exits"], &Map.delete(&1, label))
+          Enum.reduce(removed, locations, fn {from, exit_id}, locations ->
+            update_in(locations, [from, "exits"], &Map.delete(&1, exit_id))
           end)
 
         {:ok, %{content | "locations" => locations},
-         Enum.map(removed, fn {from, label} -> "#{from} → #{label}" end)}
+         Enum.map(removed, fn {from, exit_id} -> "#{from} → #{exit_id}" end)}
     end
   end
 
@@ -159,18 +161,21 @@ defmodule Chronicles.Stories.Authoring do
   defp rename_by_location(map, _from, _to), do: map
 
   @doc """
-  Adds an exit `label` from `from` to `to`, and an exit `back_label` the other way when
-  given. A label the location already has is refused, and then nothing changes.
+  Adds an exit named `name` from `from` to `to`, and an exit named `back_name` the other
+  way when given. Each exit's id comes from its name (`Sketch.id/1`). An id the location
+  already has is refused, and then nothing changes.
   """
-  def connect(content, from, to, label, back_label \\ nil) do
-    with {:ok, content} <- add_exit(content, from, to, label) do
-      if back_label in [nil, ""],
+  def connect(content, from, to, name, back_name \\ nil) do
+    with {:ok, content} <- add_exit(content, from, to, name) do
+      if back_name in [nil, ""],
         do: {:ok, content},
-        else: add_exit(content, to, from, back_label)
+        else: add_exit(content, to, from, back_name)
     end
   end
 
-  defp add_exit(content, from, to, label) do
+  defp add_exit(content, from, to, name) do
+    id = Sketch.id(name)
+
     cond do
       not is_map_key(content["locations"], from) ->
         {:error, ~s(there is no location "#{from}")}
@@ -178,14 +183,15 @@ defmodule Chronicles.Stories.Authoring do
       not is_map_key(content["locations"], to) ->
         {:error, ~s(there is no location "#{to}")}
 
-      String.trim(label) == "" ->
-        {:error, "an exit label can't be empty"}
+      id == "" ->
+        {:error, "an exit needs a name with letters or digits"}
 
-      is_map_key(content["locations"][from]["exits"], label) ->
-        {:error, ~s("#{from}" already has an exit "#{label}")}
+      is_map_key(content["locations"][from]["exits"], id) ->
+        {:error, ~s("#{from}" already has an exit "#{id}")}
 
       true ->
-        {:ok, put_in(content, ["locations", from, "exits", label], %{"to" => to})}
+        exit = %{"name" => String.trim(name), "to" => to}
+        {:ok, put_in(content, ["locations", from, "exits", id], exit)}
     end
   end
 
@@ -214,7 +220,7 @@ defmodule Chronicles.Stories.Authoring do
     do: content["locations"][id] || %{"name" => id, "description" => "", "exits" => %{}}
 
   def fragment(content, {:action, id}),
-    do: content["actions"][id] || %{"description" => "", "effects" => []}
+    do: content["actions"][id] || %{"name" => Sketch.name(id), "effects" => []}
 
   def fragment(content, :context), do: content["context"]
   def fragment(content, :all), do: content

@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Chronicles.Playthrough do
 
       {"shortest win": {"steps": ["go:hall", "take:key", "open_door"], "expect": "win"}}
 
-  A step is `go:<exit label or room id>`, `take:<item id>`, `drop:<item id>`, `wait`, or
+  A step is `go:<exit id, exit name or room id>`, `take:<item id>`, `drop:<item id>`, `wait`, or
   an action key. `expect` is `win`, `loss`, `none` (no ending yet) or `broke` (a step is
   not possible). A path may give `input`, for a story that takes input. The task fails
   when any path doesn't end as expected.
@@ -84,15 +84,19 @@ defmodule Mix.Tasks.Chronicles.Playthrough do
   defp command(_content, _state, "take:" <> id), do: {:take, id}
   defp command(_content, _state, "drop:" <> id), do: {:drop, id}
 
-  # An exit by its label, or else by the room it leads to.
+  # An exit by its id, else by its name, else by the room it leads to.
   defp command(content, state, "go:" <> target) do
     exits = content["locations"][state.location]["exits"]
 
     if Map.has_key?(exits, target) do
       {:go, target}
     else
-      case Enum.find(exits, fn {_label, exit} -> exit["to"] == target end) do
-        {label, _exit} -> {:go, label}
+      found =
+        Enum.find(exits, fn {_id, exit} -> exit["name"] == target end) ||
+          Enum.find(exits, fn {_id, exit} -> exit["to"] == target end)
+
+      case found do
+        {id, _exit} -> {:go, id}
         nil -> {:go, target}
       end
     end

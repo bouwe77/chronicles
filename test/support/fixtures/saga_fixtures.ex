@@ -22,13 +22,13 @@ defmodule Chronicles.SagaFixtures do
   def finished_number_game(scope, story, outcome \\ :win) do
     exits =
       if outcome == :win,
-        do: ["add 2", "add 3", "add 2"],
-        else: ["add 3", "add 2", "add 3", "add 2", "add 3", "add 2"]
+        do: ["add_2", "add_3", "add_2"],
+        else: ["add_3", "add_2", "add_3", "add_2", "add_3", "add_2"]
 
     {:ok, game, _} = Games.start_game(scope, story)
 
-    Enum.reduce(exits, game, fn label, game ->
-      {:ok, game, _} = Games.play(game, {:go, label})
+    Enum.reduce(exits, game, fn id, game ->
+      {:ok, game, _} = Games.play(game, {:go, id})
       game
     end)
   end

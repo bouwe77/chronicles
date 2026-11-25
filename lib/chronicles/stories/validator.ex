@@ -203,8 +203,8 @@ defmodule Chronicles.Stories.Validator do
     where = ~s(location "#{loc_id}")
 
     [
-      for {label, exit} <- loc["exits"] do
-        exit_where = ~s(#{where} exit "#{label}")
+      for {exit_id, exit} <- loc["exits"] do
+        exit_where = ~s(#{where} exit "#{exit_id}")
 
         [
           if(exit["to"] in ids.locations,
@@ -523,10 +523,10 @@ defmodule Chronicles.Stories.Validator do
             text -> {"#{at}/arrivalText", text}
           end,
           log_effects(loc["sideEffects"], "#{at}/sideEffects"),
-          for {label, exit} <- loc["exits"] do
+          for {exit_id, exit} <- loc["exits"] do
             [
-              {"#{at}/exits/#{label}/interruptedText", exit["interruptedText"]},
-              log_effects(exit["sideEffects"], "#{at}/exits/#{label}/sideEffects")
+              {"#{at}/exits/#{exit_id}/interruptedText", exit["interruptedText"]},
+              log_effects(exit["sideEffects"], "#{at}/exits/#{exit_id}/sideEffects")
             ]
           end,
           for(

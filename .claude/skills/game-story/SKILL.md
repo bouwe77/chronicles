@@ -92,7 +92,7 @@ mix chronicles.playthrough "$TMPDIR/story.json" "$TMPDIR/paths.json"
 
 `paths.json` maps a name to steps and the expected result:
 `{"shortest win": {"steps": ["go:hall", "take:key", "open_door"], "expect": "win"}}`. A
-step is `go:<exit label or room id>`, `take:<item id>`, `drop:<item id>`, `wait` or an
+step is `go:<exit id, exit name or room id>`, `take:<item id>`, `drop:<item id>`, `wait` or an
 action key; `expect` is `win`, `loss`, `none` or `broke`. Add `"input": {...}` for a story
 that takes input. The task checks the content like a save does, prints one line per path,
 and fails when a path ends otherwise.

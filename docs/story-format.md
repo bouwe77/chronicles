@@ -42,7 +42,7 @@ no id or slug field.
       "name": "Outside",
       "description": "You stand on the garden path. The front door is shut.",
       "exits": {
-        "front door": { "to": "house", "order": 1, "enabledWhen": { "isCarrying": "house_key" } }
+        "front_door": { "name": "front door", "to": "house", "order": 1, "enabledWhen": { "isCarrying": "house_key" } }
       },
       "items": [
         {
@@ -64,7 +64,7 @@ no id or slug field.
           "when": { "isCarrying": "house_key" }
         }
       ],
-      "exits": { "front door": { "to": "outside", "order": 1 } }
+      "exits": { "front_door": { "name": "front door", "to": "outside", "order": 1 } }
     }
   },
   "context": {}
@@ -92,14 +92,15 @@ no id or slug field.
 | `locations[id].arrivalText`                    | string or array      | Optional, non-empty; the full arrival line written to the log when the player enters (e.g. `"Je bent in de gang."`, `"You sit down on the couch."`). An array gives one line per visit (first visit, second visit, …); the last line repeats on every later visit. See [Visit counts](#visit-counts). Omitted = the location's `description`, which is usually already the right line ("You are in the kitchen."). Set it only when the arrival should read differently from the `description` |
 | `locations[id].description`                    | string               | The default arrival line, written to the log under the name heading on every arrival. Keep it **short and factual — where the player is, nothing about how it looks.** All flavor, atmosphere, and state prose goes to the narrative **log** via `sideEffects`, so the arrival stays a terse "you are here" line. See [Where text goes](#where-text-goes-the-log-vs-the-panels)                                                                                                                |
 | `locations[id].sideEffects`                    | array                | Optional; effects fired when the player **enters** this location (by any exit). This is where a room's descriptive prose goes: a `log` effect (optionally `when`-gated) writes a line to the narrative log on every entry. Each `{ type, when?, text? }`; see [Side effects](#side-effects)                                                                                                                                                                                                    |
-| `locations[id].exits`                          | object               | Map of exit label → exit (see below)                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `locations[id].exits[label].to`                | string               | Target location-id                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `locations[id].exits[label].order`             | number               | Optional; display sort order, ascending (default `0`)                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `locations[id].exits[label].timeCost`          | integer (`0`–`1000`) | Optional (default `1`); the turn cost of taking this exit. `0` = free, `n` = advance the clock by `n`. See [Time & turns](#time--turns)                                                                                                                                                                                                                                                                                                                                                        |
-| `locations[id].exits[label].visibleWhen`       | condition            | Optional; exit is hidden unless it passes. See [Conditions](#conditions)                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `locations[id].exits[label].enabledWhen`       | condition            | Optional; exit renders disabled (dimmed, non-clickable) unless it passes                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `locations[id].exits[label].interruptedText`   | string               | Required when the exit [can be interrupted](#scheduled-events-the-timeline), else optional; non-empty. The log line when the world closes this exit while the player is taking it (e.g. `"The bridge swings up under your feet; you scramble back."`). Supports [placeholders](#text-placeholders)                                                                                                                                                                                             |
-| `locations[id].exits[label].sideEffects`       | array                | Optional; cosmetic effects fired when **this exit** is taken. Each `{ type, when? }`; see [Side effects](#side-effects)                                                                                                                                                                                                                                                                                                                                                                        |
+| `locations[id].exits`                          | object               | Map of exit id → exit (see below). Ids are snake_case, like `front_door`                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `locations[id].exits[id].name`                 | string               | Required; the button text, and the `> ...` log line when the player takes the exit. Write it as a command or a place (`north`, `Take the turbolift`). Changing it does not change the exit                                                                                                                                                                                                                                                                                                               |
+| `locations[id].exits[id].to`                   | string               | Target location-id                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `locations[id].exits[id].order`                | number               | Optional; display sort order, ascending (default `0`)                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `locations[id].exits[id].timeCost`             | integer (`0`–`1000`) | Optional (default `1`); the turn cost of taking this exit. `0` = free, `n` = advance the clock by `n`. See [Time & turns](#time--turns)                                                                                                                                                                                                                                                                                                                                                        |
+| `locations[id].exits[id].visibleWhen`          | condition            | Optional; exit is hidden unless it passes. See [Conditions](#conditions)                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `locations[id].exits[id].enabledWhen`          | condition            | Optional; exit renders disabled (dimmed, non-clickable) unless it passes                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `locations[id].exits[id].interruptedText`      | string               | Required when the exit [can be interrupted](#scheduled-events-the-timeline), else optional; non-empty. The log line when the world closes this exit while the player is taking it (e.g. `"The bridge swings up under your feet; you scramble back."`). Supports [placeholders](#text-placeholders)                                                                                                                                                                                             |
+| `locations[id].exits[id].sideEffects`          | array                | Optional; cosmetic effects fired when **this exit** is taken. Each `{ type, when? }`; see [Side effects](#side-effects)                                                                                                                                                                                                                                                                                                                                                                        |
 | `locations[id].actions`                        | array                | Optional; list of action keys (strings) from `actions` shown in this room                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `locations[id].items`                          | array                | Optional; objects the player can take                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `locations[id].items[].id`                     | string               | Stable item id (identity for take / drop, and `isCarrying` checks)                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -230,7 +231,7 @@ item, and every `log` effect must have non-empty `text`.
 
 The narrative log is the game's running scrollback, shown to the left of the room. The
 engine writes to it automatically — a `command` line each time the player takes an exit
-(`> <label>` — the exit label as-is, so write labels as commands), fires an action (`> <label>`), or takes/drops an item
+(`> <name>` — the exit's `name` as-is, so write names as commands), fires an action (`> <name>`), or takes/drops an item
 (`> take <item>` / `> drop <item>`), and an `outcome` line for the room transition (the
 anchor line above). Taking and dropping are free (they don't tick the turn counter), but
 they're still recorded. A `log` side-effect adds your own `outcome` line on
@@ -279,7 +280,7 @@ Rule of thumb: keep the `description` to the bare "where you are" and move the r
 
 ```json
 "fiddle_keypad": {
-  "description": "Start punching in random numbers",
+  "name": "Start punching in random numbers",
   "sideEffects": [{ "type": "log", "text": "The keypad buzzes red. Nothing happens." }]
 }
 ```
@@ -324,7 +325,7 @@ and ending `message`s (also in the ending dialog).
 - **Rejected on save:** links (`[text](url)` and `<https://…>`), images and raw HTML,
   for example `/locations/cellar/sideEffects/0/text: links are not supported in log text`.
 
-Not Markdown: location `name`s, exit and action labels, `descriptionWhenCarried` (the
+Not Markdown: the `name` of locations, exits and actions, `descriptionWhenCarried` (the
 Carrying panel) and the story's overview `description`.
 
 ## Context
@@ -400,12 +401,12 @@ an action whose result would break the schema.
 },
 "actions": {
   "buy_lantern": {
-    "description": "Buy the brass lantern (3 coins)",
+    "name": "Buy the brass lantern (3 coins)",
     "enabledWhen": { "path": "/coins", "atLeast": 3 },
     "effects": [{ "op": "inc", "path": "/coins", "value": -3 }]
   },
   "do_odd_job": {
-    "description": "Haul crates for the dockmaster (+5 coins)",
+    "name": "Haul crates for the dockmaster (+5 coins)",
     "effects": [{ "op": "inc", "path": "/coins", "value": 5 }]
   }
 }
@@ -426,7 +427,7 @@ the clock:
 
 | Field             | Type                 | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ----------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `description`     | string               | Button label                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `name`            | string               | Required; the button label, and the `> ...` log line when the player fires it                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `order`           | number               | Optional display sort order (default `0`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `timeCost`        | integer (`0`–`1000`) | Optional (default `1`); the turn cost of firing this action. `0` = free, `n` = advance the clock by `n` (e.g. a `sleep` action with `"timeCost": 8`). See [Time & turns](#time--turns)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `visibleWhen`     | condition            | Optional; hide the button unless it passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -437,7 +438,7 @@ the clock:
 ```json
 "actions": {
   "unlock": {
-    "description": "Unlock the door",
+    "name": "Unlock the door",
     "enabledWhen": { "isCarrying": "house_key" },
     "effects": [{ "op": "replace", "path": "/door/locked", "value": false }]
   }
@@ -466,7 +467,7 @@ so the world can hand over or take away an item too.
 
 ```json
 "turnstile": {
-  "description": "Feed the ticket into the turnstile",
+  "name": "Feed the ticket into the turnstile",
   "enabledWhen": { "isCarrying": "ticket" },
   "effects": [
     { "consume": "ticket" },
@@ -475,7 +476,7 @@ so the world can hand over or take away an item too.
   "sideEffects": [{ "type": "log", "text": "The turnstile swallows your ticket and clicks open." }]
 },
 "ask_smith": {
-  "description": "Ask the smith for a blade",
+  "name": "Ask the smith for a blade",
   "enabledWhen": { "supply": "credits", "atLeast": 10 },
   "effects": [{ "supply": "credits", "by": -10 }, { "give": "sword" }],
   "sideEffects": [{ "type": "log", "text": "The smith hands you a sword, still warm." }]
@@ -519,11 +520,11 @@ condition. A spend that would breach `[min, max]` rejects the whole action, so t
 },
 "actions": {
   "haul_keg": {
-    "description": "Haul a keg for the barkeep (+8 credits)",
+    "name": "Haul a keg for the barkeep (+8 credits)",
     "effects": [{ "supply": "credits", "by": 8 }]
   },
   "buy_drink": {
-    "description": "Buy a drink (5 credits)",
+    "name": "Buy a drink (5 credits)",
     "enabledWhen": { "supply": "credits", "atLeast": 5 },
     "effects": [{ "supply": "credits", "by": -5 }]
   }
@@ -565,7 +566,7 @@ the next entry, use a [`timeline`](#scheduled-events-the-timeline) event `messag
 
 ```json
 "exits": {
-  "vault": { "to": "vault", "enabledWhen": { "turnAtLeast": 10 } }
+  "vault": { "name": "vault", "to": "vault", "enabledWhen": { "turnAtLeast": 10 } }
 },
 "sideEffects": [
   { "type": "log", "text": "Dawn breaks — light spills through the window.", "when": { "turnAtLeast": 8 } }
@@ -858,7 +859,7 @@ plays well.
 3. **Prefer two-way exits.** If `room_1` has `east → { to: room_2 }`, `room_2`
    usually wants `west → { to: room_1 }` so the player can backtrack. Intentional
    one-way drops (trapdoors, transporters) are fine — just deliberate.
-4. **Exit labels are the player's vocabulary.** Use directions (`north`, `east`)
+4. **Exit names are the player's vocabulary.** Use directions (`north`, `east`)
    for spatial maps, or named portals (`Turbolift`, `Captain's Quarters`) for
    evocative ones. Stay consistent within a story.
 5. **Keep `description` a short factual "where you are."** One line, no atmosphere or

@@ -40,7 +40,7 @@ defmodule ChroniclesWeb.GameLive do
   end
 
   @impl true
-  def handle_event("go", %{"label" => label}, socket), do: play(socket, {:go, label})
+  def handle_event("go", %{"exit" => id}, socket), do: play(socket, {:go, id})
   def handle_event("act", %{"id" => id}, socket), do: play(socket, {:act, id})
   def handle_event("wait", _params, socket), do: play(socket, {:act, :wait})
   def handle_event("take", %{"id" => id}, socket), do: play(socket, {:take, id})
@@ -275,7 +275,7 @@ defmodule ChroniclesWeb.GameLive do
                   :for={{exit, i} <- Enum.with_index(@view.exits)}
                   id={"exit-#{i}"}
                   phx-click="go"
-                  phx-value-label={exit.label}
+                  phx-value-exit={exit.id}
                   disabled={exit.disabled?}
                   class={exit.previous? && "border-dashed"}
                 >

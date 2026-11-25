@@ -102,11 +102,11 @@ defmodule ChroniclesWeb.EditStoryLive do
     )
   end
 
-  def handle_event("connect", %{"to" => to, "label" => label, "back" => back}, socket) do
+  def handle_event("connect", %{"to" => to, "name" => name, "back" => back}, socket) do
     {:location, from} = part = socket.assigns.part
 
     result =
-      Authoring.connect(socket.assigns.content, from, to, String.trim(label), String.trim(back))
+      Authoring.connect(socket.assigns.content, from, to, String.trim(name), String.trim(back))
 
     apply_tool(socket, result, part)
   end
@@ -533,7 +533,7 @@ defmodule ChroniclesWeb.EditStoryLive do
         class="flex flex-wrap items-end gap-1"
       >
         <.input type="select" name="to" value="" options={@others} label={gettext("Connect to")} />
-        <.input name="label" value="" label={gettext("Exit label")} />
+        <.input name="name" value="" label={gettext("Exit name")} />
         <.input name="back" value="" label={gettext("Way back (optional)")} />
         <.button size="sm" class="mb-2">{gettext("Connect")}</.button>
       </.form>

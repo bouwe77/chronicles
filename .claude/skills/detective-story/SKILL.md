@@ -151,7 +151,7 @@ with all proof in hand (`"loss"`). Then run, from the repo root:
 mix chronicles.playthrough story.json paths.json
 ```
 
-A step is `go:<exit label or room id>`, `take:<item id>`, `drop:<item id>`,
+A step is `go:<exit id, exit name or room id>`, `take:<item id>`, `drop:<item id>`,
 `wait` or an action key. The task checks the content like a save, fails when a
 path ends wrong, and names the step and what was available when a path breaks. Fix the JSON until every line is `ok`.
 

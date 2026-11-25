@@ -83,9 +83,9 @@ item says why it waits. Remove an item when it is done or dropped.
   the validator's errors go back to it until the story is valid. Waits until the
   editor and upload are not enough. Open: the user's own API key or a server key,
   which providers, a new story only or also changes, and save at once or show first.
-- **Exit ids.** The exit key becomes an id with a required `name`, and actions move from
-  `description` to `name`. Designed, not built. See `plans/exit-ids.md`. Endings have no
-  id either; add one when a feature names an ending.
+- **Ending ids.** Endings are a list without ids. An id would help features that name an
+  ending ("endings found: 2 of 5", a saga that branches on the ending reached). Add one
+  when such a feature comes.
 - **The model course as a saga.** `the-model-course` could be one chapter per part, so
   it shows a saga in practice. Waits because a chapter only opens after the one before
   it is won, so nobody could skip to a later part.

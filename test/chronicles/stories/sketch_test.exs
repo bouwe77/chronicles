@@ -6,7 +6,7 @@ defmodule Chronicles.Stories.SketchTest do
   defp content(title \\ "The Old House", text \\ Sketch.example()),
     do: Sketch.content(title, Sketch.parse(text))
 
-  defp exits(location), do: Map.new(location["exits"], fn {label, e} -> {label, e["to"]} end)
+  defp exits(location), do: Map.new(location["exits"], fn {_id, e} -> {e["name"], e["to"]} end)
 
   defp fails(text, error), do: assert(Sketch.parse(text).errors == [error])
 
@@ -20,8 +20,9 @@ defmodule Chronicles.Stories.SketchTest do
     assert content["starting_location"] == "front_door"
   end
 
-  test "a slug comes from the title" do
+  test "a slug comes from the title, an exit id from its name" do
     assert Sketch.slug(" The Old Hoüse! ") == "the-old-house"
+    assert Sketch.id("Take the Turbolift!") == "take_the_turbolift"
   end
 
   test "every exit gets a way back, unless it is one-way, and exits keep their order" do
@@ -41,7 +42,7 @@ defmodule Chronicles.Stories.SketchTest do
            }
 
     hall = locations["hall"]["exits"]
-    assert Enum.map(["Kitchen", "Bathroom", "Front door"], &hall[&1]["order"]) == [1, 2, 3]
+    assert Enum.map(["kitchen", "bathroom", "front_door"], &hall[&1]["order"]) == [1, 2, 3]
   end
 
   test "names, descriptions, items, actions and log lines" do
@@ -60,20 +61,20 @@ defmodule Chronicles.Stories.SketchTest do
              }
            ]
 
-    assert locations["front_door"]["exits"]["Go inside"]["sideEffects"] ==
+    assert locations["front_door"]["exits"]["go_inside"]["sideEffects"] ==
              [%{"type" => "log", "text" => "The door creaks open."}]
 
-    refute Map.has_key?(locations["hall"]["exits"]["Front door"], "sideEffects")
+    refute Map.has_key?(locations["hall"]["exits"]["front_door"], "sideEffects")
     assert locations["hall"]["actions"] == ["ring_bell"]
 
     assert content["actions"] == %{
              "ring_bell" => %{
-               "description" => "Ring the bell",
+               "name" => "Ring the bell",
                "sideEffects" => [%{"type" => "log", "text" => "A bell rings somewhere upstairs."}]
              }
            }
 
-    assert Sketch.parse(~s(- a\n  - action: look -> "Dust."\n)).actions["look"]["description"] ==
+    assert Sketch.parse(~s(- a\n  - action: look -> "Dust."\n)).actions["look"]["name"] ==
              "Look"
   end
 
@@ -131,7 +132,7 @@ defmodule Chronicles.Stories.SketchTest do
 
     fails(
       ~s(- a\n  - exit: b "Go"\n  - exit: c "Go"\n- b\n- c\n),
-      ~s(line 3: "a" already has an exit labeled "Go")
+      ~s(line 3: "a" already has an exit "go")
     )
   end
 

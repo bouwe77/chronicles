@@ -70,7 +70,12 @@ defmodule ChroniclesWeb.EditStoryLiveTest do
     assert has_element?(view, "#json-error")
 
     select(view, "location:zero")
-    edit_text(view, ~s({"name": "Zero", "description": "", "exits": {"on": {"to": "nowhere"}}}))
+
+    edit_text(
+      view,
+      ~s({"name": "Zero", "description": "", "exits": {"on": {"name": "on", "to": "nowhere"}}})
+    )
+
     assert has_element?(view, "#problems", ~s(points to unknown location "nowhere"))
     assert has_element?(view, "#save[disabled]")
   end

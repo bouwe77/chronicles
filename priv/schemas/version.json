@@ -579,8 +579,9 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
-          "description": {
-            "type": "string"
+          "name": {
+            "type": "string",
+            "minLength": 1
           },
           "order": {
             "type": "number"
@@ -614,6 +615,9 @@
             }
           }
         },
+        "required": [
+          "name"
+        ],
         "additionalProperties": false
       }
     },
@@ -690,6 +694,10 @@
             "additionalProperties": {
               "type": "object",
               "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
                 "to": {
                   "type": "string"
                 },
@@ -720,6 +728,7 @@
                 }
               },
               "required": [
+                "name",
                 "to"
               ],
               "additionalProperties": false

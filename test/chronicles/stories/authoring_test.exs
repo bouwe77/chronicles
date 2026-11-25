@@ -11,7 +11,8 @@ defmodule Chronicles.Stories.AuthoringTest do
         "name" => "Hall",
         "description" => "You are in the hall.",
         "exits" => %{
-          "north door" => %{
+          "north_door" => %{
+            "name" => "north door",
             "to" => "yard",
             "enabledWhen" => %{"isCarrying" => "key"},
             "interruptedText" => "The door sticks."
@@ -23,17 +24,17 @@ defmodule Chronicles.Stories.AuthoringTest do
       "yard" => %{
         "name" => "Yard",
         "description" => "You are in the yard.",
-        "exits" => %{"south" => %{"to" => "hall"}}
+        "exits" => %{"south" => %{"name" => "south", "to" => "hall"}}
       },
       "shed" => %{
         "name" => "Shed",
         "description" => "You are in the shed.",
-        "exits" => %{"out" => %{"to" => "yard"}}
+        "exits" => %{"out" => %{"name" => "out", "to" => "yard"}}
       }
     },
     "actions" => %{
       "pull" => %{
-        "description" => "Pull",
+        "name" => "Pull",
         "effects" => [%{"op" => "replace", "path" => "/lever/down", "value" => true}]
       }
     },
@@ -51,7 +52,7 @@ defmodule Chronicles.Stories.AuthoringTest do
   end
 
   test "find uses: an item id, a context path with a nested use, an action key" do
-    assert "/locations/hall/exits/north door/enabledWhen/isCarrying" in Authoring.uses(
+    assert "/locations/hall/exits/north_door/enabledWhen/isCarrying" in Authoring.uses(
              @story,
              "key"
            )
@@ -64,7 +65,7 @@ defmodule Chronicles.Stories.AuthoringTest do
     assert {:ok, no_shed, []} = Authoring.remove_location(@story, "shed")
     assert Validator.errors(no_shed) == []
 
-    assert {:ok, _, ["hall → north door", "shed → out"]} =
+    assert {:ok, _, ["hall → north_door", "shed → out"]} =
              Authoring.remove_location(@story, "yard")
 
     assert {:error, ~s("hall" is the starting location) <> _} =
@@ -108,17 +109,29 @@ defmodule Chronicles.Stories.AuthoringTest do
              Authoring.rename_location(@story, "hall", "yard")
   end
 
-  test "connecting adds an exit, and one back when a label is given" do
-    {:ok, linked} = Authoring.connect(@story, "shed", "hall", "to the hall", "to the shed")
-    assert linked["locations"]["shed"]["exits"]["to the hall"] == %{"to" => "hall"}
-    assert linked["locations"]["hall"]["exits"]["to the shed"] == %{"to" => "shed"}
+  test "connecting adds an exit, with an id from its name, and one back when a name is given" do
+    {:ok, linked} = Authoring.connect(@story, "shed", "hall", "To the hall", "to the shed")
+
+    assert linked["locations"]["shed"]["exits"]["to_the_hall"] == %{
+             "name" => "To the hall",
+             "to" => "hall"
+           }
+
+    assert linked["locations"]["hall"]["exits"]["to_the_shed"] == %{
+             "name" => "to the shed",
+             "to" => "shed"
+           }
+
     assert Enum.find(Authoring.summarize(linked), &(&1.id == "shed")).reachable?
 
     {:ok, one_way} = Authoring.connect(@story, "shed", "hall", "in")
-    assert Map.keys(one_way["locations"]["hall"]["exits"]) == ["north door"]
+    assert Map.keys(one_way["locations"]["hall"]["exits"]) == ["north_door"]
 
     assert {:error, ~s("yard" already has an exit "south")} =
-             Authoring.connect(@story, "yard", "hall", "south")
+             Authoring.connect(@story, "yard", "hall", "South!")
+
+    assert {:error, "an exit needs a name with letters or digits"} =
+             Authoring.connect(@story, "yard", "hall", "?!")
 
     assert {:error, _} = Authoring.connect(@story, "shed", "yard", "x", "south")
   end
@@ -168,8 +181,8 @@ defmodule Chronicles.Stories.AuthoringTest do
              "exits" => %{}
            }
 
-    assert Authoring.fragment(@story, {:action, "jump"}) == %{
-             "description" => "",
+    assert Authoring.fragment(@story, {:action, "high_jump"}) == %{
+             "name" => "High jump",
              "effects" => []
            }
   end

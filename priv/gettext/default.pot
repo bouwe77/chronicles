@@ -318,7 +318,7 @@ msgstr ""
 
 #: lib/chronicles_web/live/edit_story_live.ex:536
 #, elixir-autogen, elixir-format
-msgid "Exit label"
+msgid "Exit name"
 msgstr ""
 
 #: lib/chronicles_web/live/game_live.ex:268

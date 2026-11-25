@@ -33,11 +33,11 @@ defmodule ChroniclesWeb.SagaLiveTest do
 
     # Away from 0 until the moves run out: a loss.
     lost =
-      ["subtract 3", "subtract 2"]
+      ["subtract_3", "subtract_2"]
       |> Stream.cycle()
       |> Enum.take(20)
-      |> Enum.reduce_while(sequel, fn label, game ->
-        {:ok, game, _} = Games.play(game, {:go, label})
+      |> Enum.reduce_while(sequel, fn id, game ->
+        {:ok, game, _} = Games.play(game, {:go, id})
         if game.state.ending, do: {:halt, game}, else: {:cont, game}
       end)
 

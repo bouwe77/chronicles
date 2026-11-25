@@ -19,7 +19,7 @@ defmodule Chronicles.Stories.ValidatorTest do
         "a" => %{
           "name" => "A",
           "description" => "Room A.",
-          "exits" => %{"east" => %{"to" => "b"}},
+          "exits" => %{"east" => %{"name" => "east", "to" => "b"}},
           "actions" => ["open"],
           "items" => [%{"id" => "key", "name" => "a key"}]
         },
@@ -27,7 +27,7 @@ defmodule Chronicles.Stories.ValidatorTest do
       },
       "actions" => %{
         "open" => %{
-          "description" => "Open the door",
+          "name" => "Open the door",
           "effects" => [%{"op" => "replace", "path" => "/door", "value" => "open"}]
         }
       },
@@ -47,6 +47,18 @@ defmodule Chronicles.Stories.ValidatorTest do
 
   test "the shape comes first: a missing field stops the other checks" do
     assert errors(&Map.delete(&1, "locations")) == ["(root) property 'locations' is required"]
+  end
+
+  test "exits and actions need a name" do
+    assert "/locations/a/exits/east property 'name' is required" in errors(
+             &(pop_in(&1, ~w(locations a exits east name))
+               |> elem(1))
+           )
+
+    assert "/actions/open property 'name' is required" in errors(
+             &(pop_in(&1, ~w(actions open name))
+               |> elem(1))
+           )
   end
 
   test "exits, the start and action lists name real things" do

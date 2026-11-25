@@ -20,7 +20,7 @@ defmodule Chronicles.Play do
 
   def view(game), do: Engine.view(game.version, game.state)
 
-  def exit(game, label), do: click(game, :exits, label, fn _ -> {:go, label} end)
+  def exit(game, label), do: click(game, :exits, label, &{:go, &1.id})
 
   def act(game, label), do: click(game, :actions, label, &{:act, &1.id})
 

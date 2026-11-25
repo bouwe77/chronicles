@@ -77,7 +77,7 @@ test('editing a story does not change a game in progress', async ({ page, user: 
   await expect(text).toHaveValue(/"locations"/)
   const content = JSON.parse(await text.inputValue())
   content.locations.attic = { name: 'Attic', description: 'Dusty.', exits: {} }
-  content.locations.hall.exits['Climb up'] = { to: 'attic' }
+  content.locations.hall.exits.climb_up = { name: 'Climb up', to: 'attic' }
   await text.fill(JSON.stringify(content, null, 2))
   await expect(page.getByText('No problems found.')).toBeVisible()
   await button(page, 'Save').click()

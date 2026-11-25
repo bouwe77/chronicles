@@ -11,15 +11,18 @@
       "name": "Zero",
       "description": "An empty room. A 0 is painted on the floor.",
       "exits": {
-        "add 3": {
+        "add_3": {
+          "name": "add 3",
           "to": "plus_three",
           "order": 0
         },
-        "add 2": {
+        "add_2": {
+          "name": "add 2",
           "to": "plus_two",
           "order": 1
         },
-        "subtract 1": {
+        "subtract_1": {
+          "name": "subtract 1",
           "to": "minus_one",
           "order": 2
         }
@@ -29,11 +32,13 @@
       "name": "+3",
       "description": "A bare room. Its only content is the sign +3 on the wall.",
       "exits": {
-        "add 2": {
+        "add_2": {
+          "name": "add 2",
           "to": "plus_two",
           "order": 1
         },
-        "subtract 1": {
+        "subtract_1": {
+          "name": "subtract 1",
           "to": "minus_one",
           "order": 2
         }
@@ -43,11 +48,13 @@
       "name": "+2",
       "description": "A bare room. Its only content is the sign +2 on the wall.",
       "exits": {
-        "add 3": {
+        "add_3": {
+          "name": "add 3",
           "to": "plus_three",
           "order": 0
         },
-        "subtract 1": {
+        "subtract_1": {
+          "name": "subtract 1",
           "to": "minus_one",
           "order": 2
         }
@@ -57,11 +64,13 @@
       "name": "−1",
       "description": "A bare room. Its only content is the sign −1 on the wall.",
       "exits": {
-        "add 3": {
+        "add_3": {
+          "name": "add 3",
           "to": "plus_three",
           "order": 0
         },
-        "add 2": {
+        "add_2": {
+          "name": "add 2",
           "to": "plus_two",
           "order": 1
         }

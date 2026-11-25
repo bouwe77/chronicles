@@ -68,14 +68,17 @@
       ],
       "exits": {
         "north": {
+          "name": "north",
           "to": "south_yard",
           "order": 1
         },
         "east": {
+          "name": "east",
           "to": "porters_lodge",
           "order": 2
         },
         "south": {
+          "name": "south",
           "to": "road_outside",
           "order": 3,
           "enabledWhen": {
@@ -98,6 +101,7 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "gatehouse",
           "order": 4
         }
@@ -118,18 +122,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "gatehouse",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "stables",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "smithy",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "north_yard",
           "order": 1
         }
@@ -146,14 +154,17 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "south_yard",
           "order": 2
         },
         "up": {
+          "name": "up",
           "to": "hayloft",
           "order": 5
         },
         "north": {
+          "name": "north",
           "to": "laundry",
           "order": 1
         }
@@ -173,6 +184,7 @@
       ],
       "exits": {
         "down": {
+          "name": "down",
           "to": "stables",
           "order": 6
         }
@@ -189,14 +201,17 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "south_yard",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "kennels",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "mews",
           "order": 1
         }
@@ -213,10 +228,12 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "smithy",
           "order": 4
         },
         "north": {
+          "name": "north",
           "to": "orchard",
           "order": 1
         }
@@ -233,18 +250,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "south_yard",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "laundry",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "mews",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "inner_gate",
           "order": 1
         }
@@ -272,18 +293,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "stables",
           "order": 3
         },
         "east": {
+          "name": "east",
           "to": "north_yard",
           "order": 2
         },
         "west": {
+          "name": "west",
           "to": "drying_green",
           "order": 4
         },
-        "hide in the laundry basket": {
+        "hide_in_the_laundry_basket": {
+          "name": "hide in the laundry basket",
           "to": "road_outside",
           "order": 9,
           "visibleWhen": {
@@ -323,10 +348,12 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "laundry",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "postern_passage",
           "order": 1
         }
@@ -351,14 +378,17 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "drying_green",
           "order": 3
         },
         "east": {
+          "name": "east",
           "to": "guardroom",
           "order": 2
         },
         "west": {
+          "name": "west",
           "to": "riverbank",
           "order": 4,
           "enabledWhen": {
@@ -397,10 +427,12 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "postern_passage",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "inner_gate",
           "order": 2
         }
@@ -429,14 +461,17 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "smithy",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "north_yard",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "orchard",
           "order": 2
         }
@@ -453,10 +488,12 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "kennels",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "mews",
           "order": 4
         }
@@ -473,14 +510,17 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "guardroom",
           "order": 4
         },
         "south": {
+          "name": "south",
           "to": "north_yard",
           "order": 3
         },
         "north": {
+          "name": "north",
           "to": "inner_yard",
           "order": 1
         }
@@ -497,18 +537,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "inner_gate",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "well",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "chapel_porch",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "great_hall",
           "order": 1
         }
@@ -525,14 +569,17 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "inner_yard",
           "order": 2
         },
         "west": {
+          "name": "west",
           "to": "brewhouse",
           "order": 4
         },
         "north": {
+          "name": "north",
           "to": "screens_passage",
           "order": 1
         }
@@ -549,10 +596,12 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "well",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "kitchen",
           "order": 1
         }
@@ -604,14 +653,17 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "inner_yard",
           "order": 4
         },
         "north": {
+          "name": "north",
           "to": "keep_yard",
           "order": 1
         },
         "east": {
+          "name": "east",
           "to": "chaplain_house",
           "order": 2
         }
@@ -646,18 +698,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "inner_yard",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "screens_passage",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "keep_yard",
           "order": 2
         },
         "up": {
+          "name": "up",
           "to": "upper_passage",
           "order": 5
         }
@@ -674,18 +730,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "well",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "kitchen",
           "order": 4
         },
         "east": {
+          "name": "east",
           "to": "great_hall",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "buttery",
           "order": 1
         }
@@ -702,18 +762,22 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "brewhouse",
           "order": 3
         },
         "east": {
+          "name": "east",
           "to": "screens_passage",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "pantry",
           "order": 1
         },
         "west": {
+          "name": "west",
           "to": "herb_garden",
           "order": 4
         }
@@ -734,10 +798,12 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "kitchen",
           "order": 3
         },
         "east": {
+          "name": "east",
           "to": "buttery",
           "order": 2
         }
@@ -754,14 +820,17 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "screens_passage",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "pantry",
           "order": 4
         },
         "down": {
+          "name": "down",
           "to": "cellar",
           "order": 6
         }
@@ -778,6 +847,7 @@
       ],
       "exits": {
         "up": {
+          "name": "up",
           "to": "buttery",
           "order": 5
         }
@@ -849,10 +919,12 @@
       ],
       "exits": {
         "down": {
+          "name": "down",
           "to": "great_hall",
           "order": 6
         },
         "west": {
+          "name": "west",
           "to": "steward_chamber",
           "order": 4,
           "enabledWhen": {
@@ -882,6 +954,7 @@
           "interruptedText": "You stop on the threshold of the steward's room and step back into the passage before Agnes can see you."
         },
         "north": {
+          "name": "north",
           "to": "guest_chamber",
           "order": 1
         }
@@ -901,6 +974,7 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "upper_passage",
           "order": 3
         }
@@ -920,10 +994,12 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "upper_passage",
           "order": 2
         },
         "north": {
+          "name": "north",
           "to": "counting_house",
           "order": 1
         }
@@ -955,6 +1031,7 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "steward_chamber",
           "order": 3
         }
@@ -993,14 +1070,17 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "great_hall",
           "order": 4
         },
         "south": {
+          "name": "south",
           "to": "chapel_porch",
           "order": 3
         },
         "east": {
+          "name": "east",
           "to": "keep_ground",
           "order": 2,
           "enabledWhen": {
@@ -1036,14 +1116,17 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "keep_yard",
           "order": 4
         },
         "north": {
+          "name": "north",
           "to": "storeroom",
           "order": 1
         },
         "up": {
+          "name": "up",
           "to": "antechamber",
           "order": 5
         }
@@ -1060,6 +1143,7 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "keep_ground",
           "order": 3
         }
@@ -1076,14 +1160,17 @@
       ],
       "exits": {
         "down": {
+          "name": "down",
           "to": "keep_ground",
           "order": 6
         },
         "up": {
+          "name": "up",
           "to": "solar",
           "order": 5
         },
         "north": {
+          "name": "north",
           "to": "wall_walk",
           "order": 1
         }
@@ -1116,10 +1203,12 @@
       ],
       "exits": {
         "down": {
+          "name": "down",
           "to": "antechamber",
           "order": 6
         },
         "north": {
+          "name": "north",
           "to": "garderobe",
           "order": 1
         }
@@ -1142,10 +1231,12 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "solar",
           "order": 3
         },
-        "climb down the shaft": {
+        "climb_down_the_shaft": {
+          "name": "climb down the shaft",
           "to": "moat",
           "order": 9,
           "enabledWhen": {
@@ -1166,10 +1257,12 @@
       ],
       "exits": {
         "south": {
+          "name": "south",
           "to": "antechamber",
           "order": 3
         },
         "west": {
+          "name": "west",
           "to": "north_tower",
           "order": 4
         }
@@ -1186,6 +1279,7 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "wall_walk",
           "order": 2
         }
@@ -1223,7 +1317,8 @@
         }
       ],
       "exits": {
-        "swim north": {
+        "swim_north": {
+          "name": "swim north",
           "to": "moat_far_bank",
           "order": 9
         }
@@ -1251,6 +1346,7 @@
       ],
       "exits": {
         "east": {
+          "name": "east",
           "to": "kitchen",
           "order": 2
         }
@@ -1267,6 +1363,7 @@
       ],
       "exits": {
         "west": {
+          "name": "west",
           "to": "chapel_porch",
           "order": 4
         }
@@ -1278,7 +1375,7 @@
   },
   "actions": {
     "ask_maud_embers": {
-      "description": "Ask Maud for some hot embers",
+      "name": "Ask Maud for some hot embers",
       "visibleWhen": {
         "not": {
           "isCarrying": "fire_pot"
@@ -1298,7 +1395,7 @@
       "interruptedText": "Maud turns away to shout at a kitchen boy, and the moment to ask is gone."
     },
     "ask_maud_letters": {
-      "description": "Ask Maud who takes the letters to Sir Geoffrey",
+      "name": "Ask Maud who takes the letters to Sir Geoffrey",
       "sideEffects": [
         {
           "type": "log",
@@ -1307,7 +1404,7 @@
       ]
     },
     "ask_hob_leave": {
-      "description": "Ask Hob if you can leave",
+      "name": "Ask Hob if you can leave",
       "sideEffects": [
         {
           "type": "log",
@@ -1316,7 +1413,7 @@
       ]
     },
     "ask_hob_postern": {
-      "description": "Ask Hob about other ways out",
+      "name": "Ask Hob about other ways out",
       "sideEffects": [
         {
           "type": "log",
@@ -1325,7 +1422,7 @@
       ]
     },
     "ask_tom_rope": {
-      "description": "Ask Tom for a rope",
+      "name": "Ask Tom for a rope",
       "visibleWhen": {
         "not": {
           "isCarrying": "rope"
@@ -1345,7 +1442,7 @@
       "interruptedText": "A horse kicks at its stall and Tom runs to it before you can ask."
     },
     "ask_ede_osric": {
-      "description": "Ask Ede about Master Osric",
+      "name": "Ask Ede about Master Osric",
       "visibleWhen": {
         "not": {
           "isCarrying": "ede_hint"
@@ -1365,7 +1462,7 @@
       "interruptedText": "Ede is wringing out a sheet and does not hear your question."
     },
     "ask_ede_help": {
-      "description": "Ask Ede to help you get out",
+      "name": "Ask Ede to help you get out",
       "visibleWhen": {
         "path": "/ede/agreed",
         "equals": false
@@ -1386,7 +1483,7 @@
       "interruptedText": "Ede turns back to her copper before you find the words. You will have to ask her again."
     },
     "search_desk": {
-      "description": "Search the desk",
+      "name": "Search the desk",
       "visibleWhen": {
         "path": "/steward/searched",
         "equals": false
@@ -1414,7 +1511,7 @@
       "interruptedText": "A board creaks out on the stair. You freeze with your hand on the drawer and leave it shut."
     },
     "read_chaplain_letter": {
-      "description": "Look at the letter with the foreign seal",
+      "name": "Look at the letter with the foreign seal",
       "timeCost": 0,
       "sideEffects": [
         {
@@ -1424,7 +1521,7 @@
       ]
     },
     "lift_seal": {
-      "description": "Lift the seal with a hot knife",
+      "name": "Lift the seal with a hot knife",
       "visibleWhen": {
         "path": "/letter/read",
         "equals": false
@@ -1474,7 +1571,7 @@
       "interruptedText": "The embers have gone grey on top and the wax will not soften. You stop before you crack the seal."
     },
     "take_letter": {
-      "description": "Take the letter",
+      "name": "Take the letter",
       "visibleWhen": {
         "path": "/letter/taken",
         "equals": false
@@ -1498,7 +1595,7 @@
       "interruptedText": "Steps pass below the window. You pull your hand back from the table."
     },
     "return_letter": {
-      "description": "Put the letter back on the table",
+      "name": "Put the letter back on the table",
       "visibleWhen": {
         "isCarrying": "lords_letter"
       },
@@ -1526,7 +1623,7 @@
       "interruptedText": "You stop over the table with the letter in your hand, then slip it back into your satchel."
     },
     "listen_at_door": {
-      "description": "Listen at the chapel door",
+      "name": "Listen at the chapel door",
       "timeCost": 0,
       "sideEffects": [
         {
@@ -1536,7 +1633,7 @@
       ]
     },
     "hint_start": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "path": "/hints/start",
         "equals": false
@@ -1562,7 +1659,7 @@
       "interruptedText": "Your thoughts will not settle. You get up from the bed no wiser than you sat down."
     },
     "hint_ways_out": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "allOf": [
           {
@@ -1602,7 +1699,7 @@
       "interruptedText": "A cart horse stamps behind you and your thoughts scatter. You are still standing in the mud."
     },
     "hint_osric": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "allOf": [
           {
@@ -1637,7 +1734,7 @@
       "interruptedText": "Every sound on the stair makes you look at the door. You cannot think in this room."
     },
     "hint_proof": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "allOf": [
           {
@@ -1670,7 +1767,7 @@
       "interruptedText": "You turn the black-sealed letter over and over, but no clear thought comes."
     },
     "search_rolls": {
-      "description": "Search the old rolls",
+      "name": "Search the old rolls",
       "visibleWhen": {
         "allOf": [
           {
@@ -1714,7 +1811,7 @@
       "interruptedText": "You have unrolled only a few of the old rolls when your nerve fails. You roll them up again and put them back."
     },
     "hint_keep": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "allOf": [
           {
@@ -1745,7 +1842,7 @@
       "interruptedText": "The guard keeps his eyes on you. You stop staring at the keep door and try to look busy."
     },
     "hint_door": {
-      "description": "Stop and think",
+      "name": "Stop and think",
       "visibleWhen": {
         "allOf": [
           {
@@ -1774,7 +1871,7 @@
       "interruptedText": "Steps on the stair break off your thinking. You no longer need to guess who carries the keys."
     },
     "slip_into_chapel": {
-      "description": "Slip in at the back of the chapel",
+      "name": "Slip in at the back of the chapel",
       "visibleWhen": {
         "path": "/alarm/raised",
         "equals": false

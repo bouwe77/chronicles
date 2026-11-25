@@ -63,10 +63,11 @@ defmodule Chronicles.Engine do
 
     %{
       exits:
-        for {label, exit} <- (live? && loc["exits"]) || %{},
+        for {id, exit} <- (live? && loc["exits"]) || %{},
             holds?(state, exit["visibleWhen"]) do
           %{
-            label: label,
+            id: id,
+            label: exit["name"],
             order: exit["order"] || 0,
             previous?: exit["to"] == state.previous_location,
             disabled?: not holds?(state, exit["enabledWhen"]),
@@ -74,14 +75,14 @@ defmodule Chronicles.Engine do
           }
         end
         # Postgres jsonb and Elixir maps don't keep JSON key order, so ties sort by label.
-        |> Enum.sort_by(&{&1.order, &1.label})
+        |> Enum.sort_by(&{&1.order, &1.label, &1.id})
         |> Enum.map(&Map.delete(&1, :order)),
       actions:
         for {id, action} <- if(live?, do: actions_here(version, loc), else: []),
             holds?(state, action["visibleWhen"]) do
           %{
             id: id,
-            label: action["description"] || "",
+            label: action["name"] || "",
             disabled?: not holds?(state, action["enabledWhen"]),
             turn_cost: time_cost(action)
           }
@@ -118,7 +119,7 @@ defmodule Chronicles.Engine do
   defp has_key?(_value, _keys), do: false
 
   @doc """
-  Plays one command: `{:go, exit_label}`, `{:act, action_id}` (`:wait` for the built-in
+  Plays one command: `{:go, exit_id}`, `{:act, action_id}` (`:wait` for the built-in
   wait), `{:take, item_id}`, `{:drop, item_id}` or `{:notes, text}`.
 
   Returns `{:ok, state, cues}`, or `{:error, reason}` and the state stays as it was:
@@ -130,11 +131,11 @@ defmodule Chronicles.Engine do
 
   def move(_version, %State{ending: %Ending{}}, _command), do: {:error, :ended}
 
-  def move(version, state, {:go, label}) do
-    exit = here(version, state)["exits"][label]
+  def move(version, state, {:go, id}) do
+    exit = here(version, state)["exits"][id]
 
     if exit && available?(state, exit) do
-      interact(version, state, exit, {:command, label}, fn state, cues, delta ->
+      interact(version, state, exit, {:command, exit["name"]}, fn state, cues, delta ->
         to = exit["to"]
 
         state = %{
@@ -160,7 +161,7 @@ defmodule Chronicles.Engine do
     {_, action} = List.keyfind(actions_here(version, here(version, state)), id, 0, {id, nil})
 
     if action && available?(state, action) do
-      command = if id == :wait, do: {:wait, ""}, else: {:command, action["description"] || ""}
+      command = if id == :wait, do: {:wait, ""}, else: {:command, action["name"]}
       interact(version, state, action, command, &perform(version, action, &1, &2, &3))
     else
       {:error, :unavailable}

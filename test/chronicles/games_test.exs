@@ -30,7 +30,7 @@ defmodule Chronicles.GamesTest do
 
   test "every move is saved", %{scope: scope, story: story} do
     {:ok, game, _cues} = Games.start_game(scope, story)
-    {:ok, _game, _cues} = Games.play(game, {:go, "add 2"})
+    {:ok, _game, _cues} = Games.play(game, {:go, "add_2"})
 
     assert Games.get_game!(scope, game.id).state.turns == 1
     assert [%{id: id}] = Games.list_games(scope, story)
@@ -41,8 +41,8 @@ defmodule Chronicles.GamesTest do
     {:ok, game, _} = Games.start_game(scope, story)
 
     game =
-      Enum.reduce(["add 2", "add 3", "add 2"], game, fn label, game ->
-        {:ok, game, _} = Games.play(game, {:go, label})
+      Enum.reduce(["add_2", "add_3", "add_2"], game, fn id, game ->
+        {:ok, game, _} = Games.play(game, {:go, id})
         game
       end)
 
