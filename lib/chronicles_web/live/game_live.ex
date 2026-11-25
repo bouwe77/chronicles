@@ -5,7 +5,7 @@ defmodule ChroniclesWeb.GameLive do
   """
   use ChroniclesWeb, :live_view
 
-  alias Chronicles.{Engine, Games, Stories}
+  alias Chronicles.{Engine, Games, Markdown, Stories}
   alias Chronicles.Engine.LogEntry
 
   @impl true
@@ -172,21 +172,25 @@ defmodule ChroniclesWeb.GameLive do
             aria-label={gettext("Log")}
             class="h-[40vh] space-y-2 overflow-y-auto rounded-2xl border border-base-300 bg-base-100 p-5 lg:h-[75vh]"
           >
-            <p
-              :for={{id, {_i, entry}} <- @streams.log}
-              id={id}
-              role={if entry.type == :location, do: "heading"}
-              aria-level={if entry.type == :location, do: "3"}
-              class={
-                case entry.type do
-                  :location -> "pt-4 text-lg font-semibold first:pt-0"
-                  :outcome -> "leading-relaxed"
-                  _choice -> "text-sm italic text-base-content/50"
-                end
-              }
-            >
-              {log_text(entry)}
-            </p>
+            <%= for {id, {_i, entry}} <- @streams.log do %>
+              <%!-- Story text is Markdown, so it can hold lists and headings: not a <p>. --%>
+              <div :if={entry.type == :outcome} id={id} class="log-prose">
+                {Phoenix.HTML.raw(Markdown.to_html(entry.text))}
+              </div>
+              <p
+                :if={entry.type != :outcome}
+                id={id}
+                role={if entry.type == :location, do: "heading"}
+                aria-level={if entry.type == :location, do: "3"}
+                class={
+                  if entry.type == :location,
+                    do: "pt-4 text-lg font-semibold first:pt-0",
+                    else: "text-sm italic text-base-content/50"
+                }
+              >
+                {log_text(entry)}
+              </p>
+            <% end %>
           </section>
           <script :type={Phoenix.LiveView.ColocatedHook} name=".ScrollToEnd">
             export default {
@@ -336,7 +340,9 @@ defmodule ChroniclesWeb.GameLive do
               do: gettext("You won!"),
               else: gettext("You lost")}
           </h2>
-          <p class="leading-relaxed">{@game.state.ending.message}</p>
+          <div class="log-prose">
+            {Phoenix.HTML.raw(Markdown.to_html(@game.state.ending.message))}
+          </div>
           <div class="flex flex-wrap justify-end gap-2">
             <.button navigate={~p"/stories/#{@game.version.story.slug}"} variant="ghost">
               {gettext("Back to the story")}

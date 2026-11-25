@@ -72,6 +72,7 @@ defmodule Chronicles.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:jsv, "~> 0.26"},
+      {:mdex, "~> 0.14"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"}
     ]

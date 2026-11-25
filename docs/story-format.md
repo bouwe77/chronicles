@@ -308,6 +308,25 @@ Validation: a `{/path}` must root at a key declared in `context.initial` or
 `context.schema` (or be `/visits/<location_id>`), and a `{supply:<id>}` must name a
 declared supply.
 
+### Markdown in log text
+
+Every text the engine writes to the log as an `outcome` line is Markdown: `log`
+side-effects, `arrivalText` and `description` on arrival, item `description` and
+`descriptionByLocation`, `openingLog` lines, timeline `message`s, `interruptedText`,
+and ending `message`s (also in the ending dialog).
+
+- Blocks: paragraphs, headings (`#` to `######`), bullet and numbered lists, block
+  quotes, a horizontal rule (`---`), and code blocks.
+- Inline: `**bold**`, `*italic*`, `` `code` ``.
+- **One newline is a line break**; an empty line starts a new paragraph.
+- All headings look the same (body size, semibold), one level below the location name.
+- Tables and strikethrough are off, so `|` and `~` show as written.
+- **Rejected on save:** links (`[text](url)` and `<https://…>`), images and raw HTML,
+  for example `/locations/cellar/sideEffects/0/text: links are not supported in log text`.
+
+Not Markdown: location `name`s, exit and action labels, `descriptionWhenCarried` (the
+Carrying panel) and the story's overview `description`.
+
 ## Context
 
 The top-level `context` object holds story-wide world state:

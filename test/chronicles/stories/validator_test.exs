@@ -168,4 +168,18 @@ defmodule Chronicles.Stories.ValidatorTest do
            ) ==
              ["ending #1 has an empty message"]
   end
+
+  test "log prose may not hold links, images or raw HTML" do
+    link = [%{"type" => "log", "text" => "See [this](https://x)."}]
+
+    assert errors(&put_in(&1, ~w(locations b sideEffects), link)) ==
+             ["/locations/b/sideEffects/0/text: links are not supported in log text"]
+
+    # The Carrying panel is not the log, so it isn't checked.
+    assert errors(
+             &put_in(&1, ~w(locations a items), [
+               %{"id" => "key", "name" => "a key", "descriptionWhenCarried" => "[x](y)"}
+             ])
+           ) == []
+  end
 end

@@ -1,6 +1,8 @@
 # Markdown in the log
 
-Status: planned (2026-11-23), not built.
+Status: built (2026-11-23). Two changes from the plan below: one module,
+`Chronicles.Markdown`, does both the check and the rendering (no `ChroniclesWeb.Markdown`),
+and the ending dialog renders its message as Markdown too.
 
 Authors can write log text in Markdown: paragraphs, headings, lists, block quotes, and a
 few inline styles. The log shows it as formatted text instead of one plain paragraph.

@@ -153,6 +153,7 @@ defmodule Chronicles.Stories.Validator do
       for({id, action} <- v["actions"] || %{}, do: action_errors(v, ids, id, action)),
       context_errors(v),
       placeholder_errors(v, ids, v, ""),
+      markdown_errors(v),
       supply_errors(v),
       timeline_errors(v, ids),
       for({rule, i} <- Enum.with_index(v["rules"] || [], 1), do: rule_errors(ids, rule, i)),
@@ -500,6 +501,84 @@ defmodule Chronicles.Stories.Validator do
   end
 
   defp placeholder_errors(_v, _ids, _value, _where), do: []
+
+  # Log prose is Markdown without links, images or raw HTML. Labelled by JSON Pointer.
+  defp markdown_errors(v) do
+    for {where, text} <- log_prose(v),
+        kind <- Chronicles.Markdown.unsupported(text),
+        do: "#{where}: #{kind} are not supported in log text"
+  end
+
+  # Every text the engine writes to the log as an outcome line, with its JSON Pointer.
+  defp log_prose(v) do
+    List.flatten([
+      indexed(v["openingLog"], "/openingLog"),
+      for {id, loc} <- v["locations"] do
+        at = "/locations/#{id}"
+
+        [
+          {"#{at}/description", loc["description"]},
+          case loc["arrivalText"] do
+            texts when is_list(texts) -> indexed(texts, "#{at}/arrivalText")
+            text -> {"#{at}/arrivalText", text}
+          end,
+          log_effects(loc["sideEffects"], "#{at}/sideEffects"),
+          for {label, exit} <- loc["exits"] do
+            [
+              {"#{at}/exits/#{label}/interruptedText", exit["interruptedText"]},
+              log_effects(exit["sideEffects"], "#{at}/exits/#{label}/sideEffects")
+            ]
+          end,
+          for(
+            {item, i} <- Enum.with_index(loc["items"] || []),
+            do: item_prose(item, "#{at}/items/#{i}")
+          )
+        ]
+      end,
+      for(
+        {item, i} <- Enum.with_index(v["starting_inventory"] || []),
+        do: item_prose(item, "/starting_inventory/#{i}")
+      ),
+      for({id, item} <- v["items"] || %{}, do: item_prose(item, "/items/#{id}")),
+      for {id, action} <- v["actions"] || %{} do
+        [
+          {"/actions/#{id}/interruptedText", action["interruptedText"]},
+          log_effects(action["sideEffects"], "/actions/#{id}/sideEffects")
+        ]
+      end,
+      for(
+        {rule, i} <- Enum.with_index(v["rules"] || []),
+        do: log_effects(rule["sideEffects"], "/rules/#{i}/sideEffects")
+      ),
+      for(
+        {event, i} <- Enum.with_index(v["timeline"] || []),
+        do: {"/timeline/#{i}/message", event["message"]}
+      ),
+      for(
+        {ending, i} <- Enum.with_index(v["endings"] || []),
+        do: {"/endings/#{i}/message", ending["message"]}
+      )
+    ])
+    |> Enum.filter(&is_binary(elem(&1, 1)))
+  end
+
+  defp indexed(texts, at),
+    do: for({text, i} <- Enum.with_index(texts || []), do: {"#{at}/#{i}", text})
+
+  defp log_effects(effects, at) do
+    for {%{"type" => "log"} = effect, i} <- Enum.with_index(effects || []),
+        do: {"#{at}/#{i}/text", effect["text"]}
+  end
+
+  defp item_prose(item, at) do
+    [
+      {"#{at}/description", item["description"]}
+      | for(
+          {loc, text} <- item["descriptionByLocation"] || %{},
+          do: {"#{at}/descriptionByLocation/#{loc}", text}
+        )
+    ]
+  end
 
   # A supply starts within its own bounds, and its min is not above its max.
   defp supply_errors(v) do

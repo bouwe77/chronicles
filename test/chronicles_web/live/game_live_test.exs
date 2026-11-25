@@ -89,4 +89,21 @@ defmodule ChroniclesWeb.GameLiveTest do
 
     assert_raise Ecto.NoResultsError, fn -> live(conn, ~p"/games/#{game}") end
   end
+
+  test "story text in the log is Markdown", %{conn: conn, user: user} do
+    content = Chronicles.Play.story("the-number")
+
+    content =
+      put_in(
+        content,
+        ["locations", content["starting_location"], "description"],
+        "Zero.\n\n- one\n- two"
+      )
+
+    {:ok, story} = Chronicles.Stories.create_story(user, "listy", content, :private)
+    {:ok, view, _html} = live(conn, ~p"/stories/#{story.slug}")
+    {:ok, view, _html} = view |> element("#new-game") |> render_click() |> follow_redirect(conn)
+
+    assert has_element?(view, "#log ul li", "two")
+  end
 end

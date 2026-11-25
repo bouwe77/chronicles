@@ -74,6 +74,14 @@ jq '{content: .}' "$TMPDIR/story.json" \
   - `422 {"errors": [...]}`: every problem, one line each. Fix them and save again.
   - `403`: you are a player, or the story belongs to another author.
 
+## Log text is Markdown
+
+Text that goes to the log (`log` effects, arrival text, item descriptions, `openingLog`,
+timeline and ending `message`s, `interruptedText`) may use Markdown: paragraphs,
+headings, lists, quotes, `**bold**`, `*italic*`, `` `code` ``. One newline is a line
+break. Links, images and raw HTML are rejected on save. See
+[Markdown in log text](../../../docs/story-format.md#markdown-in-log-text).
+
 ## Test it before you save
 
 Play scripted paths with the real engine, from the repo root:
