@@ -83,15 +83,9 @@ item says why it waits. Remove an item when it is done or dropped.
   the validator's errors go back to it until the story is valid. Waits until the
   editor and upload are not enough. Open: the user's own API key or a server key,
   which providers, a new story only or also changes, and save at once or show first.
-- **Should exits get an id?** An exit's label is both its display text and its key,
-  while actions and items have an `id` next to their text. So fixing a typo in a label
-  changes the exit's identity: for example, live reload stops its replay there. Look
-  into whether an `id` on exits gives enough in general (not only for replay) to
-  change the format, validator, editor, docs and stories. The app is not live, so a
-  big change is fine if it is worth it. Endings have no id either (a list, matched in
-  order); an id there would help features that name an ending, such as "endings found:
-  2 of 5" or a saga that branches on which ending was reached. Rules and timeline
-  events have no id, but nothing refers to them, so they don't need one.
+- **Exit ids.** The exit key becomes an id with a required `name`, and actions move from
+  `description` to `name`. Designed, not built. See `plans/exit-ids.md`. Endings have no
+  id either; add one when a feature names an ending.
 - **The model course as a saga.** `the-model-course` could be one chapter per part, so
   it shows a saga in practice. Waits because a chapter only opens after the one before
   it is won, so nobody could skip to a later part.

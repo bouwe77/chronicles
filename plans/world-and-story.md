@@ -99,9 +99,10 @@ This plan does not change them.
     - A story location with a world id merges into that world location: its items,
       actions, `sideEffects` and exits are added.
     - A story location with a new id is a new location.
-    - A story exit with the same label as a world exit adds conditions to it; the merge
+    - A story exit with the same id as a world exit adds conditions to it; the merge
       combines both with `allOf`. The story can't change the exit's other fields (`to`,
-      `timeCost`); the validator rejects that.
+      `timeCost`, `name`); the validator rejects that. This needs exit ids
+      (`plans/exit-ids.md`), so those come first.
     - A story can't set a world location's `name` or `description` (decision 2).
 13. **The editor.** One screen with two groups of parts, "World" and "Story". On a shared
     world that is not yours, the world parts are read-only.
