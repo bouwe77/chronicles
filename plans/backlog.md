@@ -43,6 +43,10 @@ item says why it waits. Remove an item when it is done or dropped.
   story. Designed, not built. See `plans/time-mode.md`.
 - **Command mode.** Type commands instead of clicking buttons, chosen per story. Low
   priority: no story needs it yet. See `plans/command-mode.md`.
+- **Random events during play.** A chance on a rule or timeline event ("each turn, 10%
+  chance a patrol arrives"). Today randomness only happens at game start
+  (`context.randomize`). Fine if live reload can't replay it exactly; it only needs to
+  work for players. Not planned yet.
 
 ## Writing stories
 
@@ -70,6 +74,8 @@ item says why it waits. Remove an item when it is done or dropped.
 - **Compare two values in a condition.** For example `/agility` against
   `/monster/speed`. One form per comparator or a general `compare`, and whether a side
   can be a supply, is open. Waits until a story needs it.
+- **World and story.** Split the map (a world) from the game on top of it (a story), so
+  many stories can share one world. Designed, not built. See `plans/world-and-story.md`.
 - **Dialogue trees.** Long branching conversations need many flags and gates today.
   First check how hard `a-word-with-vale` was to write; if it was painful, try a small
   helper (a `node` per conversation in context) before a full dialogue structure.
