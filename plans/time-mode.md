@@ -87,9 +87,11 @@ Identical lines **in a row** from one move become one line with a count (`… ×
 timeline and rules alike. Different placeholder values or alternating lines stay
 separate.
 
-### `timeCost` cap per mode
+### One `timeCost` cap for both modes
 
-`1000` in turn mode (as today), `10080` (one week of minutes) in time mode.
+The cap goes from `1000` to `10080` (one week of minutes) in both modes. A turn-mode
+story never gets near it, and one cap in the schema means no per-mode check in the
+validator.
 
 ### The device clock plays no part
 
@@ -102,10 +104,10 @@ the format.
 
 - **Schema** (`priv/schemas/version.json`): the `clock` object; the three `time*`
   condition forms next to the `turn*` ones; a timeline event takes `atTurn` **or**
-  `atTime`; the rule fields `every`, `from`, `accumulate`; the higher `timeCost` cap.
+  `atTime`; the rule fields `every`, `from`, `accumulate`; the `timeCost` cap raised to `10080`.
 - **Validator** (`Chronicles.Stories.Validator`): the mode check, parsing `epoch` and
   every datetime, `atTime` after `epoch`, timeline order on minutes, `every` required on
-  rules in time mode, `from` in the mode's vocabulary, the cap per mode, and `ruleTime`
+  rules in time mode, `from` in the mode's vocabulary, and `ruleTime`
   reserved like `visits`.
 - **Engine** (`Chronicles.Engine`): convert every `time*` condition, `atTime` and rule
   `from` to minutes once per version, so the rest keeps comparing integers. Default cost

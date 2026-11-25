@@ -26,7 +26,18 @@ item says why it waits. Remove an item when it is done or dropped.
 
 - **Save points.** Not there for now (decision 4). Can come as a `checkpoint`
   field on the game.
-- **Undo or replay.** Needs a move history, which we don't store (decision 5).
+- **Undo or replay.** Needs a move history, which we don't store (decision 5). Author
+  games do store their moves now, for live reload (`plans/live-reload.md`).
+- **The same game in two tabs.** Each tab has its own copy of the game and doesn't see
+  moves made in the other. A move in an out-of-date tab is saved over the newer game, so
+  the other tab's moves are lost. With live reload, the second tab ends on "not found".
+  Preferred fix: don't support it. Either refuse a second open tab of the same game (for
+  example with a `Registry` per game id), or, if that isn't simple, refuse a save when
+  the game changed since the tab loaded it (Ecto's `optimistic_lock`). Waits until
+  someone runs into it.
+- **A toggle for live reload.** An author's game always follows a new version. Add a
+  toggle when an author needs to keep playing the old version, for example to compare.
+  It needs state that survives `push_navigate`, such as a URL parameter.
 - **Multiplayer or chat.** Needs a process per game (decision 6).
 - **Time mode.** A real date and time ("Sun 5 Jul, 20:30") instead of turns, chosen per
   story. Designed, not built. See `plans/time-mode.md`.
@@ -35,7 +46,6 @@ item says why it waits. Remove an item when it is done or dropped.
 
 ## Writing stories
 
-- **Markdown in log text.** Planned, not built. See `plans/markdown-log.md`.
 - **Markdown outside the log.** `descriptionWhenCarried` and the story overview stay
   plain text (decision 2 of the Markdown plan). Add when a story needs structure there.
 - **Links in log text.** Rejected on save for now: they lead players out of the game.
@@ -67,6 +77,15 @@ item says why it waits. Remove an item when it is done or dropped.
   the validator's errors go back to it until the story is valid. Waits until the
   editor and upload are not enough. Open: the user's own API key or a server key,
   which providers, a new story only or also changes, and save at once or show first.
+- **Should exits get an id?** An exit's label is both its display text and its key,
+  while actions and items have an `id` next to their text. So fixing a typo in a label
+  changes the exit's identity: for example, live reload stops its replay there. Look
+  into whether an `id` on exits gives enough in general (not only for replay) to
+  change the format, validator, editor, docs and stories. The app is not live, so a
+  big change is fine if it is worth it. Endings have no id either (a list, matched in
+  order); an id there would help features that name an ending, such as "endings found:
+  2 of 5" or a saga that branches on which ending was reached. Rules and timeline
+  events have no id, but nothing refers to them, so they don't need one.
 - **The model course as a saga.** `the-model-course` could be one chapter per part, so
   it shows a saga in practice. Waits because a chapter only opens after the one before
   it is won, so nobody could skip to a later part.
