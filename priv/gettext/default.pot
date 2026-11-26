@@ -41,7 +41,7 @@ msgstr ""
 msgid "%{title} is created."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:385
+#: lib/chronicles_web/live/game_live.ex:427
 #, elixir-autogen, elixir-format
 msgid "+%{count} turn"
 msgid_plural "+%{count} turns"
@@ -102,7 +102,7 @@ msgstr ""
 
 #: lib/chronicles_web/components/core_components.ex:401
 #: lib/chronicles_web/live/edit_story_live.ex:329
-#: lib/chronicles_web/live/game_live.ex:253
+#: lib/chronicles_web/live/game_live.ex:293
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -135,13 +135,13 @@ msgid "Author"
 msgstr ""
 
 #: lib/chronicles_web/live/edit_story_live.ex:276
-#: lib/chronicles_web/live/game_live.ex:134
-#: lib/chronicles_web/live/game_live.ex:342
+#: lib/chronicles_web/live/game_live.ex:170
+#: lib/chronicles_web/live/game_live.ex:384
 #, elixir-autogen, elixir-format
 msgid "Back to the story"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:295
+#: lib/chronicles_web/live/game_live.ex:335
 #, elixir-autogen, elixir-format
 msgid "Carrying"
 msgstr ""
@@ -203,7 +203,7 @@ msgid "Connect to"
 msgstr ""
 
 #: lib/chronicles_web/live/edit_story_live.ex:414
-#: lib/chronicles_web/live/game_live.ex:213
+#: lib/chronicles_web/live/game_live.ex:253
 #, elixir-autogen, elixir-format
 msgid "Context"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Could not delete the story."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:70
+#: lib/chronicles_web/live/game_live.ex:106
 #: lib/chronicles_web/live/story_live.ex:37
 #: lib/chronicles_web/live/story_live.ex:46
 #, elixir-autogen, elixir-format
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Delete your account and everything you own?"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:315
+#: lib/chronicles_web/live/game_live.ex:355
 #, elixir-autogen, elixir-format
 msgid "Drop"
 msgstr ""
@@ -321,7 +321,7 @@ msgstr ""
 msgid "Exit name"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:268
+#: lib/chronicles_web/live/game_live.ex:308
 #, elixir-autogen, elixir-format
 msgid "Exits"
 msgstr ""
@@ -358,7 +358,7 @@ msgid "If your email is in our system, you will get an email to log in shortly."
 msgstr ""
 
 #: lib/chronicles_web/live/edit_story_live.ex:415
-#: lib/chronicles_web/live/game_live.ex:237
+#: lib/chronicles_web/live/game_live.ex:277
 #, elixir-autogen, elixir-format
 msgid "Items"
 msgstr ""
@@ -383,7 +383,7 @@ msgstr ""
 msgid "Locations"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:172
+#: lib/chronicles_web/live/game_live.ex:208
 #, elixir-autogen, elixir-format
 msgid "Log"
 msgstr ""
@@ -484,14 +484,14 @@ msgstr ""
 msgid "Not valid JSON yet: %{message}"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:150
-#: lib/chronicles_web/live/game_live.ex:224
-#: lib/chronicles_web/live/game_live.ex:231
+#: lib/chronicles_web/live/game_live.ex:186
+#: lib/chronicles_web/live/game_live.ex:264
+#: lib/chronicles_web/live/game_live.ex:271
 #, elixir-autogen, elixir-format
 msgid "Notes"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:297
+#: lib/chronicles_web/live/game_live.ex:337
 #, elixir-autogen, elixir-format
 msgid "Nothing yet"
 msgstr ""
@@ -526,7 +526,7 @@ msgstr ""
 msgid "Parts of the story"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:349
+#: lib/chronicles_web/live/game_live.ex:391
 #, elixir-autogen, elixir-format
 msgid "Play again"
 msgstr ""
@@ -656,12 +656,12 @@ msgstr ""
 msgid "Supplies"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:247
+#: lib/chronicles_web/live/game_live.ex:287
 #, elixir-autogen, elixir-format
 msgid "Take"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:89
+#: lib/chronicles_web/live/game_live.ex:125
 #, elixir-autogen, elixir-format
 msgid "That doesn't work right now."
 msgstr ""
@@ -746,7 +746,7 @@ msgstr ""
 msgid "This story is a chapter of a saga. Change or delete the saga first."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:284
+#: lib/chronicles_web/live/game_live.ex:324
 #, elixir-autogen, elixir-format
 msgid "Time"
 msgstr ""
@@ -791,8 +791,8 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:116
-#: lib/chronicles_web/live/game_live.ex:262
+#: lib/chronicles_web/live/game_live.ex:152
+#: lib/chronicles_web/live/game_live.ex:302
 #, elixir-autogen, elixir-format
 msgid "Wait"
 msgstr ""
@@ -828,17 +828,17 @@ msgstr ""
 msgid "Won"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:232
+#: lib/chronicles_web/live/game_live.ex:272
 #, elixir-autogen, elixir-format
 msgid "Write down what you want to remember."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:288
+#: lib/chronicles_web/live/game_live.ex:328
 #, elixir-autogen, elixir-format
 msgid "You"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:337
+#: lib/chronicles_web/live/game_live.ex:377
 #, elixir-autogen, elixir-format
 msgid "You lost"
 msgstr ""
@@ -854,7 +854,7 @@ msgstr ""
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:336
+#: lib/chronicles_web/live/game_live.ex:376
 #, elixir-autogen, elixir-format
 msgid "You won!"
 msgstr ""
@@ -900,7 +900,7 @@ msgstr ""
 msgid "continues"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:114
+#: lib/chronicles_web/live/game_live.ex:150
 #, elixir-autogen, elixir-format
 msgid "drop %{item}"
 msgstr ""
@@ -920,7 +920,7 @@ msgstr ""
 msgid "start"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:111
+#: lib/chronicles_web/live/game_live.ex:147
 #, elixir-autogen, elixir-format
 msgid "take %{item}"
 msgstr ""
@@ -940,23 +940,23 @@ msgstr ""
 msgid "you"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:160
-#: lib/chronicles_web/live/game_live.ex:203
+#: lib/chronicles_web/live/game_live.ex:196
+#: lib/chronicles_web/live/game_live.ex:243
 #, elixir-autogen, elixir-format
 msgid "Debug"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:204
+#: lib/chronicles_web/live/game_live.ex:244
 #, elixir-autogen, elixir-format
 msgid "Version"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:210
+#: lib/chronicles_web/live/game_live.ex:250
 #, elixir-autogen, elixir-format
 msgid "an older version"
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:209
+#: lib/chronicles_web/live/game_live.ex:249
 #, elixir-autogen, elixir-format
 msgid "the latest"
 msgstr ""
@@ -1161,7 +1161,7 @@ msgstr ""
 msgid "Make the whole saga public? Every user will see its chapters."
 msgstr ""
 
-#: lib/chronicles_web/live/game_live.ex:352
+#: lib/chronicles_web/live/game_live.ex:394
 #: lib/chronicles_web/live/story_live.ex:221
 #, elixir-autogen, elixir-format
 msgid "Continue in chapter %{n}: %{title}"
@@ -1455,4 +1455,24 @@ msgstr ""
 #: lib/chronicles_web/live/saga_form_live.ex:276
 #, elixir-autogen, elixir-format
 msgid "chapter %{n}: %{error}"
+msgstr ""
+
+#: lib/chronicles_web/live/game_live.ex:79
+#, elixir-autogen, elixir-format
+msgid "Could not reload on the new version."
+msgstr ""
+
+#: lib/chronicles_web/live/game_live.ex:83
+#, elixir-autogen, elixir-format
+msgid "Reloaded on the new version."
+msgstr ""
+
+#: lib/chronicles_web/live/game_live.ex:87
+#, elixir-autogen, elixir-format
+msgid "Replayed %{replayed} of %{total} moves. Move %{n} (%{move}) is no longer possible."
+msgstr ""
+
+#: lib/chronicles_web/live/game_live.ex:97
+#, elixir-autogen, elixir-format
+msgid "Started a new game: %{key} can no longer be %{value}."
 msgstr ""

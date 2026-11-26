@@ -14,15 +14,23 @@ defmodule Chronicles.Engine do
   # Context keys the engine manages; the story's context.schema doesn't cover them.
   @reserved ~w(notes visits input)
 
-  @doc "A fresh game, and the cues of the starting room. `input` is the input of a later chapter in a saga."
-  def new_game(version, input \\ nil) do
+  @doc """
+  One random value per `context.randomize` key, for `new_game/3`. Made apart from the game,
+  so the picks are known before the starting room can change them.
+  """
+  def random_picks(version),
+    do: Map.new(version["context"]["randomize"] || %{}, fn {k, v} -> {k, Enum.random(v)} end)
+
+  @doc """
+  A fresh game, and the cues of the starting room. `input` is the input of a later chapter
+  in a saga. `picks` are the values of the `context.randomize` keys (see `random_picks/1`).
+  """
+  def new_game(version, input, picks) do
     start = version["starting_location"]
 
     context =
       (version["context"]["initial"] || %{})
-      |> Map.merge(
-        Map.new(version["context"]["randomize"] || %{}, fn {k, v} -> {k, Enum.random(v)} end)
-      )
+      |> Map.merge(picks)
       |> then(&if(input, do: Map.put(&1, "input", input), else: &1))
       |> arrive(start)
 

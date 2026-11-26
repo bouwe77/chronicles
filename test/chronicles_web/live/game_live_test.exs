@@ -57,13 +57,12 @@ defmodule ChroniclesWeb.GameLiveTest do
     refute has_element?(view, "#exits")
   end
 
-  test "the debug panel shows the version and the context", %{
-    conn: conn,
-    user: user,
-    story: story
-  } do
+  # Another player's game: an author's own game would follow the new version.
+  test "the debug panel shows the version and the context", %{user: user, story: story} do
     scope = user_scope_fixture(user)
-    {:ok, game, _} = Chronicles.Games.start_game(scope, story)
+    player = user_fixture()
+    conn = log_in_user(build_conn(), player)
+    {:ok, game, _} = Chronicles.Games.start_game(user_scope_fixture(player), story)
     {:ok, view, _html} = live(conn, ~p"/games/#{game}")
 
     assert has_element?(view, "#debug-version", "the latest")
@@ -105,5 +104,44 @@ defmodule ChroniclesWeb.GameLiveTest do
     {:ok, view, _html} = view |> element("#new-game") |> render_click() |> follow_redirect(conn)
 
     assert has_element?(view, "#log ul li", "two")
+  end
+
+  describe "live reload" do
+    alias Chronicles.{Games, Stories}
+
+    test "an author's game moves to a new version of the story", %{
+      conn: conn,
+      user: user,
+      story: story
+    } do
+      scope = user_scope_fixture(user)
+      {:ok, game, _} = Games.start_game(scope, story)
+      {:ok, view, _html} = live(conn, ~p"/games/#{game}")
+      click_exit(view, "add 2")
+
+      {:ok, _} = Stories.save_story(scope, story.slug, Chronicles.Play.story("the-number"))
+
+      {path, flash} = assert_redirect(view)
+      [new] = Games.list_games(scope, story)
+      assert path == ~p"/games/#{new}"
+      assert flash["info"]
+      assert new.state.turns == 1
+    end
+
+    test "another player's game stays", %{user: user, story: story} do
+      player = user_fixture()
+      {:ok, game, _} = Games.start_game(user_scope_fixture(player), story)
+      {:ok, view, _html} = live(log_in_user(build_conn(), player), ~p"/games/#{game}")
+
+      {:ok, _} =
+        Stories.save_story(
+          user_scope_fixture(user),
+          story.slug,
+          Chronicles.Play.story("the-number")
+        )
+
+      _ = :sys.get_state(view.pid)
+      assert has_element?(view, "#exits")
+    end
   end
 end

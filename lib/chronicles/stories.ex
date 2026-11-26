@@ -109,7 +109,7 @@ defmodule Chronicles.Stories do
 
         story ->
           if can_manage?(scope, story),
-            do: new_version(story, content),
+            do: story |> new_version(content) |> broadcast_new_versions(),
             else: {:error, :unauthorized}
       end
     else
@@ -135,10 +135,29 @@ defmodule Chronicles.Stories do
           end
         end)
       end)
+      |> broadcast_new_versions()
     else
       {:error, :unauthorized}
     end
   end
+
+  @doc """
+  Subscribes the caller to the story's new versions: it gets `{:new_version, story_id}`
+  after each save of a new head version. A new story sends nothing.
+  """
+  def subscribe_to_versions(story_id),
+    do: Phoenix.PubSub.subscribe(Chronicles.PubSub, "story:#{story_id}")
+
+  # Only after the save is final: `save_stories/2` can still undo an earlier story when a
+  # later one fails, so `new_version/2` itself doesn't broadcast.
+  defp broadcast_new_versions({:ok, saved} = result) do
+    for %Story{id: id} <- List.wrap(saved),
+        do: Phoenix.PubSub.broadcast(Chronicles.PubSub, "story:#{id}", {:new_version, id})
+
+    result
+  end
+
+  defp broadcast_new_versions(error), do: error
 
   @doc """
   Problems a saved story causes that don't stop the save. For a chapter: the checks of

@@ -13,7 +13,7 @@ defmodule Chronicles.Play do
 
   # `setup` may change the fresh game state before the first move.
   def start(version, opts \\ []) do
-    {state, _cues} = Engine.new_game(version, opts[:input])
+    {state, _cues} = Engine.new_game(version, opts[:input], Engine.random_picks(version))
     setup = Keyword.get(opts, :setup, & &1)
     %{version: version, state: setup.(state)}
   end

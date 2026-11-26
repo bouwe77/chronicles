@@ -24,6 +24,10 @@ defmodule ChroniclesWeb.GameLive do
     cues = Phoenix.Flash.get(socket.assigns.flash, :cues) || []
     cues = if game.state.ending, do: cues ++ [ending_cue(game)], else: cues
 
+    # An author's game records its moves, and follows each new version of the story.
+    if connected?(socket) and is_list(game.state.commands),
+      do: Stories.subscribe_to_versions(game.version.story_id)
+
     if connected?(socket),
       do: {:ok, socket |> clear_flash(:cues) |> push_cues(cues)},
       else: {:ok, socket}
@@ -62,6 +66,38 @@ defmodule ChroniclesWeb.GameLive do
 
   def handle_event("continue", _params, socket) do
     open_new_game(socket, Games.continue_game(socket.assigns.current_scope, socket.assigns.game))
+  end
+
+  @impl true
+  def handle_info({:new_version, _story_id}, socket) do
+    case Games.reload(socket.assigns.current_scope, socket.assigns.game) do
+      {:ok, game, result} ->
+        {kind, message} = reload_flash(result)
+        {:noreply, socket |> put_flash(kind, message) |> push_navigate(to: ~p"/games/#{game}")}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, gettext("Could not reload on the new version."))}
+    end
+  end
+
+  defp reload_flash(:replayed), do: {:info, gettext("Reloaded on the new version.")}
+
+  defp reload_flash({:stopped, replayed, total, command}) do
+    {:error,
+     gettext("Replayed %{replayed} of %{total} moves. Move %{n} (%{move}) is no longer possible.",
+       replayed: replayed,
+       total: total,
+       n: replayed + 1,
+       move: Enum.join(command, ": ")
+     )}
+  end
+
+  defp reload_flash({:new_pick, key, value}) do
+    {:error,
+     gettext("Started a new game: %{key} can no longer be %{value}.",
+       key: key,
+       value: if(is_binary(value), do: value, else: Jason.encode!(value))
+     )}
   end
 
   defp open_new_game(socket, {:ok, game, cues}), do: {:noreply, open(socket, game, cues)}

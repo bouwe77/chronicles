@@ -1,6 +1,6 @@
 # Live reload
 
-Status: designed (2026-11-25), updated for exit ids (2026-11-26), not built.
+Status: built (2026-11-26).
 
 ## What it is
 
@@ -83,8 +83,9 @@ No migration: `State` is one `jsonb` column.
 ### `Chronicles.Engine.new_game`
 
 Takes the picks instead of making them: `new_game(version, input, picks)`, and merges
-`picks` into the context where it now merges the random values. `Enum.random` moves out
-of the engine. The check whether old picks are still allowed lives in `Games.reload/2`,
+`picks` into the context where it now merges the random values. The random values come
+from a separate `Engine.random_picks/1`, which `Games`, the test helper `Play` and
+`mix chronicles.playthrough` call before `new_game`. The check whether old picks are still allowed lives in `Games.reload/2`,
 not here.
 
 Why not read the picks from the game after it started: the first room can already
@@ -92,7 +93,6 @@ change those values (its `sideEffects`), so the game could store the wrong ones.
 
 ### `Chronicles.Games`
 
-- A private `random_picks(content)`: one `Enum.random` per `randomize` key.
 - `start_game/2` and `continue_game/2` both build a game the same way. One private
   helper makes the picks, calls `new_game`, inserts the game, and sets `commands: []`
   and `picks` when the user is the story's `author`. This is the **only** author check.
@@ -100,7 +100,7 @@ change those values (its `sideEffects`), so the game could store the wrong ones.
   means "not recording".
 - `reload/2`, new: takes the scope and the old game, and loads the story's head version.
   1. Check the old picks against the new `randomize` (decision 2). Keys without an old
-     pick get `random_picks`. On a failure, use only new random picks and replay no
+     pick get `Engine.random_picks/1`. On a failure, use only new random picks and replay no
      commands.
   2. `Engine.new_game(content, state.context["input"], picks)`.
   3. `Enum.reduce_while/3` over the commands with `Engine.move/3`; stop at the first
@@ -108,7 +108,9 @@ change those values (its `sideEffects`), so the game could store the wrong ones.
   4. Copy `context["notes"]` from the old game.
   5. Insert the new game (same user, the new version, the same `from_game_id`), and
      delete the old one with `delete_game/2`, in one transaction.
-  6. Return `{:ok, game, flash}`, with `flash` as `{:info | :error, message}`.
+  6. Return `{:ok, game, result}`: `:replayed`, `{:stopped, replayed, total, command}`
+     or `{:new_pick, key, value}`. `GameLive` turns it into the flash, so the context
+     has no UI text. A game that doesn't record gives `{:error, :not_recording}`.
 
 ### `Chronicles.Stories`
 

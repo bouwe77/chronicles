@@ -48,7 +48,7 @@ defmodule Mix.Tasks.Chronicles.Playthrough do
   def run(_), do: Mix.raise("Usage: mix chronicles.playthrough STORY.json PATHS.json")
 
   defp play(content, steps, input) do
-    {state, _cues} = Engine.new_game(content, input)
+    {state, _cues} = Engine.new_game(content, input, Engine.random_picks(content))
 
     steps
     |> Enum.with_index(1)

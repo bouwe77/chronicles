@@ -24,5 +24,9 @@ defmodule Chronicles.Engine.State do
     embeds_many :log, LogEntry
     # Nil while the game is live.
     embeds_one :ending, Ending
+    # Only for games that record, for live reload; nil otherwise. The successful moves,
+    # oldest first, as JSON lists (`["go", id]`, `["wait"]`, ...), and the random picks.
+    field :commands, {:array, :any}
+    field :picks, :map
   end
 end
